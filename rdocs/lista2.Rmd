@@ -1,0 +1,371 @@
+---
+title: ''
+author: ''
+date: ''
+output:
+  pdf_document: null
+  fig_crop: no
+  html_document:
+    df_print: paged
+subtitle: ''
+highlight: tango
+number_sections: no
+fig_caption: yes
+keep_tex: yes
+includes:
+  in_header: Estilo.sty
+classoption: a4paper
+always_allow_html: yes
+---
+  
+  
+\begin{center}
+{\Large
+  DEPARTAMENTO DE ESTATÍSTICA} \\
+\vspace{0.5cm}
+\begin{figure}[!t]
+\centering
+\includegraphics[width=9cm, keepaspectratio]{logo-UnB.eps}
+\end{figure}
+\vskip 1em
+{\large
+  `r format(Sys.time(), '%d %B %Y')`}
+\vskip 3em
+{\LARGE
+  \textbf{Lista 2}} \\
+\vskip 1em
+{\Large
+  Prof. Dr. George von Borries} \\
+\vskip 1em
+{\Large
+  Análise Multivariada 1} \\
+\vskip 1em
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636} \\
+\vskip 1em
+\end{center}
+
+\vskip 5em
+
+```{r setup, include=F}
+
+library(pacman)
+p_load(knitr,tidyverse,ggExtra,gridExtra,car)
+
+```
+
+\newpage
+
+8. Provar o seguinte teorema:
+Sejam **A** e **B** matrizes idempotentes. Então,
+
+(a) **A** + **B** é idempotente somente quando **AB** = **BA** = 0.
+
+(b) **C** = **AB** é idempotente somente quando **AB** = **BA**.
+
+(c) **I** - **A** é idempotente.
+
+9. Provar o seguinte teorema:
+Seja $X_{(n×k)}$ tal que rank(**X**) = $k < n$.
+Então, $P_X = X(X'X)^{-1}X'$ é idempotente e simétrica e consequentemente, uma matriz projeção ortogonal.
+
+10. Utilizando o R verifique, através de exemplos, que uma matriz de projeção tem autovalores somente no conjunto {0, 1}. A demonstração pode ser feita utilizando a equação
+característica e lembrando que se **M** é uma matriz de projeção, então:
+$$M = M^2 = M^T$$
+
+11. Seja **X** uma matriz de dados $(n × p)$ com matriz de covariância **S**. Sejam $\lambda_1,...,\lambda_p$ os autovalores de **S**.
+
+(a) Mostre que a soma das variâncias $s_{ii}$ de **X** (variação amostral total) é dada por $\lambda_1 +...+ \lambda_p$.
+
+(b) Mostre que a variância amostral generalizada é dada por $\lambda_1 \times...\times \lambda_p$.
+
+(c) Mostre que a variância amostral generalizada se anula se as colunas de **X** somarem zero.
+
+12. Seja **A** uma matriz quadrada $(k × k)$ positiva definida. Mostre que,
+
+(a) $(A^{1/2})' = A^{1/2}$.
+
+(b) $A^{1/2}A^{1/2}=A$.
+
+(c) $(A^{1/2})^{-1}=CD^{-1/2}C'$, sendo $D^{-1/2}=diag(1/\sqrt{\lambda_1},...,1/\sqrt{\lambda_k})$.
+
+(d) $A^{1/2}A^{-1/2}=A^{-1/2}A^{1/2}=I$.
+
+(e) $A^{-1/2}A^{-1/2}=A^{-1}$.
+
+13. Considere uma matriz de correlação $(r×r)$ com a mesma correlação ($\rho$) em todas as células fora da diagonal. Encontre os autovalores e autovetores desta matriz quando $r = 2, 3, 4$. Generalize seus resultados para qualquer número *r* de variáveis. Como exemplo, faça $\rho = 0.1, 0.3, 0.5, 0.7, 0.9.$
+
+14. Considere a decomposição espectral de uma matrix $A_{p \times p}$ positiva definida, isto é, $A_{p \times p} = B \Delta B^T$ . Seja
+
+\[
+  A =
+  \left[ {\begin{array}{ccccc}
+    3 & 2 & 3 & 2\\
+    2 & 5 & 1 & 1\\
+    3 & 1 & 8 & 2\\
+    2 & 1 & 2 & 3\\
+  \end{array} } \right]
+\]
+
+(a) Obtenha **B** e $\Delta$.
+
+(b) Obtenha $A^{1/2}$ e mostre que $(A^{1/2})^2=A$.
+
+(c) Obtenha $(A^{1/2})^{-1}$ (descreva seus elementos) e mostre que $(A^{1/2})^{-1}A^{1/2}=I$.
+
+15. Let $x' = [5,1,3]$ and $y'=[-1,3,1]$.
+
+(a) Graph the two vectors.
+
+(b) Find (i) the length of x, (ii) the angle between x and y, and (iii) the projection of y on x.
+
+(c) Since $\bar{x}=3$ and $\bar{y}=1$, graph $[5-3,1-3,3-3]=[2,-2,0]$ and $[-1-1,3-1,1-1]=[-2,2,0]$.
+
+16. Given the matrices
+
+\[
+  A =
+  \left[ {\begin{array}{ccccc}
+    -1 & 3\\
+     4 & 2\\
+  \end{array} } \right]
+\]
+
+\[
+  B =
+  \left[ {\begin{array}{ccccc}
+     4 & -3\\
+     1 & -2\\
+    -2 & 0 \\
+  \end{array} } \right]
+\]
+
+and
+
+\[
+  C =
+  \left[ {\begin{array}{ccccc}
+     5 \\
+     -4\\
+     2 \\
+  \end{array} } \right]
+\]
+
+perform the indicated multiplications.
+
+(a) $5A$
+
+(b) $BA$
+
+(c) $A'B'$
+
+(d) $C'B$
+
+(e) Is **AB** defined?
+
+17. Let
+
+\[
+  A =
+  \left[ {\begin{array}{ccccc}
+     9 & -2\\
+     -2 & 6\\
+  \end{array} } \right]
+\]
+
+(a) Is **A** symmetric?
+
+(b) Show that **A** is positive definite.
+
+18. Let **A** be as given in previous exercise.
+
+(a) Determine the eigenvalues and eigenvectors of **A**.
+
+(b) Write the spectral decomposition of **A**.
+
+(c) Find $A^{-1}$.
+
+(d) Find the eigenvalues and eigenvectors of $A^{-1}$
+
+19. Given the matrix
+
+\[
+  A =
+  \left[ {\begin{array}{ccccc}
+     1 & 2\\
+     2 & -2\\
+  \end{array} } \right]
+\]
+
+find the eigenvalues $\lambda_1$ and $\lambda_2$ and the associated normalized eigenvectors $e_1$ and $e_2$.
+Determine the spectral decomposition (2-16) of **A**.
+
+20. Consider an arbitrary $n\times p$ matrix **A**. Then $A'A$ is a symmetric $p \times p$ matrix. Show that $A'A$ is necessarily nonnegative definite.
+Hint: Set $y=A \ x$ so that $y'y=x'A'A \ x$
+
+21. Consider the set of points $(x_1,x_2)$ whose "distances" from the Origin are given by
+$$c^2=4x_1^2+3x_2^2-2\sqrt2x_1x_2$$
+for $c^2=1$ and for $c^2=4$. Determine the major and minor axes of the ellipses of constant distances and their associated lengths. Sketch the ellipses of constant distances and comment on their positions. What will happen as $c^2$ increases?
+
+22. Let $A^{1/2}_{(m \times m)}=\sum_{i=1}^m\sqrt\lambda_ie_ie_i'=PA^{1/2}P'$, where $PP'=P'P=I$.(The $\lambda_i's$ and the $e_i's$ are the eigenvalues and associated normalized eigenvectors of the matrix A.) Show properties (1)-(4) of the square-root matrix in (2-22).
+
+23. (See result 2A.15) Using the matrix
+
+\[
+  A =
+  \left[ {\begin{array}{ccccc}
+     1 & 1 \\
+     2 & -2\\
+     2 & 2 \\
+  \end{array} } \right]
+\]
+
+(a) Calculate $A'A$ and obtain its eigenvalues and eigenvectors.
+
+(b) Calculate $AA'$ and obtain its eigenvalues and eigenvectors. Check that the nonzero eigenvalues are the same as those in part a.
+
+(c) Obtain the singular-value decomposition of **A**
+
+24. Let **X** have covariance matrix
+
+\[
+  \Sigma =
+  \left[ {\begin{array}{ccccc}
+     25 & -2 & 4\\
+     -2 & 4  & 1\\
+     4  & 1  & 9\\
+  \end{array} } \right]
+\]
+
+(a) Determine $\rho$ and $V^{1/2}$.
+
+(b) Multiply your matrices to check the relation $V^{1/2}\rho V^{1/2}=\Sigma$.
+
+Nota: $\rho$ é a matriz de correlação populacional e **V** é a matriz diagonal de variâncias.
+Para calcular $\rho$ é mais fácil fazer $\rho=(V^{1/2})^{-1}\sum(V^{1/2})^{-1}$, uma vez que **V** é uma matriz diagonal, i.e., $V=diag[\sqrt{\sigma_{11}},...,\sqrt{\sigma_{11}}]$.
+
+25. Derive exoressions for the mean and variance of the following linear combinations in terms of the mean and covariances of the random variable $X_1,X_2, \ and \ X_3$.
+
+(a) $X_1-2X_2$
+
+(b) $-X_1+3X_2$
+
+(c) $X_1+X_2+X_3$
+
+(e) $X_1+2X_2-X_3$
+
+(f) $3X_1-4X_2$ if $X_1$ and $X_2$ are independent random variables.
+
+26. You are given the random vector $X'=[X_1,X_2,...,X_5]$ with mean vector $\mu'_x=[2,4,-1,3,0]$ and variance-covariance matrix
+
+\[
+  \Sigma_x =
+  \left[ {\begin{array}{ccccc}
+     4 & -1 & \frac{1}{2} & -\frac{1}{2} & 0\\
+     -1 & 3 & 1 & -1 & 0\\
+     \frac{1}{2} & 1 & 6 & 1 & -1\\
+     -\frac{1}{2} & -1 & 1 & 4 & 0\\
+     0 & 0 & -1 & 0 & 2\\
+  \end{array} } \right]
+\]
+
+Partition **X** as
+
+\[
+  X =
+  \left[ {\begin{array}{ccccc}
+     X_1\\
+     X_2\\
+     .....\\
+          X_3\\
+     X_4\\
+     X_5\\ 
+  \end{array} } \right]
+\]
+
+=
+
+\[
+  \left[ {\begin{array}{ccccc}
+     X^{(1)}\\
+     .....\\
+      X^{(2)}\\
+  \end{array} } \right]
+\]
+
+Let
+
+\[
+  A =
+  \left[ {\begin{array}{ccccc}
+     1 & -1\\
+    1 & 1\\
+  \end{array} } \right]
+\]
+
+and
+
+\[
+  B =
+  \left[ {\begin{array}{ccccc}
+     1 & 1 & 1\\
+     1 & 1 & -2\\
+  \end{array} } \right]
+\]
+
+and consider the linear combinations $AX^{(1)} \ and \ BX^{(2)}$. Find
+
+(a) $E(X^{(1)})$
+
+(b) $E(AX^{(1)})$
+
+(c) $Cov(X^{(1)})$
+
+(d) $Cov(AX^{(1)})$
+
+(e) $E(X^{(2)})$
+
+(f) $E(BX^{(2)})$
+
+(g) $Cov(X^{(2)})$
+
+(h) $Cov(BX^{(2)})$
+
+(i) $Cov(X^{(1)},X^{(2)})$
+
+(J) $Cov(AX^{(1)},BX^{(2)})$
+
+27. You are given the random vector $X1=[X_1,X_2,X_3,X_4]$ with mean vector $\mu'_x=[3,2,-2,0]$ and variance-covariance matrix
+
+\[
+  \Sigma_x =
+  \left[ {\begin{array}{ccccc}
+     3 & 0 & 0 & 0\\
+     0 & 3 & 0 & 0\\
+     0 & 0 & 3 & 0\\
+     0 & 0 & 0 & 3\\
+  \end{array} } \right]
+\]
+
+Let
+
+\[
+  A =
+  \left[ {\begin{array}{ccccc}
+     1 & -1 & 0  & 0\\
+     1 & 1  & -2 & 0\\
+     1 & 1  & 1  & -3\\
+  \end{array} } \right]
+\]
+
+(a) Find E(**AX**), the mean of **AX**.
+
+(b) Find Cov(**AX**), the variances and covariances of **AX**
+
+(c) Which pairs of linear combinations have zero covariances?
+
+28. Considere o seguinte conjunto de dados de Pacientes em Tratamento de Hemodiálise.
+
+(a) Represente graficamente e através de medidas descritivas.
+
+(b) Obtenha a decomposição espectral e verifique se existe indicação de uma possível redução da dimensão do estudo em questão. Justifique.
