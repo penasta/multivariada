@@ -187,11 +187,12 @@ Baseado no gráfico de dispersão, a covariância desses dados é alta e negativ
 A covariância para uma amostra é definida como:
 
 $$ s_{xy} = \frac{1}{n-1} \sum_{i=1}^n  (x_i-\bar{x})(y_i-\bar{y}) $$
-A covariância calculada para este conjunto de dados é:
 
 ```{r q412b, echo=F}
-round(cov(df$Age,df$Price),2)
+valor <- round(cov(df$Age,df$Price),2)
 ```
+
+A covariância calculada para este conjunto de dados é `r valor`
 
 O que confirma o palpite inferido sobre o gráfico de dispersão.
 
@@ -226,20 +227,251 @@ d) Display the sample mean array $\bar{x}$, the sample variance-covariance array
 
 ```{r q412d, echo=F}
 
-# Acho que isso tá errado...
-m <- (m1+m2)/2
+cordf <- data.frame(cor(df))
+
+covdf <- data.frame(cov(df))
+
+meandf <- data.frame(m1,m2)
+colnames(meandf) <- c("Age","Price")
+rownames(meandf) <- "Média"
+
+```
+
+Matriz de médias
+
+```{r q412d2, echo=F}
+kable(meandf)
+```
+
+Matriz de correlação
+
+```{r q412d3, echo=F}
+kable(cordf)
+```
+
+Matriz de covariâncias
+
+```{r q412d4, echo=F}
+kable(covdf)
+rm(list = ls())
+```
+
+## 1.6) The data in Table 1.5 are 42 measurements on air-pollution variables recorded at 12:00 noon in the Los Angeles area on different days.
+
+```{r q416data, include=FALSE}
+
+air <- read_table("dados/table1_5-air-pollution.DAT.txt", 
+    col_names = FALSE)
+
+kable(air)
 
 ```
 
 
-## 1.6) 
+```{r q416data1, echo=FALSE}
 
-## 1.14) 
+kable(air)
 
-## 1.22) 
+```
 
 
+a) Plot the marginal dot diagrams for all the variables.
 
+```{r q416a, echo=FALSE}
+
+ggplot(air, aes(x=X1, fill = factor(X1))) +
+  geom_dotplot(stackgroups = TRUE, method = "histodot", 
+               binwidth = 0.2)
+
+ggplot(air, aes(x=X2, fill = factor(X2))) +
+  geom_dotplot(stackgroups = TRUE, method = "histodot", 
+               binwidth = 2.8)
+
+ggplot(air, aes(x=X3, fill = factor(X3))) +
+  geom_dotplot(stackgroups = TRUE, method = "histodot", 
+               binwidth = .1)
+
+ggplot(air, aes(x=X4, fill = factor(X4))) +
+  geom_dotplot(stackgroups = TRUE, method = "histodot", 
+               binwidth = .2)
+
+ggplot(air, aes(x=X5, fill = factor(X5))) +
+  geom_dotplot(stackgroups = TRUE, method = "histodot", 
+               binwidth = .8)
+
+ggplot(air, aes(x=X6, fill = factor(X6))) +
+  geom_dotplot(stackgroups = TRUE, method = "histodot", 
+               binwidth = 1)
+
+ggplot(air, aes(x=X7, fill = factor(X7))) +
+  geom_dotplot(stackgroups = TRUE, method = "histodot", 
+               binwidth = .05)
+
+```
+
+
+b) Construct the $\bar{x}$,$S_n$, and **R** arrays, and interpret the entries in **R**.
+
+Matriz de médias($\bar{x}$):
+
+```{r q416b, echo=FALSE}
+
+meanarray <- data.frame(apply(air[,1:7],2,mean)) 
+colnames(meanarray) <- "Médias"
+
+kable(meanarray)
+
+vararray <- data.frame(apply(air[,1:7],2,var)) 
+colnames(vararray) <- "Variâncias"
+
+kable(cor(air))
+
+```
+
+Matriz de variâncias($S_n$):
+
+```{r q416b2, echo=F}
+
+kable(vararray)
+
+```
+
+Matriz de covariâncias(Cov):
+
+```{r q416b3, echo=F}
+
+kable(cov(air))
+
+```
+
+Matriz de correlações(**R**):
+
+```{r q416b4, echo=F}
+
+kable(cor(air))
+
+```
+
+## 1.14) Table contains some raw data. Two different visual stimuli (S1 and S2) produced responses in both the left eye (L) and the right eye (R) of subjects in the study groups. The values recorded in the table include x1 (subject's age); x2 (total response of both eyes to stimulus S1, that is, S1L + S1R); x3 (difference between responses of eyes to stimulus S1,|S1L-S1R|); and so forth.
+
+```{r q4114data, include=FALSE}
+rm(list = ls())
+esclerose <- read_table("dados/table1_6-multiple-sclerosis.DAT.txt", 
+    col_names = FALSE)
+```
+
+```{r q4114data1, echo=FALSE}
+
+kable(esclerose)
+
+```
+
+a) Plot the two-dimensional scatter diagram for the variables $x_2$ and $x_4$ for the multiple-sclerosis group. Comment on the appearance of the dragram.
+
+```{r q4144a, echo=F}
+
+ggplot(esclerose, aes(x=X2, y=X4)) +
+  geom_point(size=2)
+
+```
+
+Observando o resultado do gráfico de dispersão, notamos que aparenta existir uma correlação linear positiva entre as duas variáveis.
+
+b) Compute the $\bar{x}$,$S_n$, and **R** arrays for the non-multiple-sclerosis and multiple-sclerosis groups separately.
+
+```{r q4114b, echo=FALSE}
+
+ne <- esclerose %>%
+  filter(X6 == 0) %>%
+  select(1:5)
+
+ce <- esclerose %>%
+  filter(X6 == 1) %>%
+  select(1:5)
+
+meanarrayne <- data.frame(apply(ne[,1:5],2,mean)) 
+colnames(meanarrayne) <- "Médias"
+
+meanarrayce <- data.frame(apply(ce[,1:5],2,mean)) 
+colnames(meanarrayce) <- "Médias"
+
+vararrayne <- data.frame(apply(ne[,1:5],2,var)) 
+colnames(vararrayne) <- "Variâncias"
+
+vararrayce <- data.frame(apply(ce[,1:5],2,var)) 
+colnames(vararrayce) <- "Variâncias"
+
+#kable(meanarrayne)
+
+#kable(meanarrayce)
+
+#kable(vararrayne)
+
+#kable(vararrayce)
+
+#kable(cor(ne))
+
+```
+
+Matriz de médias das colunas para o conjunto dos que não tem esclerose múltipla
+
+```{r q4114b1, echo=FALSE}
+kable(meanarrayne)
+```
+
+Matriz de médias das colunas para o conjunto dos que tem esclerose múltipla
+
+```{r q4114b2, echo=FALSE}
+kable(meanarrayce)
+```
+
+Matriz de variâncias das colunas para o conjunto dos que não tem esclerose múltipla
+
+```{r q4114b3, echo=FALSE}
+kable(vararrayne)
+```
+
+Matriz de variâncias das colunas para o conjunto dos que tem esclerose múltipla
+
+```{r q4114b4, echo=FALSE}
+kable(vararrayce)
+```
+
+Matriz de correlações para o conjunto dos que não tem esclerose múltipla
+
+```{r q4114b5, echo=FALSE}
+kable(cor(ne))
+```
+
+Matriz de correlações para o conjunto dos que tem esclerose múltipla
+
+```{r q4114b6, echo=FALSE}
+kable(cor(ce))
+```
+
+## 1.22) Refer to the oxygen-comsumption data. Using appropriate computer software,
+
+```{r q4122data, echo=FALSE}
+
+```
+
+a) View the entire data set in three dimensions employing various combinations of three variables to represent the coordinate axes. Begin with the $x_1$,$x_2$,$x_3$ space.
+
+```{r q4122a, echo=FALSE}
+
+```
+
+
+b) Check this data set for outliers.
+
+```{r q4122b, echo=FALSE}
+
+```
+
+
+```{r clean, include=FALSE}
+rm(list = ls())
+```
 
 
 

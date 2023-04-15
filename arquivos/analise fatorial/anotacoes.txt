@@ -1,0 +1,36 @@
+Verificar validade: mede o que está medindo:
+- com os dados, confirma a estrutura que foi proposta:
+-- analise fatorial confirmatória:
+CFI > 0,95
+RMSEA < 0,95
+
+fidedignidade: alpha de cronbach
+
+Alpha de cronbach Geral (em geral dá bem alto)
+
+O que está sozinho é uma variável observada, não uma dimensão
+
+Tudo junto, mensura algo; adicionar fator geral (dimensão de segunda ordem)
+
+--------------------------------
+
+Validação internacional não abrange a validação deste questionário em sí
+
+existe um instrumento rigoroso para adaptar o questionário para a realidade brasileira
+
+-------------------------------
+
+Estudar análise fatorial:
+
+Hair: Análise Multivariada
+
+HAIR, J. F. Análise Multivariada de Dados - 6ª Edição.pdf
+
+Monografia Rafaela baliana
+
+Richard Johnson and 'wichern' 
+
+Applied Multivariate Statistical Analysis - Johnson and Wichernhttps://edisciplinas.usp.br › mod › url › view
+Applied Multivariate Statistical Analysis - Johnson and Wichern. Clique o link https://www.pearson.com/us/higher-education/product/Johnson-Applied-Multiva
+
+-------------------------------
