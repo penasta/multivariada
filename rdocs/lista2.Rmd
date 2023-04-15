@@ -364,7 +364,23 @@ Let
 
 (c) Which pairs of linear combinations have zero covariances?
 
+\newpage
+ 
 28. Considere o seguinte conjunto de dados de Pacientes em Tratamento de Hemodiálise.
+
+```{r q28data, include=FALSE}
+
+df <- read_table("dados/tabelaq2.txt")
+
+```
+
+
+```{r q28t, echo=FALSE}
+
+kable(df)
+
+```
+
 
 (a) Represente graficamente e através de medidas descritivas.
 
