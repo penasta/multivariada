@@ -88,15 +88,26 @@ A grande semelhança é que no fundo essas ciências são quase a mesma coisa e 
 
 ## a) Análise multivariada clássica (*n < p*).
 
-Análises fatoriais e escalas psicométricas. "Com o uso dessa técnica, o investigador discerne os aspectos isolados da estrutura latente em uma matriz de dados e, logo depois, indica o quanto que cada variável é explicada por cada dimensão; ou seja, ele é capaz de descrever as correlações entre muitas variáveis observáveis em termos de um número menor de variáveis não observáveis (linearmente relacionadas com as variáveis originais observadas) denominadas dimensões ou variáveis latentes" (VASCONCELOS, Rafaela Balliana Bragança de. (2016) Apud Hair Jr. et al., 2009; Johnson e Wichern, 2007)[1]
+Análises fatoriais e escalas psicométricas. "Com o uso dessa técnica, o investigador discerne os aspectos isolados da estrutura latente em uma matriz de dados e, logo depois, indica o quanto que cada variável é explicada por cada dimensão; ou seja, ele é capaz de descrever as correlações entre muitas variáveis observáveis em termos de um número menor de variáveis não observáveis (linearmente relacionadas com as variáveis originais observadas) denominadas dimensões ou variáveis latentes" (VASCONCELOS, Rafaela Balliana Bragança de. (2016) Apud Hair Jr. et al., 2009; Johnson e Wichern, 2007, p.21)[1]
 
 ## b) Mineração de dados (*Data Mining*) (*n* elevado).
 
+Uma das problemáticas em que a mineração de dados frequentemente esbarra é na privacidade dos dados. "Given a database containing both "public" information and "sensitive" information, we can use data mining to search for inference paths from the public to the sensitive information. In other words, a rule with antecedents in the public information and consequents in the sensitive information points to a potential problem. Clustering the public information could conceivably bring together the antecedents. This by itself does not pose a problem, but knowing sensitive information about one of the instances could then be conjectured (correctly) to apply to all of them (greatly expanding the "leak" of sensitive information). Proper use of data mining technology can be used to detect such situations. We can then apply techniques from the previous section to ensure that the data cannot be clustered in meaningful ways." (CLIFTON & MARKS, 1996, p. 18)[2]
+
 ## c)  Aprendizado estatístico (*Statistical Learning*) (*p* elevado).
+
+Talvez um dos campos que mais difira da análise multivariada clássica, SLT (*Statistical Learning Theory*) trabalha com o cada vez mais demandado desafio de extrair informações de bases de dados com p elevado e n "pequeno". Conforme elocidado pelo Prof. Von Borries em sala de aula, uma das aplicações recorrentes da SLT é em campos ge genética. "SLT effectively describes statistical estimation with small samples. Naturally, as a special case, this theory includes classical statistical methods which are developed for large samples and strict parametric assumptions. SLT is based on principle of empirical risk minimization(ERM) and VC dimension. The empirical risk is the average risk for the training data. This is minimized by choosing the appropriate parameters." (JUN & OH, 2006, p. 249) [3] **[3.1]**
+
+**[3.1] Nota:** *VC = Vapnik-Chervonenkis*
 
 ## d) Reconhecimento de padrões.
 
+Outro procedimento cada dia mais requisitado na área estatística, o reconhecimento de padrões é essencial quando se trabalha com conjuntos de dados muito grandes ($n \rightarrow \infty$) e/ou desestruturados. O conceito é retirar conclusões de conjuntos em que técnicas clássicas de inferência não funcionam/requisitam poder computacional demasiadamente grande. "A pattern recognition system can be regarded as a process that allows it to cope with real and noisy data. Whether the decision made by the system is right or not mainly depending on the decision make by the human expert." (LIU et al., 2006, p.58) [4]
+
 ## e) *Data Science*.
+
+*Data science* é como a adequação da estatística clássica ao poder computacional do século XXI. Tomadas de decisões são cada vez mais aperfeiçoadas e possíveis se analisados grandes conjuntos de dados, o que torna o aproveitamento desses para os setores estratégicos cada vez mais indispensável. "Data-driven decisions are better decisions — it’s as simple as that. Using big data enables managers to decide on the basis of evidence rather than intuition. For that reason it has the potential to revolutionize management." (MCAFEE et al., 2012, p.64)
+
 
 \vskip 5em
 
@@ -104,16 +115,15 @@ Referências:
 
 \vskip 1em
 
-[1] VASCONCELOS, R. **Avaliação psicométrica de um instrumento para
-mensuração de autoeficácia**.  Monografia (Bacharelado em Estatística) – Departamento de Estatística, Universidade de Brasília. Brasília, p. 21. 2016.
+[1] VASCONCELOS, Rafaela Balliana Bragança de. **Avaliação psicométrica de um instrumento para mensuração de autoeficácia**.  Monografia (Bacharelado em Estatística) – Departamento de Estatística, Universidade de Brasília. Brasília, p. 21. 2016.
 
-[2]
+[2] CLIFTON, Chris; MARKS, Don. Security and privacy implications of data mining. In: ACM SIGMOD Workshop on Research Issues on Data Mining and Knowledge Discovery. 1996. p. 15-19.
 
-[3]
+[3] JUN, Sung-Hae; OH, Kyung-Whan. An evolutionary statistical learning theory. International Journal of Computational Intelligence, v. 3, n. 3, p. 249-256, 2006.
 
-[4]
+[4] LIU, Jie; SUN, Jigui; WANG, Shengsheng. Pattern recognition: An overview. IJCSNS International Journal of Computer Science and Network Security, v. 6, n. 6, p. 57-61, 2006.
 
-[5]
+[5] McAfee, A., Brynjolfsson, E., Davenport, T. H., Patil, D. J., & Barton, D. Big data: the management revolution. Harvard business review, v. 90, n. 10, p. 60-68, 2012.
 
 \newpage
 
@@ -453,21 +463,172 @@ kable(cor(ce))
 
 ```{r q4122data, echo=FALSE}
 
+oxigenio <- read_table("dados/table6_12-oxygen-consumption.DAT.txt", col_names = FALSE)
+
+
+
 ```
 
 a) View the entire data set in three dimensions employing various combinations of three variables to represent the coordinate axes. Begin with the $x_1$,$x_2$,$x_3$ space.
 
 ```{r q4122a, echo=FALSE}
 
+p_load(TeachingDemos)
+
+faces(oxigenio[,1:3])
+faces2(oxigenio[,1:3])
+
+p_load(andrews)
+
+data(iris)
+head(iris)
+
+par(mfrow=c(2, 2))
+
+oxi <- oxigenio[,1:3]
+
+# andrews(oxi,type=1,step=500,clr=3)
+
+# ficou bem ruim seguindo o enunciado a risca (apenas col 1 a 3)
+# mas deixando a coluna de sexo para usar como referencia...
+
+oxi2 <- oxigenio[,c(1:3,4)]
+
+andrews(oxi2,type=6,step=500,clr=4,
+        ymax=3,main='Andrews Plot 2')
+
+# Agora no banco completo (melhor resultado)
+
+andrews(oxigenio,type=3,step=500,clr=5,
+        ymax=3,main='Andrews Plot 3')
+andrews(oxigenio,type=6,step=500,clr=5,
+        ymax=3,main='Andrews Plot 4')
+
+# Outra forma..
+
+p_load(lattice)
+super.sym <- trellis.par.get("superpose.symbol")
+splom(~oxigenio[1:4], groups = X5, data = oxigenio,
+      xlab=" ",
+      panel = panel.superpose,
+      key = list(title = "",
+                 columns = 3, 
+                 points = list(pch = super.sym$pch[1:3],
+                               col = super.sym$col[1:3]),
+                 text = list(c("X1", 
+                               "X2", "X3"))))
+
+# Outra forma
+
+parallelplot(~oxigenio[1:4] | X5, oxigenio) 
+
+parallelplot(~oxigenio[1:4], oxigenio, groups = X5,
+             horizontal.axis = FALSE, 
+             scales = list(x = list(rot = 90)))
+
+# Outra forma...
+
+p_load(aplpack)
+
+aplpack::faces(oxigenio[,1:4],face.type=0)
+aplpack::faces(oxigenio[,1:4],face.type=1)
+
+# Outra forma...
+
+p_load(gplots)
+
+heatmap.2(as.matrix(oxigenio[,1:4]), col=redgreen(75), dendrogram = 'none',
+          scale="row", Rowv = FALSE, Colv = FALSE, 
+          key=TRUE, symkey=FALSE, 
+          density.info="none", trace="none", cexRow=0.5)
+
+# Outra forma...
+
 ```
 
 
 b) Check this data set for outliers.
 
+Primeiramente, irei fixar um nível de significância $\alpha=0.05$. Testarei a normalidade dos dados de cada coluna utilizando o teste de *Shapiro-Wilk*; sob as hipóteses:
+
+$$\begin{cases}H_0 &: Os \ dados \ seguem \ distribuição \ normal \\ H_1 &: \ " \ " \ NÃO \ " \ " \ " \end{cases}$$
+Para as colunas em que a hipótese nula não for rejeitada, irei aplicar o teste de *Grubbs* para identificação de *outliers*.
+
 ```{r q4122b, echo=FALSE}
+p_load(outliers)
+
+oxigenio %>%
+  pull(X1) %>%
+  shapiro.test(.) 
+oxigenio %>%
+  pull(X2) %>%
+  shapiro.test(.)
+oxigenio %>%
+  pull(X3) %>%
+  shapiro.test(.) 
+oxigenio %>%
+  pull(X4) %>%
+  shapiro.test(.) 
+
+
+oxigenio %>%
+  pull(X1) %>%
+  grubbs.test(.) 
+
+oxigenio %>%
+  pull(X2) %>%
+  grubbs.test(.)
+
+oxigenio %>%
+  pull(X3) %>%
+  grubbs.test(.)
+
+oxigenio %>%
+  pull(X4) %>%
+  grubbs.test(.)
 
 ```
 
+\vskip 3em
+
+Nas colunas que a hipótese de normalidade não foi rejeitada (colunas $X_1$ e $X_4$), aplicou-se o teste de *Grubbs* para identificação de *outliers*. Em $X_1$, A estatística de teste pontual observada foi $G = 3.04029$, e $p = 0.03592$ é o p-valor. Rejeitamos a hipótese nula pelo p-valor ser menor que $0.05$. Portanto, existe ao menos um *outlier* na variável $X_1$. Não foram detectados *outliers* na coluna $X_4$.
+
+Podemos também fazer *boxplots* para explorar a existência de *outliers*, principalmente para as colunas $X_2$ e $X_3$ em que o teste de *Shapiro-Wilk* rejeitou a hipótese nula de normalidade, portanto impossibilitando o uso do teste de *Grubbs*
+
+```{r q4122b2, echo=FALSE}
+
+oxigenio2 <- oxigenio[,1:4] %>% 
+  pivot_longer(cols = everything(), names_to = "colunas", values_to = "valores")
+
+ggplot(oxigenio2, aes(x = colunas, y = valores)) +
+  geom_boxplot() +
+  theme_classic()
+
+oxigenio[,1] %>%
+  pivot_longer(cols = 1, names_to = 'coluna', values_to = 'valores') %>%
+  ggplot(., aes(x = coluna, y = valores)) +
+  geom_boxplot()
+
+oxigenio[,2] %>%
+  pivot_longer(cols = 1, names_to = 'coluna', values_to = 'valores') %>%
+  ggplot(., aes(x = coluna, y = valores)) +
+  geom_boxplot()
+
+oxigenio[,3] %>%
+  pivot_longer(cols = 1, names_to = 'coluna', values_to = 'valores') %>%
+  ggplot(., aes(x = coluna, y = valores)) +
+  geom_boxplot()
+
+oxigenio[,4] %>%
+  pivot_longer(cols = 1, names_to = 'coluna', values_to = 'valores') %>%
+  ggplot(., aes(x = coluna, y = valores)) +
+  geom_boxplot()
+
+
+
+```
+
+Pelo *boxplot*, observamos que o teste de *Grubbs* aparenta ter acertado em detectar um *outlier* na coluna $X_1$, e na não existência de *outliers* na coluna $X_4$. Ainda, é possível perceber que a coluna $X_2$ aparenta ter um *outlier* pela visualização do *boxplot*, enquanto a coluna $X_3$; não.
 
 ```{r clean, include=FALSE}
 rm(list = ls())
