@@ -1,0 +1,588 @@
+---
+title: ''
+author: ''
+date: ''
+output:
+  pdf_document: null
+  fig_crop: no
+  html_document:
+    df_print: paged
+subtitle: ''
+highlight: tango
+number_sections: no
+fig_caption: yes
+keep_tex: yes
+includes:
+  in_header: Estilo.sty
+classoption: a4paper
+always_allow_html: yes
+---
+  
+  
+\begin{center}
+{\Large
+  DEPARTAMENTO DE ESTATÍSTICA} \\
+\vspace{0.5cm}
+\begin{figure}[!t]
+\centering
+\includegraphics[width=9cm, keepaspectratio]{logo-UnB.eps}
+\end{figure}
+\vskip 1em
+{\large
+  `r format(Sys.time(), '%d %B %Y')`}
+\vskip 3em
+{\LARGE
+  \textbf{Entrega 1 - Lista 2}} \\
+\vskip 1em
+{\Large
+  Prof. Dr. George von Borries} \\
+\vskip 1em
+{\Large
+  Análise Multivariada 1} \\
+\vskip 1em
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636} \\
+\vskip 1em
+\end{center}
+
+\vskip 5em
+
+```{r setup, include=F}
+
+library(pacman)
+p_load(knitr,tidyverse,ggExtra,gridExtra,car)
+
+```
+
+\newpage
+
+13. Considere uma matriz de correlação $(r \times r)$ com a mesma correlação ($\rho$) em todas as células fora da diagonal. Encontre os autovalores e autovetores desta matriz quando $r = 2, 3, 4$. Generalize seus resultados para qualquer número *r* de variáveis. Como exemplo, faça $\rho = 0.1, 0.3, 0.5, 0.7, 0.9.$
+
+```{r q13, include=F}
+
+# ---- rho = 0.1 ---- #
+rho <- 0.1
+
+r <- 2
+mat <- matrix(rho, nrow = r, ncol = r)
+diag(mat) <- 1
+
+eigen(mat)
+
+r <- 3
+mat <- matrix(rho, nrow = r, ncol = r)
+diag(mat) <- 1
+
+eigen(mat)
+
+r <- 4
+mat <- matrix(rho, nrow = r, ncol = r)
+diag(mat) <- 1
+
+eigen(mat)
+
+# ---- rho = 0.3 ---- #
+rho <- 0.3
+
+r <- 2
+mat <- matrix(rho, nrow = r, ncol = r)
+diag(mat) <- 1
+
+eigen(mat)
+
+r <- 3
+mat <- matrix(rho, nrow = r, ncol = r)
+diag(mat) <- 1
+
+eigen(mat)
+
+r <- 4
+mat <- matrix(rho, nrow = r, ncol = r)
+diag(mat) <- 1
+
+eigen(mat)
+
+# ---- rho = 0.5 ---- #
+rho <- 0.5
+
+r <- 2
+mat <- matrix(rho, nrow = r, ncol = r)
+diag(mat) <- 1
+
+eigen(mat)
+
+r <- 3
+mat <- matrix(rho, nrow = r, ncol = r)
+diag(mat) <- 1
+
+eigen(mat)
+
+r <- 4
+mat <- matrix(rho, nrow = r, ncol = r)
+diag(mat) <- 1
+
+eigen(mat)
+
+# ---- rho = 0.7 ---- #
+rho <- 0.7
+
+r <- 2
+mat <- matrix(rho, nrow = r, ncol = r)
+diag(mat) <- 1
+
+eigen(mat)
+
+r <- 3
+mat <- matrix(rho, nrow = r, ncol = r)
+diag(mat) <- 1
+
+eigen(mat)
+
+r <- 4
+mat <- matrix(rho, nrow = r, ncol = r)
+diag(mat) <- 1
+
+eigen(mat)
+
+# ---- rho = 0.9 ---- #
+rho <- 0.9
+
+r <- 2
+mat <- matrix(rho, nrow = r, ncol = r)
+diag(mat) <- 1
+
+eigen(mat)
+
+r <- 3
+mat <- matrix(rho, nrow = r, ncol = r)
+diag(mat) <- 1
+
+eigen(mat)
+
+r <- 4
+mat <- matrix(rho, nrow = r, ncol = r)
+diag(mat) <- 1
+
+eigen(mat)
+
+
+```
+
+Seja $r=2$ e $\rho=0.1$; Os autovalores e autovetores calculados da matriz de correlação $\mathbf{X}_{(2 \times 2)}$(em que $x_{ii}=1$ e $x_{ij}=0.1 \ ,\forall \ i \neq j$) são:
+
+```{r q131, echo=FALSE}
+
+rho <- 0.1
+r <- 2
+mat <- matrix(rho, nrow = r, ncol = r)
+diag(mat) <- 1
+eigen(mat)
+
+```
+
+Seja $r=3$ e $\rho=0.1$; Os autovalores e autovetores calculados da matriz de correlação $\mathbf{X}_{(3 \times 3)}$(em que $x_{ii}=1$ e $x_{ij}=0.1 \ ,\forall \ i \neq j$) são:
+
+```{r q132, echo=FALSE}
+
+rho <- 0.1
+r <- 3
+mat <- matrix(rho, nrow = r, ncol = r)
+diag(mat) <- 1
+eigen(mat)
+
+```
+
+Seja $r=4$ e $\rho=0.1$; Os autovalores e autovetores calculados da matriz de correlação $\mathbf{X}_{(4 \times 4)}$(em que $x_{ii}=1$ e $x_{ij}=0.1 \ ,\forall \ i \neq j$) são:
+
+```{r q133, echo=FALSE}
+
+rho <- 0.1
+r <- 4
+mat <- matrix(rho, nrow = r, ncol = r)
+diag(mat) <- 1
+eigen(mat)
+
+```
+
+Seja $r=2$ e $\rho=0.3$; Os autovalores e autovetores calculados da matriz de correlação $\mathbf{X}_{(2 \times 2)}$(em que $x_{ii}=1$ e $x_{ij}=0.3 \ ,\forall \ i \neq j$) são:
+
+```{r q134, echo=FALSE}
+
+rho <- 0.3
+r <- 2
+mat <- matrix(rho, nrow = r, ncol = r)
+diag(mat) <- 1
+eigen(mat)
+
+```
+
+Seja $n=3$ e $\rho=0.3$; Os autovalores e autovetores calculados da matriz de correlação $\mathbf{X}_{(3 \times 3)}$(em que $x_{ii}=1$ e $x_{ij}=0.3 \ ,\forall \ i \neq j$) são:
+
+```{r q135, echo=FALSE}
+
+rho <- 0.3
+r <- 3
+mat <- matrix(rho, nrow = r, ncol = r)
+diag(mat) <- 1
+eigen(mat)
+
+```
+
+Seja $n=4$ e $\rho=0.3$; Os autovalores e autovetores calculados da matriz de correlação $\mathbf{X}_{(4 \times 4)}$(em que $x_{ii}=1$ e $x_{ij}=0.3 \ ,\forall \ i \neq j$) são:
+
+```{r q136, echo=FALSE}
+
+rho <- 0.3
+r <- 4
+mat <- matrix(rho, nrow = r, ncol = r)
+diag(mat) <- 1
+eigen(mat)
+
+```
+
+Seja $n=2$ e $\rho=0.5$; Os autovalores e autovetores calculados da matriz de correlação $\mathbf{X}_{(2 \times 2)}$(em que $x_{ii}=1$ e $x_{ij}=0.5 \ ,\forall \ i \neq j$) são:
+
+```{r q137, echo=FALSE}
+
+rho <- 0.5
+r <- 2
+mat <- matrix(rho, nrow = r, ncol = r)
+diag(mat) <- 1
+eigen(mat)
+
+```
+
+Seja $n=3$ e $\rho=0.5$; Os autovalores e autovetores calculados da matriz de correlação $\mathbf{X}_{(3 \times 3)}$(em que $x_{ii}=1$ e $x_{ij}=0.5 \ ,\forall \ i \neq j$) são:
+
+```{r q138, echo=FALSE}
+
+rho <- 0.5
+r <- 3
+mat <- matrix(rho, nrow = r, ncol = r)
+diag(mat) <- 1
+eigen(mat)
+
+```
+
+Seja $n=4$ e $\rho=0.5$; Os autovalores e autovetores calculados da matriz de correlação $\mathbf{X}_{(4 \times 4)}$(em que $x_{ii}=1$ e $x_{ij}=0.5 \ ,\forall \ i \neq j$) são:
+
+```{r q139, echo=FALSE}
+
+rho <- 0.5
+r <- 4
+mat <- matrix(rho, nrow = r, ncol = r)
+diag(mat) <- 1
+eigen(mat)
+
+```
+
+Seja $n=2$ e $\rho=0.7$; Os autovalores e autovetores calculados da matriz de correlação $\mathbf{X}_{(2 \times 2)}$(em que $x_{ii}=1$ e $x_{ij}=0.7 \ ,\forall \ i \neq j$) são:
+
+```{r q1310, echo=FALSE}
+
+rho <- 0.7
+r <- 2
+mat <- matrix(rho, nrow = r, ncol = r)
+diag(mat) <- 1
+eigen(mat)
+
+```
+
+Seja $n=3$ e $\rho=0.7$; Os autovalores e autovetores calculados da matriz de correlação $\mathbf{X}_{(3 \times 3)}$(em que $x_{ii}=1$ e $x_{ij}=0.7 \ ,\forall \ i \neq j$) são:
+
+```{r q1311, echo=FALSE}
+
+rho <- 0.7
+r <- 3
+mat <- matrix(rho, nrow = r, ncol = r)
+diag(mat) <- 1
+eigen(mat)
+
+```
+
+Seja $n=4$ e $\rho=0.7$; Os autovalores e autovetores calculados da matriz de correlação $\mathbf{X}_{(4 \times 4)}$(em que $x_{ii}=1$ e $x_{ij}=0.7 \ ,\forall \ i \neq j$) são:
+
+```{r q1312, echo=FALSE}
+
+rho <- 0.7
+r <- 4
+mat <- matrix(rho, nrow = r, ncol = r)
+diag(mat) <- 1
+eigen(mat)
+
+```
+
+Seja $n=2$ e $\rho=0.9$; Os autovalores e autovetores calculados da matriz de correlação $\mathbf{X}_{(2 \times 2)}$(em que $x_{ii}=1$ e $x_{ij}=0.9 \ ,\forall \ i \neq j$) são:
+
+```{r q1313, echo=FALSE}
+
+rho <- 0.9
+r <- 2
+mat <- matrix(rho, nrow = r, ncol = r)
+diag(mat) <- 1
+eigen(mat)
+
+```
+
+Seja $n=3$ e $\rho=0.9$; Os autovalores e autovetores calculados da matriz de correlação $\mathbf{X}_{(3 \times 3)}$(em que $x_{ii}=1$ e $x_{ij}=0.9 \ ,\forall \ i \neq j$) são:
+
+```{r q1314, echo=FALSE}
+
+rho <- 0.9
+r <- 3
+mat <- matrix(rho, nrow = r, ncol = r)
+diag(mat) <- 1
+eigen(mat)
+
+```
+
+Seja $n=4$ e $\rho=0.9$; Os autovalores e autovetores calculados da matriz de correlação $\mathbf{X}_{(4 \times 4)}$(em que $x_{ii}=1$ e $x_{ij}=0.9 \ ,\forall \ i \neq j$) são:
+
+```{r q1315, echo=FALSE}
+
+rho <- 0.9
+r <- 4
+mat <- matrix(rho, nrow = r, ncol = r)
+diag(mat) <- 1
+eigen(mat)
+
+```
+
+Generalizando, seja a matriz de correlações $\Omega(r \times r)$, com correlação $\rho$ constante fora da diagonal principal; temos uma matriz do tipo
+
+$$\Omega_{(n \times n)}=\begin{bmatrix}
+1 & \rho & \rho & \cdots & \rho & \rho \\
+\rho & 1 & \rho & \ddots & & \vdots \\
+\vdots & \ddots & \ddots & \ddots & \rho & \rho \\
+\rho & \cdots & \rho & 1 & \rho & \vdots \\
+\vdots & & & \ddots & \ddots & \rho \\
+\rho & \cdots & \rho & \cdots & \rho & 1
+\end{bmatrix}$$
+
+Para $\Omega \cdot v = \lambda v \ \ \forall \ v \neq 0$, e sendo $u_{(1 \times n)} = [1,1,...,1]$ temos:
+
+$$\lambda v = \Omega \cdot v = \rho <u,v> \cdot u + (1-\rho)\cdot v$$
+Então teremos o autovalor $\rho(n-1) \ +1$ e os autovalores $\lambda=1-\rho$ com multiplicidade $r-1$. Ou seja, $\lambda v=[(\rho (n-1) \ +1),(1-\rho),(1-\rho),...,(1-\rho)] \ \square$ 
+
+\newpage
+
+27. You are given the random vector $X'=[X_1,X_2,X_3,X_4]$ with mean vector $\mu'_x=[3,2,-2,0]$ and variance-covariance matrix
+
+\[
+  \Sigma_x =
+  \left[ {\begin{array}{ccccc}
+     3 & 0 & 0 & 0\\
+     0 & 3 & 0 & 0\\
+     0 & 0 & 3 & 0\\
+     0 & 0 & 0 & 3\\
+  \end{array} } \right]
+\]
+
+Let
+
+\[
+  A =
+  \left[ {\begin{array}{ccccc}
+     1 & -1 & 0  & 0\\
+     1 & 1  & -2 & 0\\
+     1 & 1  & 1  & -3\\
+  \end{array} } \right]
+\]
+
+(a) Find E(**AX**), the mean of **AX**.
+
+```{r q27a1, echo=F}
+
+A <- matrix(c(1,-1,0,0,
+              1,1,-2,0,
+              1,1,1,-3),3,4,byrow = T)
+
+mx <- matrix(t(c(3,2,-2,0)))
+
+# A%*%mx
+# = [1 9 3]'
+```
+
+
+Utilizando a propriedade da linearidade da esperança, e pelo dado que $E(X)=\mu'_x$:
+
+$$E(\mathbf{AX}) = \mathbf{A}E(\mathbf{X}) = \mathbf{A}\mu'_x$$
+Então,
+
+$$\mathbf{A}\mu'_x = 
+  \left[ {\begin{array}{ccccc}
+     1 & -1 & 0  & 0\\
+     1 & 1  & -2 & 0\\
+     1 & 1  & 1  & -3\\
+  \end{array} } \right] 
+  \left[ {\begin{array}{ccccc}
+     3\\
+     2\\
+     -2\\
+     0\\
+  \end{array} } \right]=   \left[ {\begin{array}{ccccc}
+     1 \\ 9 \\ 3\\
+  \end{array} } \right]$$
+
+(b) Find Cov(**AX**), the variances and covariances of **AX**
+
+```{r q27b, echo=F}
+
+X <- matrix(0, nrow = 4, ncol = 4)
+diag(X) <- 3
+
+vcax <- A%*%X%*%t(A)
+```
+
+A matriz de variância-covariância $\Omega_{(3 \times 3)}$ de **AX** é dada por:
+
+$$Cov(\mathbf{AX})=\mathbf{A\Sigma_xA^T} = \Omega_{3 \times 3}$$, que é:
+
+```{r q27b2, echo=F}
+
+kable(vcax)
+
+```
+
+(c) Which pairs of linear combinations have zero covariances?
+
+Todos os pares $\omega_{ij} \ \forall \ i \neq j$ apresentam covariância $\sigma=0$
+
+\newpage
+ 
+28. Considere o seguinte conjunto de dados de Pacientes em Tratamento de Hemodiálise.
+
+```{r q28data, include=FALSE}
+
+df <- read_table("dados/tabelaq2.txt")
+
+```
+
+
+```{r q28t, echo=FALSE}
+
+kable(df)
+
+```
+
+
+(a) Represente graficamente e através de medidas descritivas.
+
+Começando com as medidas descritivas, temos:
+
+```{r q28, echo=FALSE}
+
+cova <- data.frame(cov(df))
+
+vari <- data.frame(var(df))
+
+corr <- data.frame(cor(df))
+
+```
+
+Matriz de covariâncias:
+
+```{r q28cov, echo=FALSE}
+
+kable(cova)
+
+```
+
+Matriz de variâncias:
+
+```{r q28var, echo=FALSE}
+
+kable(vari)
+
+```
+
+Matriz de correlações:
+
+```{r q28cor, echo=FALSE}
+
+kable(corr)
+
+```
+
+Agora, representando graficamente:
+
+```{r q4122a, echo=FALSE}
+
+p_load(TeachingDemos)
+
+faces(df)
+faces2(df)
+
+p_load(andrews)
+
+andrews(df,type=6,step=500,clr=4,
+        ymax=3,main='Andrews Plot 1')
+andrews(df,type=3,step=500,clr=5,
+        ymax=3,main='Andrews Plot 2')
+andrews(df,type=6,step=500,clr=5,
+        ymax=3,main='Andrews Plot 3')
+
+p_load(lattice)
+parallelplot(df)
+parallelplot(df, groups = df$Idade,
+             horizontal.axis = FALSE, 
+             scales = list(x = list(rot = 90)))
+
+p_load(aplpack)
+
+aplpack::faces(df,face.type=0)
+aplpack::faces(df,face.type=1)
+
+p_load(gplots)
+
+par(mar = rep(2, 4))
+
+df2 <- df %>%
+  rename(x1 = colnames(df)[1],
+         x2 = colnames(df)[2],
+         x3 = colnames(df)[3],
+         x4 = colnames(df)[4],
+         x5 = colnames(df)[5])
+
+heatmap.2(as.matrix(df2))
+
+```
+
+(b) Obtenha a decomposição espectral e verifique se existe indicação de uma possível redução da dimensão do estudo em questão. Justifique.
+
+```{r q28b, echo=FALSE}
+
+# Utilizado o arquivo svd.R disponibilizado pelo prof. George von Borries como referência para elaboração deste exercício.
+
+p_load(Matrix,psych)
+
+P <- as.matrix(df)
+# P
+
+# rankMatrix(P)[1]
+
+# Realizando a decomposição em valor único
+
+svdP <- svd(P)
+U <- svdP$u
+V <- svdP$v
+D <- diag(svdP$d)
+
+# Aqui vemos que, arredondando até a 11ª casa decimal, o valor retornado é zero.
+# round(P - U%*%D%*%t(V),11)
+
+# Deixando fixo o número de vetores singulares a serem computados como 2, temos:
+(svdP2 <- svd(P,nu=2,nv=2))
+(U2 <- round(svdP2$u,1))
+(V2 <- round(svdP2$v,1))
+(D2 <- round(diag(svdP2$d[1:2]),1))
+
+round(P - U2%*%D2%*%t(V2),1)
+
+tr(D2) / tr(D) * 100  # Percentual da energia (ou informacao) retida pela SVD truncada
+
+# Com este resultado, concluímos que a redução de dimensionalidade neste caso não só é possível como retêm a absoluta maior parte da informação (>99%).
+
+```
+
+Com este resultado, concluímos que a redução de dimensionalidade neste caso não só é possível como retêm a absoluta maior parte da informação (>99%). Logo, a redução se justifica pela retenção da informação dado o ganho  de eficiência computacional para a matriz reduzida à dois vetores singulares.

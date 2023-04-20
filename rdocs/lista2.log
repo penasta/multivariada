@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.4.10)  15 APR 2023 02:01
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.4.10)  20 APR 2023 13:02
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -559,20 +559,112 @@ LaTeX Warning: Command \texttimes invalid in math mode on input line 189.
 
 LaTeX Warning: Command \texttimes invalid in math mode on input line 189.
 
-[2{c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}] [3] [4] [5] [6] (./lista2.aux) ) 
+[2{c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}] [3] [4] [5] [6]
+<lista2_files/figure-latex/q4122a-1.pdf, id=122, 469.755pt x 325.215pt>
+File: lista2_files/figure-latex/q4122a-1.pdf Graphic file (type pdf)
+<use lista2_files/figure-latex/q4122a-1.pdf>
+Package pdftex.def Info: lista2_files/figure-latex/q4122a-1.pdf  used on input line 771.
+(pdftex.def)             Requested size: 452.96669pt x 313.59232pt.
+<lista2_files/figure-latex/q4122a-2.pdf, id=123, 469.755pt x 325.215pt>
+File: lista2_files/figure-latex/q4122a-2.pdf Graphic file (type pdf)
+<use lista2_files/figure-latex/q4122a-2.pdf>
+Package pdftex.def Info: lista2_files/figure-latex/q4122a-2.pdf  used on input line 772.
+(pdftex.def)             Requested size: 452.96669pt x 313.59232pt.
+<lista2_files/figure-latex/q4122a-3.pdf, id=124, 469.755pt x 325.215pt>
+File: lista2_files/figure-latex/q4122a-3.pdf Graphic file (type pdf)
+<use lista2_files/figure-latex/q4122a-3.pdf>
+Package pdftex.def Info: lista2_files/figure-latex/q4122a-3.pdf  used on input line 773.
+(pdftex.def)             Requested size: 452.96669pt x 313.59232pt.
+<lista2_files/figure-latex/q4122a-4.pdf, id=125, 469.755pt x 325.215pt>
+File: lista2_files/figure-latex/q4122a-4.pdf Graphic file (type pdf)
+<use lista2_files/figure-latex/q4122a-4.pdf>
+Package pdftex.def Info: lista2_files/figure-latex/q4122a-4.pdf  used on input line 774.
+(pdftex.def)             Requested size: 452.96669pt x 313.59232pt.
+<lista2_files/figure-latex/q4122a-5.pdf, id=126, 469.755pt x 325.215pt>
+File: lista2_files/figure-latex/q4122a-5.pdf Graphic file (type pdf)
+<use lista2_files/figure-latex/q4122a-5.pdf>
+Package pdftex.def Info: lista2_files/figure-latex/q4122a-5.pdf  used on input line 775.
+(pdftex.def)             Requested size: 452.96669pt x 313.59232pt.
+<lista2_files/figure-latex/q4122a-6.pdf, id=127, 469.755pt x 325.215pt>
+File: lista2_files/figure-latex/q4122a-6.pdf Graphic file (type pdf)
+<use lista2_files/figure-latex/q4122a-6.pdf>
+Package pdftex.def Info: lista2_files/figure-latex/q4122a-6.pdf  used on input line 776.
+(pdftex.def)             Requested size: 452.96669pt x 313.59232pt.
+<lista2_files/figure-latex/q4122a-7.pdf, id=128, 469.755pt x 325.215pt>
+File: lista2_files/figure-latex/q4122a-7.pdf Graphic file (type pdf)
+<use lista2_files/figure-latex/q4122a-7.pdf>
+Package pdftex.def Info: lista2_files/figure-latex/q4122a-7.pdf  used on input line 777.
+(pdftex.def)             Requested size: 452.96669pt x 313.59232pt.
+<lista2_files/figure-latex/q4122a-8.pdf, id=129, 469.755pt x 325.215pt>
+File: lista2_files/figure-latex/q4122a-8.pdf Graphic file (type pdf)
+<use lista2_files/figure-latex/q4122a-8.pdf>
+Package pdftex.def Info: lista2_files/figure-latex/q4122a-8.pdf  used on input line 778.
+(pdftex.def)             Requested size: 452.96669pt x 313.59232pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 771--779
+[][]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 771--779
+[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 771--779
+[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 771--779
+[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 771--779
+[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 771--779
+[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 771--779
+[]
+ []
+
+[7 <./lista2_files/figure-latex/q4122a-1.pdf>] [8 <./lista2_files/figure-latex/q4122a-2.pdf> <./lista2_files/figure-latex/q4122a-3.pdf>] [9 <./lista2_files/figure-latex/q4122a-4.pdf> <./lista2_files/figure-latex/q4122a-5.pdf>] [10 <./lista2_files/figure-latex/q4122a-6.pdf> <./lista2_files/figure-latex/q4122a-7.pdf>]
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 780.
+(c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/t1lmtt.fd
+File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+)
+<lista2_files/figure-latex/q4122a-9.pdf, id=186, 469.755pt x 325.215pt>
+File: lista2_files/figure-latex/q4122a-9.pdf Graphic file (type pdf)
+<use lista2_files/figure-latex/q4122a-9.pdf>
+Package pdftex.def Info: lista2_files/figure-latex/q4122a-9.pdf  used on input line 800.
+(pdftex.def)             Requested size: 452.96669pt x 313.59232pt.
+[11 <./lista2_files/figure-latex/q4122a-8.pdf>]
+<lista2_files/figure-latex/q4122a-10.pdf, id=198, 469.755pt x 325.215pt>
+File: lista2_files/figure-latex/q4122a-10.pdf Graphic file (type pdf)
+<use lista2_files/figure-latex/q4122a-10.pdf>
+Package pdftex.def Info: lista2_files/figure-latex/q4122a-10.pdf  used on input line 822.
+(pdftex.def)             Requested size: 452.96669pt x 313.59232pt.
+[12 <./lista2_files/figure-latex/q4122a-9.pdf>] [13 <./lista2_files/figure-latex/q4122a-10.pdf>] (./lista2.aux) ) 
 Here is how much of TeX's memory you used:
- 13501 strings out of 477977
- 217265 string characters out of 5836999
- 1868660 words of memory out of 5000000
- 33341 multiletter control sequences out of 15000+600000
- 550052 words of font info for 89 fonts, out of 8000000 for 9000
+ 13653 strings out of 477977
+ 221383 string characters out of 5836999
+ 1882660 words of memory out of 5000000
+ 33452 multiletter control sequences out of 15000+600000
+ 559706 words of font info for 99 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 77i,8n,81p,1003b,453s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb><c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb><c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb><c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb><c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi7.pfb><c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb><c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb><c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb><c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb><c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb><c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb>
-Output written on lista2.pdf (6 pages, 194875 bytes).
+ 77i,8n,81p,1003b,555s stack positions out of 10000i,1000n,20000p,200000b,200000s
+<c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb><c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb><c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb><c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb><c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi7.pfb><c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb><c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb><c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb><c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb><c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb><c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb><c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt10.pfb>
+Output written on lista2.pdf (13 pages, 777682 bytes).
 PDF statistics:
- 193 PDF objects out of 1000 (max. 8388607)
- 158 compressed objects within 2 object streams
- 82 named destinations out of 1000 (max. 500000)
- 22534 words of extra memory for PDF output out of 24883 (max. 10000000)
+ 303 PDF objects out of 1000 (max. 8388607)
+ 237 compressed objects within 3 object streams
+ 92 named destinations out of 1000 (max. 500000)
+ 28728 words of extra memory for PDF output out of 29859 (max. 10000000)
 

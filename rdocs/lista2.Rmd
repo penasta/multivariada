@@ -93,7 +93,7 @@ $$M = M^2 = M^T$$
 
 (e) $A^{-1/2}A^{-1/2}=A^{-1}$.
 
-13. Considere uma matriz de correlação $(r×r)$ com a mesma correlação ($\rho$) em todas as células fora da diagonal. Encontre os autovalores e autovetores desta matriz quando $r = 2, 3, 4$. Generalize seus resultados para qualquer número *r* de variáveis. Como exemplo, faça $\rho = 0.1, 0.3, 0.5, 0.7, 0.9.$
+13. Considere uma matriz de correlação $(r × r)$ com a mesma correlação ($\rho$) em todas as células fora da diagonal. Encontre os autovalores e autovetores desta matriz quando $r = 2, 3, 4$. Generalize seus resultados para qualquer número *r* de variáveis. Como exemplo, faça $\rho = 0.1, 0.3, 0.5, 0.7, 0.9.$
 
 14. Considere a decomposição espectral de uma matrix $A_{p \times p}$ positiva definida, isto é, $A_{p \times p} = B \Delta B^T$ . Seja
 
@@ -335,7 +335,7 @@ and consider the linear combinations $AX^{(1)} \ and \ BX^{(2)}$. Find
 
 (J) $Cov(AX^{(1)},BX^{(2)})$
 
-27. You are given the random vector $X1=[X_1,X_2,X_3,X_4]$ with mean vector $\mu'_x=[3,2,-2,0]$ and variance-covariance matrix
+27. You are given the random vector $X'=[X_1,X_2,X_3,X_4]$ with mean vector $\mu'_x=[3,2,-2,0]$ and variance-covariance matrix
 
 \[
   \Sigma_x =
@@ -360,6 +360,30 @@ Let
 
 (a) Find E(**AX**), the mean of **AX**.
 
+Utilizando a propriedade da linearidade da esperança, e pelo dado que $E(X)=\mu'_x$:
+
+$$E(\mathbf{AX}) = \mathbf{A}E(\mathbf{X}) = \mathbf{A}\mu'_x$$
+Então,
+
+$$\mathbf{A}\mu'_x = 
+  \left[ {\begin{array}{ccccc}
+     1 & -1 & 0  & 0\\
+     1 & 1  & -2 & 0\\
+     1 & 1  & 1  & -3\\
+  \end{array} } \right] 
+  \left[ {\begin{array}{ccccc}
+     3\\
+     2\\
+     -2\\
+     0\\
+  \end{array} } \right]=\left[ {\begin{array}{ccccc}
+1(3) + (-1)(2) + 0(-2) + 0(0) \\
+1(3) + 1(2) + (-2)(-2) + 0(0) \\
+1(3) + 1(2) + 1(-2) + (-3)(0) \\
+\end{array} } \right] =   \left[ {\begin{array}{ccccc}
+     -1 & 6 & 0\\
+  \end{array} } \right]$$
+
 (b) Find Cov(**AX**), the variances and covariances of **AX**
 
 (c) Which pairs of linear combinations have zero covariances?
@@ -383,5 +407,83 @@ kable(df)
 
 
 (a) Represente graficamente e através de medidas descritivas.
+
+```{r q28, echo=FALSE}
+
+cova <- data.frame(cov(df))
+
+vari <- data.frame(var(df))
+
+corr <- data.frame(cor(df))
+
+```
+
+Matriz de covariâncias:
+
+```{r q28cov, echo=FALSE}
+
+kable(cova)
+
+```
+
+Matriz de variâncias:
+
+```{r q28var, echo=FALSE}
+
+kable(vari)
+
+```
+
+Matriz de correlações:
+
+```{r q28cor, echo=FALSE}
+
+kable(corr)
+
+```
+
+Agora, representando graficamente:
+
+```{r q4122a, echo=FALSE}
+
+p_load(TeachingDemos)
+
+faces(df)
+faces2(df)
+
+p_load(andrews)
+
+andrews(df,type=6,step=500,clr=4,
+        ymax=3,main='Andrews Plot 1')
+andrews(df,type=3,step=500,clr=5,
+        ymax=3,main='Andrews Plot 2')
+andrews(df,type=6,step=500,clr=5,
+        ymax=3,main='Andrews Plot 3')
+
+p_load(lattice)
+parallelplot(df)
+parallelplot(df, groups = df$Idade,
+             horizontal.axis = FALSE, 
+             scales = list(x = list(rot = 90)))
+
+p_load(aplpack)
+
+aplpack::faces(df,face.type=0)
+aplpack::faces(df,face.type=1)
+
+p_load(gplots)
+
+par(mar = rep(2, 4))
+
+df2 <- df %>%
+  rename(x1 = colnames(df)[1],
+         x2 = colnames(df)[2],
+         x3 = colnames(df)[3],
+         x4 = colnames(df)[4],
+         x5 = colnames(df)[5])
+
+heatmap.2(as.matrix(df2))
+
+```
 
 (b) Obtenha a decomposição espectral e verifique se existe indicação de uma possível redução da dimensão do estudo em questão. Justifique.
