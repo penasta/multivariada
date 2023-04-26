@@ -1,0 +1,213 @@
+---
+title: ''
+author: ''
+date: ''
+output:
+  pdf_document: null
+  fig_crop: no
+  html_document:
+    df_print: paged
+subtitle: ''
+highlight: tango
+number_sections: no
+fig_caption: yes
+keep_tex: yes
+includes:
+  in_header: Estilo.sty
+classoption: a4paper
+always_allow_html: yes
+---
+  
+  
+\begin{center}
+{\Large
+  DEPARTAMENTO DE ESTATÍSTICA} \\
+\vspace{0.5cm}
+\begin{figure}[!t]
+\centering
+\includegraphics[width=9cm, keepaspectratio]{logo-UnB.eps}
+\end{figure}
+\vskip 1em
+{\large
+  `r format(Sys.time(), '%d %B %Y')`}
+\vskip 3em
+{\LARGE
+  \textbf{Entrega 2 - Lista 3}} \\
+\vskip 1em
+{\Large
+  Prof. Dr. George von Borries} \\
+\vskip 1em
+{\Large
+  Análise Multivariada 1} \\
+\vskip 1em
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636} \\
+\vskip 1em
+\end{center}
+
+```{r setup, include=F}
+
+library(pacman)
+p_load(knitr,tidyverse,ggExtra,gridExtra,car,Matrix,psych,OpenImageR,gplots)
+
+```
+
+\newpage
+
+4. Exercício 30 da Lista 3 - Utilize a decomposição espectral $\mathbf{\Sigma=UDV^T}$ para mostrar que $\sum_{i=1}^pVar(\mathbf{X}_i)=\sum_{i=1}^p\lambda_i$,em que $\lambda_i$ são os elementos da matriz diagonal **D**.
+
+Nota 1: Inclua dois exemplos numéricos com este resultado no R.
+
+Nota 2: Entregas com exemplos iguais serão desconsideradas.
+
+
+```{r q1}
+
+# Questão 1
+
+# Comprovando c/ exemplo numérico
+
+set.seed(150167636)
+matriz <- matrix(c(sample.int(n=9,replace=T)),
+                 nrow = 3, byrow = TRUE)
+
+cov <- cov(matriz)
+eig <- eigen(cov)
+
+svar <- sum(diag(cov))
+seig <- sum(eig$values)
+
+# É necessário "arredondar" os resultados para a igualdade valer, mas na realidade é uma limitação do R (truncamento)
+round(svar) == round(seig)
+
+# E o resultado está comprovado para este caso particular.
+
+# Aumentando agora a matriz e verificando se a igualdade permanece
+set.seed(636761051)
+matriz2 <- matrix(c(sample.int(n=100,replace=T)),
+                  nrow = 10, byrow = TRUE)
+
+cov2 <- cov(matriz2)
+eig2 <- eigen(cov2)
+
+svar2 <- sum(diag(cov2))
+seig2 <- sum(eig2$values)
+
+# É necessário "arredondar" os resultados para a igualdade valer, mas na realidade é uma limitação do R (truncamento)
+round(svar2) == round(seig2)
+
+# O que fortalece a hipótese do resultado.
+
+```
+
+
+\newpage
+
+5. Exercício 31 da Lista 3 Reproduza o estudo de redução de dimensão SVD de imagens, utilizando duas imagens. A primeira com poucos detalhes (abstrata, por exemplo) e a segunda com vários detalhes. Justifique sua escolha de dimensão na redução de cada imagem e compare os resultados. Você achou a redução compatível com as imagens utilizadas? Justifique.
+
+Nota 1: Alguns pacotes de leitura de imagem podem ser mais simples de utilizar que o apresentado em aula.
+
+Nota 2: Entregas com imagens e códigos iguais serão desconsideradas.
+
+
+# Exemplo abstrato:
+```{r q21, echo=TRUE,eval=FALSE}
+
+img <- readImage("rdocs/volpi.jpg")
+dim(img)
+imageShow(img,clear_viewer = T)
+#writeImage(img, file_name = 'rdocs/img.png')
+
+```
+
+![Imagem original](C:/Users/toled/Documents/Github/multivariada/rdocs/volpi.jpg)
+```{r q22, echo=TRUE,eval=FALSE}
+
+img_gray <- rgb_2gray(img) 
+dim(img_gray)
+imageShow(img_gray,clear_viewer = T)
+#writeImage(img_gray, file_name = 'rdocs/volpi_gray.png')
+
+```
+
+![Imagem cinza](C:/Users/toled/Documents/Github/multivariada/rdocs/volpi_gray.png)
+
+Aplicando SVD na imagem
+
+
+```{r q23, echo=TRUE,eval=TRUE}
+
+img <- readImage("C:/Users/toled/Documents/Github/multivariada/rdocs/volpi.jpg")
+img_gray <- rgb_2gray(img) 
+
+imgg.svd <- svd(img_gray)
+head(imgg.svd$d,n=54)
+D <- diag(imgg.svd$d)
+dim(D)
+
+U <- imgg.svd$u
+V <- imgg.svd$v
+
+```
+\newpage
+
+Analisando a quantidade de informação por dimensão
+
+
+```{r q24, echo=TRUE,eval=FALSE}
+
+png(file="C:/Users/toled/Documents/Github/multivariada/rdocs/plot4.png")
+plot(1:length(imgg.svd$d), imgg.svd$d)
+abline(v=c(5,10,20,40))
+dev.off()
+
+```
+
+![Gráfico 1](C:/Users/toled/Documents/Github/multivariada/rdocs/plot4.png)
+
+\newpage
+
+```{r q25, echo=TRUE,eval=FALSE}
+
+png(file="rdocs/plot5.png")
+plot(1:length(imgg.svd$d), imgg.svd$d,xlim = c(1,60))
+abline(v=c(5,10,20,40))
+dev.off()
+
+```
+
+![Gráfico 2](C:/Users/toled/Documents/Github/multivariada/rdocs/plot5.png)
+\newpage
+
+```{r q26, echo=TRUE,eval=FALSE}
+
+png(file="rdocs/plot6.png")
+plot(1:length(imgg.svd$d), imgg.svd$d,xlim = c(10,80),ylim = c(0,30))
+abline(v=c(20,40,60))
+dev.off()
+
+```
+
+![Gráfico 3](C:/Users/toled/Documents/Github/multivariada/rdocs/plot6.png)
+\newpage
+
+Reduzindo a dimensionalidade
+
+```{r q27, echo=TRUE,eval=TRUE}
+
+U5 <- as.matrix(U[,1:5])
+V5 <- as.matrix(V[,1:5])
+D5 <- diag(imgg.svd$d[1:5])
+img_gray5 <- U5 %*% D5 %*% t(V5)
+tr(D5)/tr(D) * 100 
+
+```
+
+```{r q28, echo=TRUE,eval=FALSE}
+
+imageShow(img_gray5,clear_viewer = T)
+writeImage(img_gray5, file_name = 'rdocs/volpi_gray5.png')
+
+```
+![Redução para 5 dimensões](C:/Users/toled/Documents/Github/multivariada/rdocs/volpi_gray5.png)
+
