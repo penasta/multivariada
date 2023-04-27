@@ -50,10 +50,9 @@ writeImage(img, file_name = 'rdocs/img.png')
 
 
 img_gray <- rgb_2gray(img) 
-
 dim(img_gray)
 imageShow(img_gray,clear_viewer = T)
-writeImage(img_gray, file_name = 'rdocs/img_gray.png')
+writeImage(img_gray, file_name = 'rdocs/maicon_gray.png')
 
 # Aplicando SVD na Imagem
 
@@ -72,14 +71,12 @@ abline(v=c(5,10,20,40))
 dev.off()
 
 png(file="rdocs/plot2.png")
-plot(1:length(imgg.svd$d), imgg.svd$d,
-     xlim = c(1,60))
+plot(1:length(imgg.svd$d), imgg.svd$d,xlim = c(1,60))
 abline(v=c(5,10,20,40))
 dev.off()
 
 png(file="rdocs/plot3.png")
-plot(1:length(imgg.svd$d), imgg.svd$d,
-     xlim = c(10,80),ylim = c(0,30))
+plot(1:length(imgg.svd$d), imgg.svd$d,xlim = c(10,80),ylim = c(0,30))
 abline(v=c(20,40,60))
 dev.off()
 
@@ -170,7 +167,7 @@ imageShow(img,clear_viewer = T)
 img_gray <- rgb_2gray(img) 
 dim(img_gray)
 imageShow(img_gray,clear_viewer = T)
-writeImage(img_gray, file_name = 'rdocs/volpi_gray.png')
+#writeImage(img_gray, file_name = 'rdocs/volpi_gray.png')
 
 # Aplicando SVD na Imagem
 

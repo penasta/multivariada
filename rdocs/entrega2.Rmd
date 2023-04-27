@@ -61,6 +61,13 @@ Nota 1: Inclua dois exemplos numéricos com este resultado no R.
 Nota 2: Entregas com exemplos iguais serão desconsideradas.
 
 
+Demonstração:
+
+Como $\sum_{i=1}^nVar(\mathbf{X})=tr\mathbf(\Sigma)$, segue que $\sum_{i=1}^nVar(\mathbf{X})=tr(\mathbf{UDU^T})$. Dado que $\mathbf{U^TU=I}$ e $tr(\mathbf{UDU^T})=tr(\mathbf{U^TUD})$, então é seguro afirmar que $\sum_{i=1}^nVar(\mathbf{X})=tr(\mathbf{ID})=tr(\mathbf{\Sigma})$. Como $tr(\mathbf{ID})=tr(\mathbf{D})$, em que o traço de **D** é $\sum_{i=1}^n\lambda_i$, que são autovalores da matriz de covariâncias $\mathbf{\Sigma}$.
+
+$\square$
+
+
 ```{r q1}
 
 # Questão 1
@@ -77,7 +84,6 @@ eig <- eigen(cov)
 svar <- sum(diag(cov))
 seig <- sum(eig$values)
 
-# É necessário "arredondar" os resultados para a igualdade valer, mas na realidade é uma limitação do R (truncamento)
 round(svar) == round(seig)
 
 # E o resultado está comprovado para este caso particular.
@@ -93,12 +99,13 @@ eig2 <- eigen(cov2)
 svar2 <- sum(diag(cov2))
 seig2 <- sum(eig2$values)
 
-# É necessário "arredondar" os resultados para a igualdade valer, mas na realidade é uma limitação do R (truncamento)
 round(svar2) == round(seig2)
 
 # O que fortalece a hipótese do resultado.
 
 ```
+
+Perceba que foi necessário "arredondar" os resultados para a igualdade ser verdadeira. Isto se deve ao fato de o R utilizar algum tipo de truncamento durante os cálculos. Porém, não fosse este fato e ele realmente utilizasse todas as casas decimais, tal operação não seria necessária visto que as respostas seriam exatamente iguais e a comparação retornaria *TRUE* sem necessidade de arredondamento.
 
 
 \newpage
@@ -111,6 +118,9 @@ Nota 2: Entregas com imagens e códigos iguais serão desconsideradas.
 
 
 # Exemplo abstrato:
+
+Para este exemplo, utilizaremos um quadro do artista ítalo-brasileiro Alfredo Volpi, conhecido modernista que costumava representar bandeirinhas juninas em suas obras.
+
 ```{r q21, echo=TRUE,eval=FALSE}
 
 img <- readImage("rdocs/volpi.jpg")
@@ -209,5 +219,318 @@ imageShow(img_gray5,clear_viewer = T)
 writeImage(img_gray5, file_name = 'rdocs/volpi_gray5.png')
 
 ```
+
 ![Redução para 5 dimensões](C:/Users/toled/Documents/Github/multivariada/rdocs/volpi_gray5.png)
 
+```{r q29, echo=TRUE,eval=TRUE}
+
+U10 <- as.matrix(U[,1:10])
+V10 <- as.matrix(V[,1:10])
+D10 <- diag(imgg.svd$d[1:10])
+img_gray10 <- U10 %*% D10 %*% t(V10)
+tr(D10)/tr(D) * 100 
+
+```
+
+```{r q210, echo=TRUE,eval=FALSE}
+
+imageShow(img_gray10,clear_viewer = T)
+writeImage(img_gray10, file_name = 'rdocs/img_gray10.png')
+
+```
+
+![Redução para 10 dimensões](C:/Users/toled/Documents/Github/multivariada/rdocs/volpi_gray10.png)
+
+```{r q211, echo=TRUE,eval=TRUE}
+
+U20 <- as.matrix(U[,1:20])
+V20 <- as.matrix(V[,1:20])
+D20 <- diag(imgg.svd$d[1:20])
+img_gray20 <- U20 %*% D20 %*% t(V20)
+tr(D20)/tr(D) * 100 
+
+```
+
+```{r q212, echo=TRUE,eval=FALSE}
+
+imageShow(img_gray20,clear_viewer = T)
+writeImage(img_gray20, file_name = 'rdocs/img_gray20.png')
+
+```
+
+![Redução para 20 dimensões](C:/Users/toled/Documents/Github/multivariada/rdocs/volpi_gray20.png)
+
+
+```{r q213, echo=TRUE,eval=TRUE}
+
+U30 <- as.matrix(U[,1:30])
+V30 <- as.matrix(V[,1:30])
+D30 <- diag(imgg.svd$d[1:30])
+img_gray30 <- U30 %*% D30 %*% t(V30)
+tr(D30)/tr(D) * 100 
+
+```
+
+```{r q214, echo=TRUE,eval=FALSE}
+
+imageShow(img_gray30,clear_viewer = T)
+writeImage(img_gray30, file_name = 'rdocs/img_gray30.png')
+
+```
+
+![Redução para 30 dimensões](C:/Users/toled/Documents/Github/multivariada/rdocs/volpi_gray30.png)
+
+À esta altura, já temos praticamente quase toda a visualização da imagem.
+
+```{r q215, echo=TRUE,eval=TRUE}
+
+U40 <- as.matrix(U[,1:40])
+V40 <- as.matrix(V[,1:40])
+D40 <- diag(imgg.svd$d[1:40])
+img_gray40 <- U40 %*% D40 %*% t(V40)
+tr(D40)/tr(D) * 100 
+
+```
+
+```{r q216, echo=TRUE,eval=FALSE}
+
+imageShow(img_gray40,clear_viewer = T)
+writeImage(img_gray40, file_name = 'rdocs/img_gray40.png')
+
+```
+
+![Redução para 40 dimensões](C:/Users/toled/Documents/Github/multivariada/rdocs/volpi_gray40.png)
+
+```{r q217, echo=TRUE,eval=TRUE}
+
+U60 <- as.matrix(U[,1:60])
+V60 <- as.matrix(V[,1:60])
+D60 <- diag(imgg.svd$d[1:60])
+img_gray60 <- U60 %*% D60 %*% t(V60)
+tr(D60)/tr(D) * 100 
+
+```
+
+```{r q218, echo=TRUE,eval=FALSE}
+
+imageShow(img_gray60,clear_viewer = T)
+writeImage(img_gray60, file_name = 'rdocs/volpi_gray60.png')
+
+```
+
+![Redução para 60 dimensões](C:/Users/toled/Documents/Github/multivariada/rdocs/volpi_gray60.png)
+
+
+À esta altura, é seguro dizer que já temos definição suficiente para identificar todos os elementos da figura, sem chance de confusão.
+
+
+\newpage
+
+Passemos agora para uma imagem com mais detalhes, onde talvez tenhamos de ser mais conservadores quanto a remoção de dimensões para preservar algumas características essenciais.
+
+
+```{r q219, echo=TRUE,eval=FALSE}
+
+img <- readImage("rdocs/maicon.jpeg")
+dim(img)
+imageShow(img,clear_viewer = T)
+writeImage(img, file_name = 'rdocs/maicon.jpeg')
+
+```
+
+\newpage
+
+Para este exemplo, usaremos uma fotografia do colega felino de Judytt: o Maicon; gato da minha namorada.
+
+Este é Maicon:
+
+
+![Imagem original](C:/Users/toled/Documents/Github/multivariada/rdocs/maicon.jpeg)
+\newpage
+
+```{r q220, echo=TRUE,eval=FALSE}
+
+img_gray <- rgb_2gray(img) 
+dim(img_gray)
+imageShow(img_gray,clear_viewer = T)
+writeImage(img_gray, file_name = 'rdocs/maicon_gray.png')
+
+```
+
+![Imagem cinza](C:/Users/toled/Documents/Github/multivariada/rdocs/maicon_gray.png)
+
+Aplicando SVD na imagem
+
+
+```{r q221, echo=TRUE,eval=TRUE}
+
+img <- readImage("C:/Users/toled/Documents/Github/multivariada/rdocs/maicon.jpeg")
+img_gray <- rgb_2gray(img) 
+
+imgg.svd <- svd(img_gray)
+head(imgg.svd$d,56)
+D <- diag(imgg.svd$d)
+dim(D)
+
+U <- imgg.svd$u
+V <- imgg.svd$v
+
+```
+\newpage
+
+Analisando a quantidade de informação por dimensão
+
+
+```{r q222, echo=TRUE,eval=FALSE}
+
+png(file="rdocs/plot1.png")
+plot(1:length(imgg.svd$d), imgg.svd$d)
+abline(v=c(5,10,20,40))
+dev.off()
+
+```
+
+![Gráfico 4](C:/Users/toled/Documents/Github/multivariada/rdocs/plot1.png)
+
+\newpage
+
+```{r q223, echo=TRUE,eval=FALSE}
+
+png(file="rdocs/plot2.png")
+plot(1:length(imgg.svd$d), imgg.svd$d,xlim = c(1,60))
+abline(v=c(5,10,20,40))
+dev.off()
+
+```
+
+![Gráfico 5](C:/Users/toled/Documents/Github/multivariada/rdocs/plot2.png)
+\newpage
+
+```{r q224, echo=TRUE,eval=FALSE}
+
+png(file="rdocs/plot3.png")
+plot(1:length(imgg.svd$d), imgg.svd$d,xlim = c(10,80),ylim = c(0,30))
+abline(v=c(20,40,60))
+dev.off()
+
+```
+
+![Gráfico 6](C:/Users/toled/Documents/Github/multivariada/rdocs/plot3.png)
+\newpage
+
+Reduzindo a dimensionalidade
+
+```{r q225, echo=TRUE,eval=TRUE}
+
+U5 <- as.matrix(U[,1:5])
+V5 <- as.matrix(V[,1:5])
+D5 <- diag(imgg.svd$d[1:5])
+img_gray5 <- U5 %*% D5 %*% t(V5)
+tr(D5)/tr(D) * 100 
+
+```
+
+```{r q226, echo=TRUE,eval=FALSE}
+
+imageShow(img_gray5,clear_viewer = T)
+writeImage(img_gray5, file_name = 'rdocs/img_gray5.png')
+
+```
+
+![Redução para 5 dimensões](C:/Users/toled/Documents/Github/multivariada/rdocs/img_gray5.png)
+
+```{r q227, echo=TRUE,eval=TRUE}
+
+U10 <- as.matrix(U[,1:10])
+V10 <- as.matrix(V[,1:10])
+D10 <- diag(imgg.svd$d[1:10])
+img_gray10 <- U10 %*% D10 %*% t(V10)
+tr(D10)/tr(D) * 100 
+
+```
+
+```{r q228, echo=TRUE,eval=FALSE}
+
+imageShow(img_gray10,clear_viewer = T)
+writeImage(img_gray10, file_name = 'rdocs/img_gray10.png')
+
+```
+
+![Redução para 10 dimensões](C:/Users/toled/Documents/Github/multivariada/rdocs/img_gray10.png)
+
+```{r q229, echo=TRUE,eval=TRUE}
+
+U20 <- as.matrix(U[,1:20])
+V20 <- as.matrix(V[,1:20])
+D20 <- diag(imgg.svd$d[1:20])
+img_gray20 <- U20 %*% D20 %*% t(V20)
+tr(D20)/tr(D) * 100 
+
+```
+
+```{r q230, echo=TRUE,eval=FALSE}
+
+imageShow(img_gray20,clear_viewer = T)
+writeImage(img_gray20, file_name = 'rdocs/img_gray20.png')
+
+```
+
+![Redução para 20 dimensões](C:/Users/toled/Documents/Github/multivariada/rdocs/img_gray20.png)
+
+A imagem ainda está bem ruim, mas já é possível identificar que é um gato, ao menos.
+
+Precisaremos fazer um salto para ganhar alguma definição.
+
+
+```{r q231, echo=TRUE,eval=TRUE}
+
+U60 <- as.matrix(U[,1:60])
+V60 <- as.matrix(V[,1:60])
+D60 <- diag(imgg.svd$d[1:60])
+img_gray60 <- U60 %*% D60 %*% t(V60)
+tr(D60)/tr(D) * 100 
+
+```
+
+```{r q232, echo=TRUE,eval=FALSE}
+
+imageShow(img_gray60,clear_viewer = T)
+writeImage(img_gray60, file_name = 'rdocs/img_gray60.png')
+
+```
+
+![Redução para 60 dimensões](C:/Users/toled/Documents/Github/multivariada/rdocs/img_gray60.png)
+
+```{r q233, echo=TRUE,eval=TRUE}
+
+U99 <- as.matrix(U[,1:99])
+V99 <- as.matrix(V[,1:99])
+D99 <- diag(imgg.svd$d[1:99])
+img_gray99 <- U99 %*% D99 %*% t(V99)
+tr(D99)/tr(D) * 100 
+
+```
+
+```{r q234, echo=TRUE,eval=FALSE}
+
+imageShow(img_gray99,clear_viewer = T)
+writeImage(img_gray99, file_name = 'rdocs/img_gray99.png')
+
+```
+
+![Redução para 99 dimensões](C:/Users/toled/Documents/Github/multivariada/rdocs/img_gray60.png)
+
+Conferindo o rank das matrizes, ou seja, vendo o quanto de informação conseguimos retirar e ainda reter uma definição razoável.
+
+```{r q235}
+
+rankMatrix(img_gray)[1]
+rankMatrix(img_gray99)[1]
+
+```
+
+\newpage
+
+# Referências:
+
+ - Código disponibilizado pelo prof. George von Borries no aprender3 (svdImagem.R)
