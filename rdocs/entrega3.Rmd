@@ -1,0 +1,184 @@
+---
+title: ''
+author: ''
+date: ''
+output:
+  pdf_document: null
+  fig_crop: no
+  html_document:
+    df_print: paged
+subtitle: ''
+highlight: tango
+number_sections: no
+fig_caption: yes
+keep_tex: yes
+includes:
+  in_header: Estilo.sty
+classoption: a4paper
+always_allow_html: yes
+---
+  
+  
+\begin{center}
+{\Large
+  DEPARTAMENTO DE ESTATÍSTICA} \\
+\vspace{0.5cm}
+\begin{figure}[!t]
+\centering
+\includegraphics[width=9cm, keepaspectratio]{logo-UnB.eps}
+\end{figure}
+\vskip 1em
+{\large
+  `r format(Sys.time(), '%d %B %Y')`}
+\vskip 3em
+{\LARGE
+  \textbf{Entrega 3 - Lista 4}} \\
+\vskip 1em
+{\Large
+  Prof. Dr. George von Borries} \\
+\vskip 1em
+{\Large
+  Análise Multivariada 1} \\
+\vskip 1em
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636} \\
+\vskip 1em
+\end{center}
+
+```{r setup, include=F}
+
+library(pacman)
+p_load(knitr,tidyverse)
+
+```
+
+\newpage
+
+6. Exercício 32 da Lista 4 Suponha que um pesquisador padronizou os dados de um
+estudo através da transformação de Mahalanobis ($\mathbf{Z}=\mathbf{XD}^{-1/2}$), em que **S** é a matriz de variância-covariâncias amostrais. Seria razoável aplicar componentes principais nos dados transformados? Justifique sua resposta.
+
+
+7. Exercício 37 da Lista 4 - Johnson e Wichern - Exercício 8.12. Dados no arquivo Air Pollution (T1-5.DAT). Os dados correspondem a 42 medidas de poluição do ar observadas na área de Los Angeles em um mesmo horário.
+
+
+```{r q2, include=FALSE}
+
+df <- read_table("dados/table1_5-air-pollution.DAT.txt", 
+    col_names = FALSE)
+
+```
+
+(a) Resumir os dados em em menos de 7 dimensões (se possível) através de análise de componentes principais utilizando a matrix de covariâncias **S** e apresentar suas conclusões.
+
+```{r q2a}
+
+S <- cov(df)
+
+avav <- eigen(S)
+
+avav[1]
+
+```
+
+Aqui, notamos que a maior parte da informação está concentrada na primeira dimensão. As dimensões 2 e 3 também são relevantes. Da quarta em diante, apenas uma fração da informação está contida.
+
+Irei então trabalhar com 3 dimensões.
+
+```{r q2a2}
+
+transformada <- avav$vectors[, 1:3]
+
+pca <- as.matrix(df) %*% transformada
+
+plot(pca[,1], pca[,2])
+
+
+```
+
+Notamos pelo gráfico acima que aparenta haver um *cluster* formado no primeiro quadrante quando analisamos as duas primeiras componentes. Apesar disso, nota-se pontos em praticamente todo o gráfico, exceto no terceiro quadrante, o que indica que estas duas componentes estão conseguindo explicar bem a variabilidade dos dados.
+
+(b) Resumir os dados em em menos de 7 dimensões (se possível) através de análise
+de componentes principais utilizando a matrix de correlações **R** e apresentar suas
+conclusões.
+
+```{r q2b}
+
+R <- cor(df)
+
+avav2 <- eigen(R)
+
+avav2[1]
+
+```
+Utilizando a matriz de correlações, notamos que agora a informação está mais espalhada entre as dimensões. Portanto, provavelmente não será possível diminuir tanto o número de dimensões utilizando esta técnica em detrimento da técnica utilizada anteriormente.
+
+```{r q2b2}
+
+transformada2 <- avav2$vectors[, 1:5]
+
+pca2 <- as.matrix(df) %*% transformada2
+
+plot(pca2[,1], pca2[,2])
+
+
+```
+Aqui, tentando analisar as duas primeiras componentes, notamos não só uma clusterização no terceiro quadrante, como uma menor dispersão dos dados no gráfico. O que leva a interpretação que estas duas dimensões provavelmente não estão sendo suficientes para explicar a variabilidade desse conjunto de dados.
+
+(c) A escolha da matriz para análise faz alguma diferença? Explique.
+
+Sim; conforme citado anteriormente, no caso da matriz de covariâncias, a informação acabou se concentrando melhor nas primeiras dimensões, permitindo assim uma redução maior sem muita perda de informação da variabilidade dos dados. No caso da matriz de correlações, a informação acabou ficando pulverizada entre as dimensões, não sendo possível por exemplo analisar visualmente com o gráfico a dispersão dos dados com fidedignidade. 
+
+(d) Os dados podem ser resumidos em 3 ou menos dimensões?
+
+Utilizando o comando *prcomp*, obtemos o seguinte resultado:
+
+```{r q2d}
+
+summary(prcomp(df))
+
+```
+
+Onde vemos que 87.3% da variância está contida apenas na primeira componente. Conforme elucidado pelo Prof. von Borries em aula, não existe um valor exato para se alcançar na redução, mas levando ao limite, este valor (87.3%) já é um valor excelente, em outras palavras, a depender do tipo de análise, é possível trabalhar com apenas uma componente neste exemplo: A primeira!
+
+Sendo um pouco mais conservador, ao manter a segunda componente, já temos 95.4% da variância explicada, então para quase qualquer análise esta seria uma redução perfeitamente aceitável.
+
+Poderíamos parar por aqui e ficar com um trabalho mediano, porém se formos atentos e analisarmos o conjunto de dados
+
+```{r q2d2}
+head(df)
+```
+
+Notamos que os dados aparentam estar em escalas diferentes. Portanto, iremos utilizar a matriz de correlações, com a variável padronizada.
+
+```{r q2d3}
+
+summary(prcomp(df, center = TRUE, scale = TRUE))
+
+```
+
+Por esta análise, notamos que até a terceira componente, acumulamos 70,38% da variação do conjunto. Portanto, notamos que na realidade, utilizar 3 ou menos dimensões iremos perder muito mais informação do que especulado anteriormente. Ainda assim, a dependender da análise, este valor (70,38%) ainda pode ser excelente para algumas análises.
+
+```{r q2d4}
+
+fviz_pca_ind(prcomp(df, center = TRUE, scale = TRUE),
+             col.ind = "cos2", #Cor pela qualidade de representação
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = TRUE, # Texto não sobreposto
+             legend.title = "Representação")
+
+fviz_pca_var(teste,
+             col.var = "contrib", # Cor por contribuições para o PC
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = TRUE,     
+             legend.title = "Contribuição")
+
+fviz_pca_biplot(teste, repel = TRUE,
+                col.var = "#2E9FDF", # cor das variáveis
+                col.ind = "#696969"  # cor dos automoveis
+)
+             
+```
+
+Referências:
+
+[1] SILVA, Adilane Ribeiro da. Análise de Componentes Principais (PCA): cálculo e aplicação no R. dezembro 17, 2020. Disponível em: https://site.statplace.com.br/blog/analise-de-componentes-principais-pca-calculo-e-aplicacao-no-r/
