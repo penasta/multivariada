@@ -57,9 +57,12 @@ p_load(knitr,tidyverse,factoextra)
 6. Exercício 32 da Lista 4 Suponha que um pesquisador padronizou os dados de um
 estudo através da transformação de Mahalanobis ($\mathbf{Z}=\mathbf{XS}^{-1/2}$), em que **S** é a matriz de variância-covariâncias amostrais. Seria razoável aplicar componentes principais nos dados transformados? Justifique sua resposta.
 
-Sim, visto que esta transformação remove as correlações entre as variáveis e dá igual peso a cada uma delas na análise, considerando portanto a covariância entre as variáveis. Esta é uma técnica que costuma ser mais útil quando as variáveis estão apresentadas em escalas diferentes. As distâncias calculadas por esta transformada são associadas a correspondência entre elas, mas não representam um valor interpretável. No caso, se trata mais da intensidade entre elas do que uma distância real.
 
-Como a transformação considera a matriz $S^{-1/2}$ é a decomposição da matriz de vaciância-covariâncias amostrais $S$ em sua forma de autovalores e autovetores; calculanda a matriz de transformação que multiplica cada vetor de dados pelo inverso da raiz quadrada dos autovalores, a informação acaba se concentrando nos primeiros autovalores, o que permite uma redução de dimensionalidade buscado na análise de compotentes principais.
+Como a transformação considera a matriz $\mathbf{S}^{-1/2}$, que é a decomposição da matriz de variância-covariâncias amostrais **S** em sua forma de autovalores e autovetores; calculanda a matriz de transformação que multiplica cada vetor de dados pelo inverso da raiz quadrada dos autovalores, a informação acaba se concentrando nos primeiros autovalores. Neste caso, obteríamos uma matriz similar a matriz identidade, ou seja, com valores concentrados na diagonal principal, e valores zero ou tendendo a zero fora dela. Com isso, não teríamos um bom material para aplicar componentes principais, visto que na prática isso inviabilizaria a redução da dimensionalidade, pois cada dimensão teria uma variação mais ou menos constante, impedido assim de eliminar dimensões sem perda de informação, que é justamente o objetivo de componentes principais.
+
+Além disso, dado que temos a matriz **S**, em muitos casos será apropriado utilizar ela própria para a análise de componentes principais, e realizar esta transformação seria simplesmente um gasto desnecessário de poder computacional.
+
+Portanto, concluímos que não seria razoável aplicar a transformação de Mahalanobis numa matriz com a intenção de posteriormente aplicar componentes principais nesta.
 
 \vskip 5em
 
@@ -82,6 +85,8 @@ S <- cov(df)
 avav <- eigen(S)
 
 avav[1]
+
+summary(prcomp(S))
 
 ```
 
@@ -114,6 +119,8 @@ avav2 <- eigen(R)
 
 avav2[1]
 
+summary(prcomp(R))
+
 ```
 Utilizando a matriz de correlações, notamos que agora a informação está mais espalhada entre as dimensões. Portanto, provavelmente não será possível diminuir tanto o número de dimensões utilizando esta técnica em detrimento da técnica utilizada anteriormente.
 
@@ -127,11 +134,14 @@ plot(pca2[,1], pca2[,2])
 
 
 ```
+
 Aqui, tentando analisar as duas primeiras componentes, notamos não só uma clusterização no terceiro quadrante, como uma menor dispersão dos dados no gráfico. O que leva a interpretação que estas duas dimensões provavelmente não estão sendo suficientes para explicar a variabilidade desse conjunto de dados.
 
 (c) A escolha da matriz para análise faz alguma diferença? Explique.
 
 Sim; conforme citado anteriormente, no caso da matriz de covariâncias, a informação acabou se concentrando melhor nas primeiras dimensões, permitindo assim uma redução maior sem muita perda de informação da variabilidade dos dados. No caso da matriz de correlações, a informação acabou ficando pulverizada entre as dimensões, não sendo possível por exemplo analisar visualmente com o gráfico a dispersão dos dados com fidedignidade. 
+
+Porém, é importante notar se esta concentração está se dando por legitimamente a variabilidade estar concentrada em menos dimensões para o caso da matriz **S** em relação à matriz **R**, pois se estiverem em escalas diferentes, podemos estar sendo levados a um erro. Irei abordar essa possibilidade nos itens subsequentes.
 
 (d) Os dados podem ser resumidos em 3 ou menos dimensões?
 
@@ -146,6 +156,8 @@ summary(prcomp(df))
 Onde vemos que 87.3% da variância está contida apenas na primeira componente. Conforme elucidado pelo Prof. von Borries em aula, não existe um valor exato para se alcançar na redução, mas levando ao limite, este valor (87.3%) já é um valor excelente, em outras palavras, a depender do tipo de análise, é possível trabalhar com apenas uma componente neste exemplo: A primeira!
 
 Sendo um pouco mais conservador, ao manter a segunda componente, já temos 95.4% da variância explicada, então para quase qualquer análise esta seria uma redução perfeitamente aceitável.
+
+É possível ainda trabalhar com métodos mais formalizados, sem ter de recorrer ao empirismo, como por exemplo o método de elbow, ou então decidindo por manter as dimensões cujo valor observado estejam acima da média das componentes.
 
 Poderíamos parar por aqui e ficar com um trabalho mediano, porém se formos atentos e analisarmos o conjunto de dados
 
