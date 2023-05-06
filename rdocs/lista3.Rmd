@@ -1,0 +1,143 @@
+---
+title: ''
+author: ''
+date: ''
+output:
+  pdf_document: null
+  fig_crop: no
+  html_document:
+    df_print: paged
+subtitle: ''
+highlight: tango
+number_sections: no
+fig_caption: yes
+keep_tex: yes
+includes:
+  in_header: Estilo.sty
+classoption: a4paper
+always_allow_html: yes
+---
+  
+  
+\begin{center}
+{\Large
+  DEPARTAMENTO DE ESTATÍSTICA} \\
+\vspace{0.5cm}
+\begin{figure}[!t]
+\centering
+\includegraphics[width=9cm, keepaspectratio]{logo-UnB.eps}
+\end{figure}
+\vskip 1em
+{\large
+  `r format(Sys.time(), '%d %B %Y')`}
+\vskip 3em
+{\LARGE
+  \textbf{Entrega 3 - Lista 4}} \\
+\vskip 1em
+{\Large
+  Prof. Dr. George von Borries} \\
+\vskip 1em
+{\Large
+  Análise Multivariada 1} \\
+\vskip 1em
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636} \\
+\vskip 1em
+\end{center}
+
+```{r setup, include=F}
+
+library(pacman)
+p_load(knitr,tidyverse,FactoMineR,factoextra)
+data("decathlon")
+```
+
+\newpage
+
+# Artigo
+
+O artigo selecionado foi o "FactoMineR: An R Package for Multivariate Analysis" (LÊ;JOSSE;HUSSON,2008)[1]. Este é o artigo que apresenta o pacote *FactoMineR*. O banco de dados utilizado nos gráficos nos exemplos é o Decathlon data (HUSSON;PAGÈS,2005)[2] 
+<!-- e Children data (GRANGÈ;LEBART,1993)[3]. -->
+
+# Gráficos contidos no artigo
+
+Primeiramente, os gráficos propostos para o banco de dados Decathlon, para uma análise de componentes principais.
+
+```{r graficos, echo=F,warning=F,error=F}
+
+res.pca <- PCA(decathlon, quanti.sup = 11:12, quali.sup = 13)
+
+plot(res.pca, habillage = 13)
+
+#barplot(res.pca$eig[,1], main = "Eigenvalues", names.arg = paste("Dim", 1:nrow(res.pca$eig), sep = ""))
+
+plot(res.pca, choix = "var", axes = c(3, 4), lim.cos2.var = 0)
+
+#print(res.pca)
+
+#dimdesc(res.pca, proba = 0.2)
+
+```
+<!-- Também, os gráficos propostos no artigo para o banco de dados Children, para uma análise de correspondências -->
+
+```{r graficos2, echo=F,warning=F,error=F,include=FALSE}
+
+data("children")
+
+res.ca <- CA(children, col.sup = 6:8, row.sup = 15:18)
+
+plot(res.ca, invisible = c("row.sup", "col.sup"))
+
+
+```
+
+# Gráficos - Solução alternativa 
+
+Uma possível alternativa seria utilizar os gráficos contidos no pacote *factoextra*, que trazem uma abordagem visual similar porém com algumas peculiaridades específicas do pacote
+
+```{r graficos3, echo=F,warning=F,error=F}
+
+fviz_pca_ind(res.pca,
+             col.ind = "cos2",
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = TRUE,
+             legend.title = "Representação")
+
+fviz_pca_var(res.pca,
+             col.var = "contrib",
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = TRUE,     
+             legend.title = "Contribuição")
+          
+```
+
+No caso desses dois gráficos, são praticamente idênticos aos produzidos pelo *FactoMineR*, porém esteticamente mais agradáveis.
+
+É possível ainda fazer um *biplot* de *gabriel*
+
+```{r graficos4, echo=F,warning=F,error=F}
+
+fviz_pca_biplot(res.pca, repel = TRUE,
+                col.var = "#2E9FDF",
+                col.ind = "#696969")
+             
+```
+
+Em que adicionamos também juntamente às observações, os vetores das componentes que estão influenciando o comportamento nas dimensões apresentadas.
+
+# Comentários:
+
+Com estes gráficos, conseguimos perceber semelhanças com um outro banco apresentado didaticamente pelo Prof. von Borries em aula, que versava sobre corrida em olimpíadas. Notamos que em geral é possível notar pela análise de componentes principais as diferenças de rendimento entre atletas de corridas de longa distância para atletas de corrida de curta distância. Neste caso específico, notamos a semelhança nas componentes de corridas de curta distância, e sua disparidade com outras modalidades divergentes como salto e arremesso de vara.
+
+Desta forma, conseguimos visualizar claramente a possibilidade de redução de dimensionalidade neste banco de dados, visto que pelo último gráfico (*biplot* de *gabriel*), percebemos o quanto apenas duas dimensões estão sendo suficientes para explicar a variabilidade do conjunto de dados, além de permitir uma análise clara do quanto do rendimento de cada atleta está sendo influenciado por cada componente.
+
+\newpage
+
+# Referências:
+
+[1] LÊ, Sébastien; JOSSE, Julie; HUSSON, François. FactoMineR: an R package for multivariate analysis. Journal of statistical software, v. 25, p. 1-18, 2008.
+
+[2] Husson, François; PAGÈS, Jérôme. Statistiques Générales pour Utilisateurs. Presses Universitaires de
+Rennes (2005).
+
+<!-- [3] GRANGÉ, Danielle; LEBART, Ludovic. Traitements statistiques des enquêtes. Dunod, 1994. -->

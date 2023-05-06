@@ -1,0 +1,1 @@
+LÊ, Sébastien; JOSSE, Julie; HUSSON, François. FactoMineR: an R package for multivariate analysis. Journal of statistical software, v. 25, p. 1-18, 2008.
