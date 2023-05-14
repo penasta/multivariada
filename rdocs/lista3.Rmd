@@ -32,7 +32,7 @@ always_allow_html: yes
   `r format(Sys.time(), '%d %B %Y')`}
 \vskip 3em
 {\LARGE
-  \textbf{Entrega 3 - Lista 4}} \\
+  \textbf{Exercício 29 da Lista 3 - Extra}} \\
 \vskip 1em
 {\Large
   Prof. Dr. George von Borries} \\

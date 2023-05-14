@@ -1,0 +1,170 @@
+---
+title: ''
+author: ''
+date: ''
+output:
+  pdf_document: null
+  fig_crop: no
+  html_document:
+    df_print: paged
+subtitle: ''
+highlight: tango
+number_sections: no
+fig_caption: yes
+keep_tex: yes
+includes:
+  in_header: Estilo.sty
+classoption: a4paper
+always_allow_html: yes
+---
+  
+  
+\begin{center}
+{\Large
+  DEPARTAMENTO DE ESTATÍSTICA} \\
+\vspace{0.5cm}
+\begin{figure}[!t]
+\centering
+\includegraphics[width=9cm, keepaspectratio]{logo-UnB.eps}
+\end{figure}
+\vskip 1em
+{\large
+  `r format(Sys.time(), '%d %B %Y')`}
+\vskip 3em
+{\LARGE
+  \textbf{Entrega 4}} \\
+\vskip 1em
+{\Large
+  Prof. Dr. George von Borries} \\
+\vskip 1em
+{\Large
+  Análise Multivariada 1} \\
+\vskip 1em
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636} \\
+\vskip 1em
+\end{center}
+
+```{r setup, include=F}
+
+library(pacman)
+p_load(knitr,tidyverse,vcd,ca,FactoMineR,factoextra,gplots)
+data("Suicide")
+```
+
+\newpage
+
+# Lista 5 - Questão 41
+
+
+## a) Indique cada etapa de seu estudo e respectivas conclusões
+
+A primeira etapa numa análise de correspodências seria criar uma tabela de contingência. Depois, as matrizes de perfil de linha e de coluna. Calculamos a inércia total e a estatística Qui-Quadrado. Depois, podemos calcular a matriz dos resíduos, subtraindo do valor observado os valores esperados. Após, é conveniente apresentar gráficos que facilitem a visualização das correspondências, ou seja, as distâncias e agrupamentos entre as variáveis que ajudem a explicar o comportamento dos dados.
+
+Para este subitem, irei apresentar a tabela de contingência para o banco de dados proposto, assim como as matrizes de perfis de linha e coluna; além de um balloonplot que ajuda a visualizar a frequência de ocorrência para cada célula. Demais tópicos serão tratados nos subitens subsequentes.
+
+```{r q1a, echo=F}
+
+df <- Suicide %>%
+  select(Freq,method,age.group)
+tabela <- xtabs(Freq ~ method + age.group, data = df)
+kable(tabela,caption="Tabela de contingência: Método por faixa etária")
+
+# Tabela normalizada pelas colunas:
+colunas <- prop.table(tabela, margin = 2)
+kable(colunas,caption="Perfis de colunas")
+
+
+# Tabela normalizada pelas linhas:
+linhas <- prop.table(tabela, margin = 1)
+kable(linhas,caption="Perfis de linha")
+
+
+ca <- ca(tabela)
+CA <- CA(tabela, graph = FALSE)
+
+balloonplot(t(tabela), main ="housetasks", xlab ="", ylab="",
+            label = FALSE, show.margins = FALSE)
+
+```
+
+\newpage
+
+## b) Calcule e interprete a estatística Qui-Quadrado e a Inércia Total.
+
+```{r q1b, echo=F}
+
+kable(CA$eig)
+# Notamos que mais de 93% da inércia total está retida na primeira dimensão.
+
+
+```
+
+Pelo cálculo dos autovalores, conseguimos obter a porcentagem da variância explicada por cada dimensão, i.é; com isso, retiramos conclusões acerca da Inércia Total, que neste caso foi calculada em aproximadamente 93.5% logo para a primeira dimensão. Isso indica que com apenas uma dimensão conseguimos explicar mais de 90% da variação total para as categorias propostas nesta análise de correspondência.
+
+```{r q1b2,echo=F}
+fviz_screeplot(CA, addlabels = TRUE, ylim = c(0, 100))
+```
+
+
+Ainda, calculando a estatística Qui-Quadrado, sob as seguintes hipóteses:
+$$\begin{cases}
+H_{0}: \nexists \ associação \ entre \ as \ variáveis \\
+H_{1}: \exists \ associação \ entre \ as \ variáveis \\
+\end{cases}$$
+
+```{r q1b3, echo=F}
+chisq <- chisq.test(tabela)
+chisq
+# Portanto, existe associação
+```
+
+
+sob um nível de significância $\alpha=0,05$, observamos um p-valor $< 0,001$. Logo, a decisão do teste é rejeitar a hipótese nula $H_0$. Portanto, aparenta haver associação entre a faixa etária com o método de suicídio empregado.
+
+\newpage
+
+## c) Análise os resíduos em cada célula da tabela e interprete os resultados
+
+```{r q1c, echo=F}
+# Matriz de resíduos
+
+# Criando a matriz de valores esperados
+nj <- margin.table(tabela, margin = 1)
+ni <- margin.table(tabela, margin = 2)
+n <- sum(tabela)
+esperado <- outer(nj, ni) / n
+# Matriz de valores esperados:
+#kable(esperado)
+
+# Matriz de resíduos: Matriz de valores observados - matriz de valores espererados
+residuos <- tabela - esperado
+kable(residuos)
+
+```
+
+Aqui, observamos o resíduo para cada célula. Este resultado foi obtido calculando os valores totais de cada linha, e dos valores totais de cada coluna. Posteriormente, para cada i,j; multiplicou-se esses dois valores , e posteriormente dividiu-se pelo N total de frequência observada. Com isso, obtemos os valores esperados para cada célula. Depois, subtraiu-se os valores observados dos valores esperados, obtendo assim os resíduos, que representam o quanto os valores esperados divergiram dos valores observados. Claramente, se somarmos todos os resíduos, iremos obter 0. 
+
+```{r q1c2, echo=F}
+```
+
+
+\newpage
+
+## d) Apresente um mapa de correspondências e faça um breve resumo dos resultados gerais da análise.
+
+```{r q1d, echo=F}
+
+# Biplot:
+fviz_ca_biplot(CA, map ="colgreen", arrow = c(TRUE, TRUE),
+               repel = TRUE)
+
+dimdesc(CA, axes = c(1,2))
+
+```
+
+Observando o *biplot* de *Gabriel* e observando a descrição da primeira dimensão das colunas e das linnhas, notamos que aparenta haver um agrupamento dos métodos *drown, hang, knife* e *jump*; e por outro lado, os métodos *poison, cookgas,gun,other,toxicgas*. No caso das faixas etárias, existe um agrupamento nas idades avançadas 55-65 e 70-90; por outro lado as idades mais jovens 10-20 e 25-35. A faixa etária 40-50 está pouco explicada neste caso, não se associando a nenhum dos agrupamentos anteriores, o que faz sentido por ser a idade intermediária entre elas.
+
+Pelo biplot, notamos que o primeiro agrupamento descrito dos métodos *(drown, hang...)* se associa ao primeiro agrupamento das idades descritas (idades avançadas); enquanto o segundo agrupamento de métodos descritos *(poison, cookgas, ...)* se associa mais com o segundo agrupamento etário descrito (jovens).
+
+Com isso, podemos concluir que aparenta existir uma diferença na preferência de método de suicídio de acordo com o agrupamento etário da pessoa; mais jovens tendendo a utilizar métodos como arma, gás tóxico, veneno e outros; enquanto idosos recorrendo ao enforcamento, afogamento e outros.
