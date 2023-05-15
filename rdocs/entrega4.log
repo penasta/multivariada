@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.4.26)  14 MAY 2023 14:17
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.4.26)  15 MAY 2023 15:31
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -565,26 +565,52 @@ File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 LaTeX Font Info:    Trying to load font information for TS1+lmtt on input line 247.
 (c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ts1lmtt.fd
 File: ts1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-) [4{c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}{c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc} <./entrega4_files/figure-latex/q1b2-1.pdf>] [5]
-<entrega4_files/figure-latex/q1d-1.pdf, id=66, 469.755pt x 325.215pt>
+) [4{c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}{c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc} <./entrega4_files/figure-latex/q1b2-1.pdf>]
+<entrega4_files/figure-latex/q1c2-1.pdf, id=59, 469.755pt x 325.215pt>
+File: entrega4_files/figure-latex/q1c2-1.pdf Graphic file (type pdf)
+<use entrega4_files/figure-latex/q1c2-1.pdf>
+Package pdftex.def Info: entrega4_files/figure-latex/q1c2-1.pdf  used on input line 309.
+(pdftex.def)             Requested size: 452.96669pt x 313.59232pt.
+<entrega4_files/figure-latex/q1c2-2.pdf, id=60, 469.755pt x 325.215pt>
+File: entrega4_files/figure-latex/q1c2-2.pdf Graphic file (type pdf)
+<use entrega4_files/figure-latex/q1c2-2.pdf>
+Package pdftex.def Info: entrega4_files/figure-latex/q1c2-2.pdf  used on input line 310.
+(pdftex.def)             Requested size: 452.96669pt x 313.59232pt.
+<entrega4_files/figure-latex/q1c2-3.pdf, id=61, 469.755pt x 325.215pt>
+File: entrega4_files/figure-latex/q1c2-3.pdf Graphic file (type pdf)
+<use entrega4_files/figure-latex/q1c2-3.pdf>
+Package pdftex.def Info: entrega4_files/figure-latex/q1c2-3.pdf  used on input line 311.
+(pdftex.def)             Requested size: 452.96669pt x 313.59232pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 309--312
+[][]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 309--312
+[]
+ []
+
+[5 <./entrega4_files/figure-latex/q1c2-1.pdf>] [6 <./entrega4_files/figure-latex/q1c2-2.pdf> <./entrega4_files/figure-latex/q1c2-3.pdf>]
+<entrega4_files/figure-latex/q1d-1.pdf, id=91, 469.755pt x 325.215pt>
 File: entrega4_files/figure-latex/q1d-1.pdf Graphic file (type pdf)
 <use entrega4_files/figure-latex/q1d-1.pdf>
-Package pdftex.def Info: entrega4_files/figure-latex/q1d-1.pdf  used on input line 312.
+Package pdftex.def Info: entrega4_files/figure-latex/q1d-1.pdf  used on input line 320.
 (pdftex.def)             Requested size: 452.96669pt x 313.59232pt.
-[6 <./entrega4_files/figure-latex/q1d-1.pdf>] [7] (./entrega4.aux) ) 
+[7 <./entrega4_files/figure-latex/q1d-1.pdf>] [8] (./entrega4.aux) ) 
 Here is how much of TeX's memory you used:
- 13512 strings out of 477961
- 218159 string characters out of 5836922
+ 13534 strings out of 477961
+ 219044 string characters out of 5836922
  1872068 words of memory out of 5000000
- 33412 multiletter control sequences out of 15000+600000
+ 33430 multiletter control sequences out of 15000+600000
  554010 words of font info for 97 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  77i,7n,81p,1208b,446s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb><c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb><c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb><c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb><c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb><c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb><c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb><c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb><c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt10.pfb><c:/Users/toled/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on entrega4.pdf (7 pages, 209678 bytes).
+Output written on entrega4.pdf (8 pages, 225640 bytes).
 PDF statistics:
- 160 PDF objects out of 1000 (max. 8388607)
- 119 compressed objects within 2 object streams
- 23 named destinations out of 1000 (max. 500000)
- 22589 words of extra memory for PDF output out of 24883 (max. 10000000)
+ 185 PDF objects out of 1000 (max. 8388607)
+ 137 compressed objects within 2 object streams
+ 24 named destinations out of 1000 (max. 500000)
+ 22604 words of extra memory for PDF output out of 24883 (max. 10000000)
 

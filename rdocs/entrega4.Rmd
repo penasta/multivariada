@@ -83,7 +83,7 @@ kable(linhas,caption="Perfis de linha")
 ca <- ca(tabela)
 CA <- CA(tabela, graph = FALSE)
 
-balloonplot(t(tabela), main ="housetasks", xlab ="", ylab="",
+balloonplot(t(tabela), main ="Balloonplot: Frequência de método por faixa etária", xlab ="", ylab="",
             label = FALSE, show.margins = FALSE)
 
 ```
@@ -145,7 +145,37 @@ kable(residuos)
 
 Aqui, observamos o resíduo para cada célula. Este resultado foi obtido calculando os valores totais de cada linha, e dos valores totais de cada coluna. Posteriormente, para cada i,j; multiplicou-se esses dois valores , e posteriormente dividiu-se pelo N total de frequência observada. Com isso, obtemos os valores esperados para cada célula. Depois, subtraiu-se os valores observados dos valores esperados, obtendo assim os resíduos, que representam o quanto os valores esperados divergiram dos valores observados. Claramente, se somarmos todos os resíduos, iremos obter 0. 
 
+Podemos ainda graficar os resíduos, primeiramente com um clássico gráfico de dispersão. Podemos também avaliar a dispersão dos resíduos com boxplots, um agrupando pelo método e o outro pela faixa etária.
+
 ```{r q1c2, echo=F}
+
+residuos <- data.frame(residuos)
+
+plot(residuos$Freq,
+     main="Gráfico de dispersão dos resíduos",
+     xlab="",
+     ylab="")
+
+boxplot(residuos$Freq ~ residuos$method,
+     main="Boxplot: Distribuição dos resíduos por método",
+     xlab="",
+     ylab="")
+
+boxplot(residuos$Freq ~ residuos$age.group,
+     main="Boxplot: Distribuição dos resíduos por faixa etária",
+     xlab="",
+     ylab="")
+
+```
+
+```{r q1c3, include=FALSE}
+# Não vou incluir esta parte pois não tenho certeza se cabe uma análise de variância neste caso para analisar os resíduos
+anova <- aov(Freq ~ method + age.group, data=data.frame(tabela))
+summary(anova)
+
+shapiro.test(residuos$Freq)
+# De qualquer forma, o pressuposto de normalidade não foi atendido pelo teste de Shapiro-Wilk, então realmente não cabe uma ANOVA neste caso.
+
 ```
 
 
