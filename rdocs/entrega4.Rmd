@@ -59,7 +59,7 @@ data("Suicide")
 
 ## a) Indique cada etapa de seu estudo e respectivas conclusões
 
-A primeira etapa numa análise de correspodências seria criar uma tabela de contingência. Depois, as matrizes de perfil de linha e de coluna. Calculamos a inércia total e a estatística Qui-Quadrado. Depois, podemos calcular a matriz dos resíduos, subtraindo do valor observado os valores esperados. Após, é conveniente apresentar gráficos que facilitem a visualização das correspondências, ou seja, as distâncias e agrupamentos entre as variáveis que ajudem a explicar o comportamento dos dados.
+A primeira etapa numa análise de correspodências seria criar uma tabela de contingência. Depois, as matrizes de perfil de linha e de coluna. Calculamos a inércia total e a estatística Qui-Quadrado, que neste caso será relacionada a distância da centróide. Depois, podemos calcular a matriz dos resíduos, subtraindo do valor observado os valores esperados. Após, é conveniente apresentar gráficos que facilitem a visualização das correspondências, ou seja, as distâncias e agrupamentos entre as variáveis que ajudem a explicar o comportamento dos dados.
 
 Para este subitem, irei apresentar a tabela de contingência para o banco de dados proposto, assim como as matrizes de perfis de linha e coluna; além de um balloonplot que ajuda a visualizar a frequência de ocorrência para cada célula. Demais tópicos serão tratados nos subitens subsequentes.
 
