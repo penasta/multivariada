@@ -154,7 +154,7 @@ Como as comunalidades são quantidades de variâncias de cada variável explicad
 
 #### b)
 
-Como $Cov(\mathbf{X,F=L})$, e $Cov(\mathbf{X_i,F_j})=\ell_{}ij$, sabemos que $Cor(\mathbf{Z_i,F_1})$, para $i=1,2,3$ será $\ell_{i1}= [.9 \ \ .7 \ \ .5] = \mathbf{L}$. Isso indica que a variável $Z_1$ carrega a maior carga fatorial, dado seu maior valor absoluto (comparando também com o último resultado encontrado sobre comunalidade).
+Como $Cov(\mathbf{X,F=L})$, e $Cov(\mathbf{X_i,F_j})=\ell_{}ij$ (Resultado 2., pag. 484 J&W) [1], sabemos que $Cor(\mathbf{Z_i,F_1})$, para $i=1,2,3$ será $\ell_{i1}= [.9 \ \ .7 \ \ .5] = \mathbf{L}$. Isso indica que a variável $Z_1$ carrega a maior carga fatorial, dado seu maior valor absoluto (comparando também com o último resultado encontrado sobre comunalidade).
 
 # Questão 45
 
@@ -176,15 +176,38 @@ $$
 
 #### a)
 
-```{r q45a, include=FALSE}
-P1 <- t(matrix(data=c(.625,.594,.507,
-                    -.291,-.491,.843,
-                    .749,-.638,-.177),3,3))
-D1 <- matrix(rep(0,9),3,3)
-diag(D1) <- c(1.96,.68,.36)
-P1T <- t(P1)
+Sabemos que $\Sigma = \lambda_1e_1e_1' + \lambda_2e_2e_2' + ... + \lambda_pe_pe'_p = [\sqrt{\lambda_1}e_1 |\sqrt{\lambda_2}e_2 | ... |\sqrt{\lambda_p}e_p] \cdot [\sqrt{\lambda_1}e_1 |\sqrt{\lambda_2}e_2 | ... |\sqrt{\lambda_p}e_p]^T$ (pag. 488 J&W) [1]. Visto que iremos trabalhar com $m=1$, iremos considerar apenas o autovalor $\lambda_1=1.96$ e o autovetor $e'_1=[.625, \ .593, \ .507]$ tal que:
 
-P1 %*% D1 %*% P1T
+$\sqrt{1.96}[.625 \ \ .593 \ \ .507] = \mathbf{L}$;
+
+e
+
+$\Sigma = \mathbf{LL^T+\Psi}=$
+
+```{r q45a, echo=FALSE}
+LL <- c(.625,.594,.507)
+
+LL <- sqrt(1.96) * LL %*% t(LL)
+
+LLT <- t(LL)
+
+SIGMA <- LL %*% LLT
+
+Psi <- matrix(rep(0,9),3,3)
+
+diag(Psi) <- abs(diag(SIGMA)-1)
+
+# Psi
+
+SIGMA <- SIGMA + Psi
+
+SIGMA
+```
+
+Onde a matriz $\mathbf{\Psi}$ foi obtida simplesmente somando o valor necessário para a matriz $\mathbf{LL^T}$ ter o valor 1 na daigonal principal, ou seja, $\mathbf{\Psi}=$
+
+```{r q45a2, echo=FALSE}
+Psi 
 ```
 
 #### b)
@@ -300,3 +323,11 @@ Neste caso, notamos que com $m=2$ já é possível obter $\approx85\%$ da variâ
 #### d)
 
 #### e)
+
+\newpage
+
+# Referências:
+
+## [1] JOHNSON, Richard A; WICHERN, Dean W. APPLIED MULTIVARIATE STATISTICAL ANALYSIS. 6ª Edição. Pearson, 2007.
+
+## [2] von Borries, George. Material de aula disponível no Aprender3; Notas de aula e códigos. Análise Multivariada 1. Universidade de Brasília, 2023.

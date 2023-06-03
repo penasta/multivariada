@@ -19,14 +19,28 @@ P1T <- t(P1)
 P1 %*% D1 %*% P1T
 
 
+library(pacman)
+p_load(pracma)
 
 
 
+LL <- c(.625,.594,.507)
 
+LL <- sqrt(1.96) * LL
 
+LLT <- t(LL)
 
+SIGMA <- LL %*% LLT
 
+Psi <- matrix(rep(0,9),3,3)
 
+diag(Psi) <- abs(diag(SIGMA)-1)
+
+# Psi
+
+SIGMA <- SIGMA + Psi
+
+SIGMA
 
 
 ###
