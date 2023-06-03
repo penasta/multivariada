@@ -211,3 +211,25 @@ rhs2 <- (round(covM
                - diag(hs2$uniquenesses),3))
 rhs2
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+pcaResult<-princomp(dados)
+pc=pcaResult$scores

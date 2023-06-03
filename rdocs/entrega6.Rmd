@@ -154,7 +154,7 @@ Como as comunalidades são quantidades de variâncias de cada variável explicad
 
 #### b)
 
-Como $Cov(\mathbf{X,F=L})$, e $Cov(\mathbf{X_i,F_j})=\ell_{}ij$ (Resultado 2., pag. 484 J&W) [1], sabemos que $Cor(\mathbf{Z_i,F_1})$, para $i=1,2,3$ será $\ell_{i1}= [.9 \ \ .7 \ \ .5] = \mathbf{L}$. Isso indica que a variável $Z_1$ carrega a maior carga fatorial, dado seu maior valor absoluto (comparando também com o último resultado encontrado sobre comunalidade).
+Como $Cov(\mathbf{X,F=L})$, e $Cov(\mathbf{X_i,F_j})=\ell_{}ij$ (Resultado 2., pag. 484 J&W) [1], e $Cov(\mathbf{X_1,F_1}) = Corr(\mathbf{X_1,F_1})$ (pag. 486 J&W) [1] sabemos que $Cor(\mathbf{Z_i,F_1})$, para $i=1,2,3$ será $\ell_{i1}= [.9 \ \ .7 \ \ .5] = \mathbf{L}$. Isso indica que a variável $Z_1$ carrega a maior carga fatorial, dado seu maior valor absoluto (comparando também com o último resultado encontrado sobre comunalidade).
 
 # Questão 45
 
@@ -322,7 +322,65 @@ Neste caso, notamos que com $m=2$ já é possível obter $\approx85\%$ da variâ
 
 #### d)
 
+```{r,eval=FALSE}
+cor(dados)
+q51a5$loadings[,1:3] %*% t(q51a5$loadings[,1:3]) + psi512
+q51a1$loadings[,1:2] %*% t(q51a1$loadings[,1:2]) + psi511
+
+cortest(R1=cor(dados),
+        R2=q51a5$loadings[,1:3] %*% t(q51a5$loadings[,1:3]) + psi512,
+        n1=50,n2 = 50)
+
+cortest(R1=cor(dados),
+        q51a1$loadings[,1:2] %*% t(q51a1$loadings[,1:2]) + psi511,
+        n1=50,n2 = 50)
+p_load(covTestR)
+cor.test(cor(dados), q51a5$loadings[,1:3] %*% t(q51a5$loadings[,1:3]) + psi512)
+
+cor.test(cor(dados), q51a1$loadings[,1:2] %*% t(q51a1$loadings[,1:2]) + psi511)
+
+compareCov(cor(dados), q51a1$loadings[,1:2] %*% t(q51a1$loadings[,1:2]) + psi511)
+
+```
+
+
 #### e)
+
+##### Solução
+
+Pelo método de mínimos quadrados ponderados, para o caso da solução $m=2$, temos que $\mathbf{\hat{f_j}=(\hat{L'}\hat{\Psi}^{-1}\hat{L})^{-1}\hat{L'}\hat{\Psi}^{-1}(x_j-\hat{\mu})}$ (pag. 515 J&W) [1]. Portanto, teremos:
+```{r q51e1}
+# m=2
+# Seja L = 
+
+L <- q51a1$loadings[,1:2]
+
+# Então L' será
+
+LT <- t(L)
+
+# Já a matriz Psi, é dada por:
+
+PSI <- matrix(rep(0,49),7,7)
+
+diag(PSI) <- q51a1[["uniquenesses"]] 
+
+# E seja o vetor de médias de x1,...,x7=
+
+XB <- c(mean(dados$X1),mean(dados$X2),mean(dados$X3),mean(dados$X4),
+        mean(dados$X5),mean(dados$X6),mean(dados$X7))
+
+# e seja o vetor xj:
+
+XJ <- c(110,98,105,15,18,12,35)
+
+# então f_j^chapeu será
+
+FJH <-(solve(LT %*% solve(PSI) %*% L) %*% LT %*% solve(PSI))*(XB-XJ)
+FJH
+```
+
+
 
 \newpage
 
