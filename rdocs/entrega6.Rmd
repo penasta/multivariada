@@ -322,26 +322,64 @@ Neste caso, notamos que com $m=2$ já é possível obter $\approx85\%$ da variâ
 
 #### d)
 
-```{r,eval=FALSE}
-cor(dados)
-q51a5$loadings[,1:3] %*% t(q51a5$loadings[,1:3]) + psi512
-q51a1$loadings[,1:2] %*% t(q51a1$loadings[,1:2]) + psi511
+```{r q51d, include=FALSE}
 
-cortest(R1=cor(dados),
-        R2=q51a5$loadings[,1:3] %*% t(q51a5$loadings[,1:3]) + psi512,
-        n1=50,n2 = 50)
+#m=2
+fa <- factanal(covmat = cor(dados),
+                        factors = 2, rotation = "none")
 
-cortest(R1=cor(dados),
-        q51a1$loadings[,1:2] %*% t(q51a1$loadings[,1:2]) + psi511,
-        n1=50,n2 = 50)
-p_load(covTestR)
-cor.test(cor(dados), q51a5$loadings[,1:3] %*% t(q51a5$loadings[,1:3]) + psi512)
+L <- fa$loadings[,1:2]
+LT <- t(L)
+n <- 50
+p <- 7
+m <- 2
+S <- fa[["correlation"]]
+PSI <- matrix(rep(0,49),7,7)
+diag(PSI) <- fa[["uniquenesses"]] 
 
-cor.test(cor(dados), q51a1$loadings[,1:2] %*% t(q51a1$loadings[,1:2]) + psi511)
+et <- (n-(2*p+4*m+11)/6)*log(det(L%*%LT+PSI)/det(S))
 
-compareCov(cor(dados), q51a1$loadings[,1:2] %*% t(q51a1$loadings[,1:2]) + psi511)
+gl <- ((p-m)^2-p-m)/2
+
+pv1 <- pchisq(et,gl,lower.tail = FALSE)
+
+#m=3
+
+fa <- factanal(covmat = cor(dados),
+                        factors = 3, rotation = "none")
+L <- fa$loadings[,1:3]
+LT <- t(L)
+n <- 50
+p <- 7
+m <- 3
+S <- fa[["correlation"]]
+PSI <- matrix(rep(0,49),7,7)
+diag(PSI) <- fa[["uniquenesses"]] 
+
+et <- (n-(2*p+4*m+11)/6)*log(det(L%*%LT+PSI)/det(S))
+
+gl <- ((p-m)^2-p-m)/2
+
+pv2 <- pchisq(et,gl,lower.tail = FALSE)
 
 ```
+
+Para testar as hipóteses:
+
+$$\begin{cases}
+H_0:\mathbf{\Sigma=LL'+\Psi}\\
+H_1:\mathbf{\Sigma \neq LL'+\Psi}
+\end{cases}$$
+
+Sob um nível de significância $\alpha=.01$, iremos portanto testar a hipótese de número de Fatores (m) adequado. Note que este teste assume a normalidade multivariada dos dados amostrais, pressuposto este que não será testado. Conforme as notas de aula [2] references a análise fatorial, a estatística do teste (razão de verossimilhança) é:
+
+$$(n-\frac{2p+4m+11}{6}) \ ln \ (\frac{|\hat{L}\hat{L}^T+\hat{\Psi}|}{|S|}),$$
+
+que tem distr. aproximada $\chi^2_\ell,\ell=[(p-m)^2-p-m]/2$, e $\mathbf{\hat{L}},\mathbf{\hat{\Psi}}$ são as estimativas de máxima verossimilhança.
+
+Calculando as estatísticas de teste para m=2 e m=3 obtemos respectivamente os p-valores `r pv1` e `r pv2`, em outras palavras, rejeitamos $h_0$ em ambos os casos para $\alpha=0.01$.
+
+Como este é um teste sensível a normalidade, talvez os resultados encontrados não sejam muito precisos sem testar o pressuposto de normalidade multivariada dos dados, o que pode influenciar no poder do teste, visto que as matrizes são similares a matriz de correlação e o teste rejeita a igualdade com tamanha certeza. Dito isso, este teste não auxiliou muito na tomada de decisão do número de fatores m adequado.
 
 
 #### e)
@@ -376,10 +414,16 @@ XJ <- c(110,98,105,15,18,12,35)
 
 # então f_j^chapeu será
 
-FJH <-(solve(LT %*% solve(PSI) %*% L) %*% LT %*% solve(PSI))*(XB-XJ)
+FJH <-(solve(LT %*% solve(PSI) %*% L) %*% LT %*% solve(PSI))%*%(XJ-XB)
 FJH
 ```
 
+Já pelo método de regressão, teremos que $\mathbf{\hat{f_j}=\hat{L}'\hat{\Sigma}^{-1}(x_j-\bar{x})}$, naturalmente com $\mathbf{\Sigma=LL'+\Psi}$. (pag. 516 J&W) [1]. Portanto, teremos:
+
+```{r}
+FJH2 <- LT%*%solve(L%*%LT+PSI)%*%(XJ-XB)
+FJH2
+```
 
 
 \newpage
