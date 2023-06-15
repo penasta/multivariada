@@ -32,7 +32,7 @@ always_allow_html: yes
   `r format(Sys.time(), '%d %B %Y')`}
 \vskip 3em
 {\LARGE
-  \textbf{Entrega 6}} \\
+  \textbf{Entrega 5}} \\
 \vskip 1em
 {\Large
   Prof. Dr. George von Borries} \\
@@ -204,7 +204,7 @@ SIGMA <- SIGMA + Psi
 SIGMA
 ```
 
-Onde a matriz $\mathbf{\Psi}$ foi obtida simplesmente somando o valor necessário para a matriz $\mathbf{LL^T}$ ter o valor 1 na daigonal principal, ou seja, $\mathbf{\Psi}=$
+Onde a matriz $\mathbf{\Psi}$ foi obtida simplesmente somando o valor necessário para a matriz $\mathbf{LL^T}$ ter o valor 1 na diagonal principal, ou seja, $\mathbf{\Psi}=$
 
 ```{r q45a2, echo=FALSE}
 Psi 
