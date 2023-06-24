@@ -211,25 +211,106 @@ rhs2 <- (round(covM
                - diag(hs2$uniquenesses),3))
 rhs2
 
+pacman::p_load(tidyverse,MCMCpack,data.table,psych,GPArotation)
+
+# 9.10 J&W
+
+corm <- xpnd(c(1,0.505,0.569,0.602,0.621,0.603,
+                  1,0.422,0.467,0.482,0.450,
+                  1,0.926,0.877,0.878,
+                  1,0.874,0.894,
+                  1,0.937,
+                  1),6)
+
+sol <- principal(corm, nfactors = 2, rotate = 'none',
+                 covar = T)
+sol$uniquenesses
+
+solution <- factanal(corm,factors = 2, rotation = "none")
+solution
+
+sol2 <- fa(corm, nfactors = 2, rotate = "none", fm = "ml")
+sol2
 
 
 
 
+# 9.12
 
+S <- matrix(c(11.072,8.019,8.160,
+            8.019,6.417,6.005,
+            8.160,6.006,6.773),3,3)
+S <- S * 10^-3
+S
+principal(S, nfactors = 1, rotate = 'none',
+          covar = T)
+exp(S)
 
+?prcomp
 
+# 9.21
 
+dados <- read_table("rdocs/dados/table1_5-air-pollution.DAT.txt", col_names = FALSE)
+dados
 
+fa1 <- principal(dados, nfactors = 1, rotate = 'none',covar = F)
+fa1
 
+fa2 <- principal(dados, nfactors = 2, rotate = 'none',covar = F)
+fa2
 
-
-
-
-
-
-
-
-
+###########
 
 pcaResult<-princomp(dados)
 pc=pcaResult$scores
+
+############
+
+pacman::p_load(tidyverse,MCMCpack,data.table,psych,GPArotation)
+
+# 9.10 J&W
+
+corm <- xpnd(c(1,0.505,0.569,0.602,0.621,0.603,
+               1,0.422,0.467,0.482,0.450,
+               1,0.926,0.877,0.878,
+               1,0.874,0.894,
+               1,0.937,
+               1),6)
+
+sol <- principal(corm, nfactors = 2, rotate = 'none',
+                 covar = T)
+sol$uniquenesses
+
+solution <- factanal(corm,factors = 2, rotation = "none")
+solution
+
+sol2 <- fa(corm, nfactors = 2, rotate = "none", fm = "ml")
+sol2
+
+
+
+
+# 9.12
+
+S <- matrix(c(11.072,8.019,8.160,
+              8.019,6.417,6.005,
+              8.160,6.006,6.773),3,3)
+S <- S * 10^-3
+S
+principal(S, nfactors = 1, rotate = 'none',
+          covar = T)
+exp(S)
+
+?prcomp
+
+# 9.21
+
+dados <- read_table("rdocs/dados/table1_5-air-pollution.DAT.txt", col_names = FALSE)
+dados
+
+fa1 <- principal(dados, nfactors = 1, rotate = 'none',covar = F)
+fa1
+
+fa2 <- principal(dados, nfactors = 2, rotate = 'none',covar = F)
+fa2
+

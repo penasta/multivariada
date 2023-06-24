@@ -166,8 +166,7 @@ $$\begin{aligned}
 \lambda_1&=1.96, \qquad  e'_1=[.625, \ .594, \ .507]\\
 \lambda_2&= .68, \qquad e'_2=[-.219, \ -.491, \ .843]\\
 \lambda_3&= .36, \qquad e'_3=[.749, \ -.638, \ -.177]\\
-\end{aligned}
-$$ 
+\end{aligned}$$
 (a) Assuming an $m=1$ factor model, calculate the loading matrix $\mathbf{L}$ and matrix of specific variances $\Psi$ using the principal component solution method. Compare the results with those in Exercise 9.1.
  
 (b) What proportion of the total population variance is explained by the first common factor?

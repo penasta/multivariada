@@ -1,0 +1,94 @@
+---
+title: ''
+author: ''
+date: ''
+output:
+  pdf_document: null
+  fig_crop: no
+  html_document:
+    df_print: paged
+subtitle: ''
+highlight: tango
+number_sections: no
+fig_caption: yes
+keep_tex: yes
+includes:
+  in_header: Estilo.sty
+classoption: a4paper
+always_allow_html: yes
+---
+  
+  
+\begin{center}
+{\Large
+  DEPARTAMENTO DE ESTATÍSTICA} \\
+\vspace{0.5cm}
+\begin{figure}[!t]
+\centering
+\includegraphics[width=9cm, keepaspectratio]{logo-UnB.eps}
+\end{figure}
+\vskip 1em
+{\large
+  `r format(Sys.time(), '%d %B %Y')`}
+\vskip 3em
+{\LARGE
+  \textbf{Lista 8 - Correlação Canônica}} \\
+\vskip 1em
+{\Large
+  Prof. Dr. George von Borries} \\
+\vskip 1em
+{\Large
+  Análise Multivariada 1} \\
+\vskip 1em
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636} \\
+\vskip 1em
+\end{center}
+
+```{r setup, include=F}
+
+library(pacman)
+p_load(knitr,tidyverse)
+```
+
+\newpage
+
+# Questão 71
+
+## Ex. 10.1 | Johnson & Wichern
+
+
+
+# Questão 72
+
+## Ex. 10.2 | Johnson & Wichern
+
+
+
+# Questão 73
+
+## Ex. 10.9 | Johnson & Wichern (itens (a) e (c))
+
+### a)
+
+
+### b)
+
+
+# Questão 74
+
+## Ex. 10.10 | Johnson & Wichern
+
+
+
+
+# Questão 75
+
+## Ex. 11.8 | Rencher & Christensen
+
+### (a) Encontre as correlações canônicas entre (y1, y2) e (x1, x2, x3).
+
+### (b) Encontre os coeficientes padronizados das variáveis canônicas.
+
+
+

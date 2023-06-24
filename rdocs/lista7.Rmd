@@ -1,0 +1,276 @@
+---
+title: ''
+author: ''
+date: ''
+output:
+  pdf_document: null
+  fig_crop: no
+  html_document:
+    df_print: paged
+subtitle: ''
+highlight: tango
+number_sections: no
+fig_caption: yes
+keep_tex: yes
+includes:
+  in_header: Estilo.sty
+classoption: a4paper
+always_allow_html: yes
+---
+  
+  
+\begin{center}
+{\Large
+  DEPARTAMENTO DE ESTATÍSTICA} \\
+\vspace{0.5cm}
+\begin{figure}[!t]
+\centering
+\includegraphics[width=9cm, keepaspectratio]{logo-UnB.eps}
+\end{figure}
+\vskip 1em
+{\large
+  `r format(Sys.time(), '%d %B %Y')`}
+\vskip 3em
+{\LARGE
+  \textbf{Lista 7 - Normal Multivariada}} \\
+\vskip 1em
+{\Large
+  Prof. Dr. George von Borries} \\
+\vskip 1em
+{\Large
+  Análise Multivariada 1} \\
+\vskip 1em
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636} \\
+\vskip 1em
+\end{center}
+
+```{r setup, include=F}
+
+library(pacman)
+p_load(knitr,tidyverse,vcd,ca,FactoMineR,factoextra,gplots,heplots,
+       ggfortify,gridExtra,MVN,mvnormalTest,QuantPsyc,mvnormtest,MASS,
+       ellipse,ggforce)
+```
+
+\newpage
+
+
+# Questão 55
+
+```{r}
+mu <- c(3, 2)
+sigma <- matrix(c(1, -1.5, -1.5, 4),2)
+set.seed(150167636)
+mvrnorm(20, mu, sigma)
+```
+
+
+# Questão 56 (caderno)
+
+
+
+# Questão 57
+
+```{r}
+mu <- c(1, 2)
+a <- 0
+sigma1 <- matrix(c(2, a, a, 2),2)
+a <- (-1/2)
+sigma2 <- matrix(c(2, a, a, 2),2)
+a <- (1/2)
+sigma3 <- matrix(c(2, a, a, 2),2)
+a <- 1
+sigma4 <- matrix(c(2, a, a, 2),2)
+# continuar
+```
+
+
+# Questão 58 (caderno)
+
+
+
+# Questão 59
+
+
+
+# Questão 60
+
+## Ex. 4.26 | Johnson & Wichern
+
+```{r q60, include=FALSE}
+x1 <- c(1,2,3,3,4,5,6,8,9,11)
+x2 <- c(18.95,19,17.95,15.54,14,12.95,8.94,7.49,6,3.99)
+
+mu <- t(matrix(c(mean(x1),mean(x2)),1,2))
+#mu
+
+S <- matrix(c(var(x1),cov(x1,x2),
+              cov(x1,x2),var(x2)),2,2)
+#S
+
+Sinv <- solve(S)
+#Sinv
+
+distancias <- vector("numeric", 10)
+for (i in 1:length(x1)) {
+  xjx <- c(x1[i], x2[i]) - mu
+  distancia <- t(xjx) %*% Sinv %*% xjx
+  distancias[i] <- distancia
+}
+#distancias
+```
+### a)
+
+De $x_1$ e $x_2$, obtemos:
+o o vetor de médias $\mathbf{\mu}$ = 
+```{r, echo=F}
+mu
+```
+
+A matriz **S** =
+```{r, echo=F}
+S
+```
+
+E a inversa $\mathbf{S^{-1}}$ = 
+```{r, echo=F}
+Sinv
+```
+
+Com isso, podemos calcular as distâncias estatísticas quadradas
+
+$d^2_j=\mathbf{(x_j-\bar{x})^TS^{-1}(x_j-\bar{x})}$ = [`r distancias`]
+
+### b)
+
+```{r q60b, include=F}
+limite <- qchisq(.5, df = 2) 
+prop <- sum(distancias < limite)/ length(distancias)
+```
+
+Neste caso, iremos comparar os valores $d^2_j$ com o quantil $\chi^2_2(0,5) =$ `r limite` e avaliar a proporção de observações na margem de aceitação, que para este caso é 50%
+
+\newpage
+
+### c)
+
+Duas representações gráficas análogas:
+
+```{r, echo=F,message=FALSE,prompt=FALSE,results='hide',fig.keep='all'}
+t <- sort(distancias)
+car::qqPlot(t, dist="chisq", df=2)
+cqplot(data.frame(x1,x2))
+```
+
+### d)
+
+Pelo resultado da proporção de distâncias não rejeitadas pelo quantil qui-quadrado, pelo baixo número de dados e pelos gráficos acima, creio não haver evidências suficientes para rejeitar a normalidade bivariada destes dados
+
+# Questão 61
+
+## Ex. 4.27 | Johnson & Wichern
+
+```{r, echo=F}
+Oven <- c(1:42)
+Radiation <- c(.15,.09,.18,.1,.05,.12,.08,.05,.08,.1,.07,.02,.01,.1,.1,
+               .1,.02,.1,.01,.4,.1,.05,.03,.05,.15,.1,.15,.09,.08,.18,
+               .1,.2,.11,.3,.02,.2,.2,.3,.3,.4,.3,.05)
+```
+
+Algumas opções de teste de normalidade multivariada
+
+Caso 1: Variáveis sem transformação
+
+```{r, echo=F}
+kable(mardia(data.frame(Oven,Radiation))$mv.test)
+kable(mvn(data.frame(Oven,Radiation))$multivariateNormality)
+qqplot(x=Oven,y=Radiation)
+```
+
+Caso 2: Variáveis com transformação $\lambda=0$ (ln)
+
+```{r, echo=F}
+kable(mardia(data.frame(Oven,log(Radiation)))$mv.test)
+kable(mvn(data.frame(Oven,log(Radiation)))$multivariateNormality)
+qqplot(x=Oven,y=log(Radiation))
+```
+
+Caso 3: Variáveis com transformação $\lambda=1/4$ ($\frac{x^{(\lambda)-1}}{\lambda}$)
+
+```{r, echo=F}
+kable(mardia(data.frame(Oven,(Radiation-1)/1/4))$mv.test)
+kable(mvn(data.frame(Oven,(Radiation-1)/1/4))$multivariateNormality)
+qqplot(x=Oven,y=(Radiation-1)/1/4)
+```
+
+Portanto, apesar de ser bem difícil de inferir uma conclusão, a transformação $\lambda=0$ aparenta ter trazido o melhor resultado de normalidade multivariada
+
+# Questão 62
+
+## Ex. 4.35 | Johnson & Wichern
+
+```{r, echo=F, message=FALSE}
+dados <- read_table("dados/PaperQuality-T1-2.DAT.txt", 
+    col_names = FALSE)
+colnames(dados) <- c("Density","Strength_MachineDirection","Strength_CrossDirection")
+
+t <- mvn(dados)
+kable(mardia(dados)$mv.test)
+kable(mvn(dados)$multivariateNormality)
+kable(t$univariateNormality)
+kable(mult.norm(dados)$mult.test)
+mshapiro.test(t(dados))
+```
+
+Diversos testes de normalidade multivariada e marginal univariada foram testados, e à excessão de um teste de normalidade marginal da variável *Machine Direction*, todos os demais rejeitaram a hipótese nula de normalidade multivariada. Portanto, há evidências para descartar a hipótese nula de normalidade multivariada desses dados. Entretando, é possível que transformadas dessas variáveis não rejeitem a hipótese nula de normalidade multivariada.
+
+
+
+# Questão 63
+
+## Ex. 4.1 | Rencher & Christensen
+
+
+
+# Questão 64
+
+## Ex. 4.2 | Rencher & Christensen
+
+
+
+# Questão 65
+
+## Ex. 4.10 | Rencher & Christensen
+
+
+
+# Questão 66
+
+## Ex. 4.11 | Rencher & Christensen
+
+
+
+# Questão 67
+
+## Ex. 4.12 | Rencher & Christensen
+
+
+
+# Questão 68
+
+## Ex. 4.13 | Rencher & Christensen
+
+
+
+# Questão 69
+
+## Ex. 4.14 | Rencher & Christensen
+
+
+
+# Questão 70
+
+## Ex. 4.17 | Rencher & Christensen
+
+

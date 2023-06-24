@@ -1,0 +1,264 @@
+---
+title: ''
+author: ''
+date: ''
+output:
+  pdf_document: null
+  fig_crop: no
+  html_document:
+    df_print: paged
+subtitle: ''
+highlight: tango
+number_sections: no
+fig_caption: yes
+keep_tex: yes
+includes:
+  in_header: Estilo.sty
+classoption: a4paper
+always_allow_html: yes
+---
+  
+  
+\begin{center}
+{\Large
+  DEPARTAMENTO DE ESTATÍSTICA} \\
+\vspace{0.5cm}
+\begin{figure}[!t]
+\centering
+\includegraphics[width=9cm, keepaspectratio]{logo-UnB.eps}
+\end{figure}
+\vskip 1em
+{\large
+  `r format(Sys.time(), '%d %B %Y')`}
+\vskip 3em
+{\LARGE
+  \textbf{Lista 6 - Análise fatorial exploratória}} \\
+\vskip 1em
+{\Large
+  Prof. Dr. George von Borries} \\
+\vskip 1em
+{\Large
+  Análise Multivariada 1} \\
+\vskip 1em
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636} \\
+\vskip 1em
+\end{center}
+
+```{r setup, include=F}
+
+if (!require("pacman")) install.packages("pacman")
+p_load(knitr,tidyverse,MCMCpack,data.table,psych,GPArotation,ggfortify,gridExtra)
+
+```
+
+\newpage
+
+# Questão 48
+
+## Ex. 9.10 | Johnson & Wichern
+
+```{r Q47,echo=F}
+
+corm <- xpnd(c(1,0.505,0.569,0.602,0.621,0.603,
+                  1,0.422,0.467,0.482,0.450,
+                  1,0.926,0.877,0.878,
+                  1,0.874,0.894,
+                  1,0.937,
+                  1),6)
+
+sol <- principal(corm, nfactors = 2, rotate = 'none',
+                 covar = T)
+
+```
+
+### a) Variância específica:
+
+```{r q47a}
+t(t(sol$uniquenesses))
+```
+
+### b) Comunalidades:
+
+```{r q47b}
+t(t(sol$communality))
+```
+
+### c) Proporção da variância explicada por cada fator:
+
+```{r q47c}
+h2 <- c(.67,.88,.92,.92,.92,.93)
+t(t(h2))
+```
+
+### d) Matriz de resíduos:
+
+```{r q47d}
+psi47d <- matrix(rep(0,36),6,6)
+diag(psi47d) <- sol[["uniquenesses"]]
+corm - (sol$loadings[,1:2] %*% t(sol$loadings[,1:2]) + psi47d)
+```
+
+# Questão 49
+
+## Ex. 9.12 | Johnson & Wichern
+
+# Questão 50
+
+## Ex. 9.25 | Johnson & Wichern
+
+tabela?
+
+# Questão 51
+
+## Ex. 9.19 | Johnson & Wichern
+
+### Feito na entrega 5
+
+# Questão 52
+
+## Ex. 9.21 | Johnson & Wichern
+
+```{r q52, include=F}
+dados <- read_table("dados/table1_5-air-pollution.DAT.txt", col_names = FALSE)
+colnames(dados) <- c("wind","solar radiation","CO","NO","NO2","O3","HC")
+#S <- cov(dados)
+fa2 <- principal(dados, nfactors = 2, rotate = 'varimax',covar = T)
+
+#dd <- diag(cov(dados))
+#v12 <- sqrt(dd)
+#M <- matrix(rep(0,49),7,7)
+#diag(M) <- v12
+# EMV L:
+#t(fa2$loadings[,1:2]) %*% solve(M)
+# Na mão deu problema..
+
+emv <- factanal(dados, factors = 2, rotation = "varimax")
+
+```
+
+Variância específica e loadings para PCA; utilizando a rotação Varimax:
+
+```{r q521}
+fa2$uniquenesses
+fa2$loadings
+```
+
+Variância específica e loadings para método de máxima verossimilhança; utilizando a rotação Varimax:
+
+```{r q522}
+emv$uniquenesses
+emv$loadings
+```
+
+# Questão 53
+
+## Ex. 9.22 | Johnson & Wichern
+
+```{r q53, include=FALSE}
+#S <- cor(dados)
+fa_reg <- factanal(dados, rotation="none",factors = 2,scores="regression")
+
+fa_mq <- factanal(dados, rotation="none",factors = 2,scores="Bartlett")
+
+fa_pca <- principal(dados, nfactors = 2, rotate = 'none', scores=TRUE)
+
+```
+
+### a) Escore dos fatores para m = 2 para:
+
+#### Método regressivo:
+
+```{r q531, echo=F}
+head(fa_reg$scores,10)
+```
+
+#### Método mínimos quadrados ponderados:
+
+```{r q532, echo=F}
+head(fa_mq$scores,10)
+```
+
+### b) Encontrar os escores dos fatores pelo método de análise de componente principal:
+
+```{r q533, echo=F}
+head(fa_pca$scores,10)
+```
+
+### c) Comparar os três métodos:
+
+Visualizando graficamente os escores:
+
+```{r q534, echo=F,message=FALSE}
+
+g1 <- autoplot(fa_reg$scores) +
+  ggtitle("Escores Regressão")
+g2 <- autoplot(fa_mq$scores) +
+  ggtitle("Escores MQP")
+g3 <- autoplot(fa_pca$scores) +
+  ggtitle("Escores PCA")
+
+grid.arrange(g1, g2, g3, nrow = 1)
+
+t1 <- ggplot(fa_pca$scores, aes(x = fa_pca$scores[,1], y = fa_pca$scores[,2])) +
+  geom_smooth() +
+  xlab("PC 1") + ylab("PC 2") +
+  ggtitle("Escores PCA")
+
+t2 <- ggplot(fa_reg$scores, aes(x = fa_reg$scores[,1], y = fa_reg$scores[,2])) +
+  geom_smooth() +
+  xlab("PC 1") + ylab("PC 2") +
+  ggtitle("Escores Regressão")
+
+t3 <- ggplot(fa_mq$scores, aes(x = fa_mq$scores[,1], y = fa_mq$scores[,2])) +
+  geom_smooth() +
+  xlab("PC 1") + ylab("PC 2") +
+  ggtitle("Escores MQP")
+
+grid.arrange(t2, t3, t1, nrow = 1)
+
+```
+
+Pela visualização dos gráficos, podemos perceber que os escores do método regressivo e de mínimos quadrados ponderados se assemelham bastante, enquanto os escores da PCA diferem um pouco desses últimos dois, mas ainda se mantendo numa escala parecida.
+
+# Questão 54
+
+## Ex. 9.23 | Johnson & Wichern
+
+```{r q54, include=F}
+
+m1d <- principal(dados, nfactors = 1, rotate = 'none')
+m2d <- principal(dados, nfactors = 2, rotate = 'none')
+
+S <- cov(dados)
+m1s <- principal(S, nfactors = 1, rotate = 'none',covar=T)
+m2s <- principal(S, nfactors = 2, rotate = 'none',covar=T)
+
+```
+
+### Variância específica para m=1, matriz = R
+
+```{r q541}
+m1d$uniquenesses
+```
+
+### Variância específica para m=2, matriz = R
+
+```{r q542}
+m2d$uniquenesses
+```
+
+### Variância específica para m=1, matriz = S
+
+```{r q543}
+m1s$uniquenesses
+```
+
+### Variância específica para m=2, matriz = S
+
+```{r q544}
+m2s$uniquenesses
+```
+
+Sob qualquer métrica, os valores encontrados são diferentes. Mas com atenção especial para a variância específica onde é bem possível encontrar as diferenças. A diferença entre usar a matriz **R** e a matriz **S** fica bem explícita, e isso se dá por conta da escala das variáveis (uma das variáveis tem a escala bastante diferente das demais e "puxa" a variabilidade para ela).
+
