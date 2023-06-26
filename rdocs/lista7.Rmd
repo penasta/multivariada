@@ -58,7 +58,7 @@ p_load(knitr,tidyverse,vcd,ca,FactoMineR,factoextra,gplots,heplots,
 
 # Questão 55
 
-```{r}
+```{r q55,echo=FALSE,cache=TRUE}
 mu <- c(3, 2)
 sigma <- matrix(c(1, -1.5, -1.5, 4),2)
 set.seed(150167636)
@@ -89,7 +89,7 @@ Ao invés das elipses, irei representar os contornos, pois encontrei uma funçã
 
 ## a = 0
 
-```{r q571,echo=F}
+```{r q571,echo=F,cache=TRUE}
 m <- c(1, 2)
 sigma <- matrix(c(2,0,0,2), nrow=2)
 data.grid <- expand.grid(s.1 = seq(-2, 5, length.out=200), s.2 = seq(-2, 5, length.out=200))
@@ -101,7 +101,7 @@ ggplot(q.samp, aes(x=s.1, y=s.2, z=prob)) +
 
 ## a = -1/2
 
-```{r q572,echo=F}
+```{r q572,echo=F,cache=TRUE}
 sigma <- matrix(c(2,(-1/2),(-1/2),2), nrow=2)
 data.grid <- expand.grid(s.1 = seq(-2, 5, length.out=200), s.2 = seq(-2, 5, length.out=200))
 q.samp <- cbind(data.grid, prob = mvtnorm::dmvnorm(data.grid, mean = m, sigma = sigma))
@@ -112,7 +112,7 @@ ggplot(q.samp, aes(x=s.1, y=s.2, z=prob)) +
 
 ## a = 1/2
 
-```{r q573,echo=F}
+```{r q573,echo=F,cache=TRUE}
 sigma <- matrix(c(2,(1/2),(1/2),2), nrow=2)
 data.grid <- expand.grid(s.1 = seq(-2, 5, length.out=200), s.2 = seq(-2, 5, length.out=200))
 q.samp <- cbind(data.grid, prob = mvtnorm::dmvnorm(data.grid, mean = m, sigma = sigma))
@@ -123,7 +123,7 @@ ggplot(q.samp, aes(x=s.1, y=s.2, z=prob)) +
 
 ## a = 1
 
-```{r q574,echo=F}
+```{r q574,echo=F,cache=TRUE}
 sigma <- matrix(c(2,1,1,2), nrow=2)
 data.grid <- expand.grid(s.1 = seq(-2, 5, length.out=200), s.2 = seq(-2, 5, length.out=200))
 q.samp <- cbind(data.grid, prob = mvtnorm::dmvnorm(data.grid, mean = m, sigma = sigma))
@@ -193,7 +193,7 @@ $\square$
 
 ## Ex. 4.26 | Johnson & Wichern
 
-```{r q60, include=FALSE}
+```{r q60, include=FALSE,cache=TRUE}
 x1 <- c(1,2,3,3,4,5,6,8,9,11)
 x2 <- c(18.95,19,17.95,15.54,14,12.95,8.94,7.49,6,3.99)
 
@@ -219,17 +219,17 @@ for (i in 1:length(x1)) {
 
 De $x_1$ e $x_2$, obtemos:
 o o vetor de médias $\mathbf{\mu}$ = 
-```{r, echo=F}
+```{r, echo=F,cache=TRUE}
 mu
 ```
 
 A matriz **S** =
-```{r, echo=F}
+```{r, echo=F,cache=TRUE}
 S
 ```
 
 E a inversa $\mathbf{S^{-1}}$ = 
-```{r, echo=F}
+```{r, echo=F,cache=TRUE}
 Sinv
 ```
 
@@ -239,7 +239,7 @@ $d^2_j=\mathbf{(x_j-\bar{x})^TS^{-1}(x_j-\bar{x})}$ = [`r distancias`]
 
 ### b)
 
-```{r q60b, include=F}
+```{r q60b, include=F,cache=TRUE}
 limite <- qchisq(.5, df = 2) 
 prop <- sum(distancias < limite)/ length(distancias)
 ```
@@ -252,7 +252,7 @@ Neste caso, iremos comparar os valores $d^2_j$ com o quantil $\chi^2_2(0,5) =$ `
 
 Duas representações gráficas análogas:
 
-```{r, echo=F,message=FALSE,prompt=FALSE,results='hide',fig.keep='all'}
+```{r, echo=F,message=FALSE,prompt=FALSE,results='hide',fig.keep='all',cache=TRUE}
 t <- sort(distancias)
 car::qqPlot(t, dist="chisq", df=2)
 cqplot(data.frame(x1,x2))
@@ -266,7 +266,7 @@ Pelo resultado da proporção de distâncias não rejeitadas pelo quantil qui-qu
 
 ## Ex. 4.27 | Johnson & Wichern
 
-```{r, echo=F}
+```{r, echo=F,cache=TRUE}
 Oven <- c(1:42)
 Radiation <- c(.15,.09,.18,.1,.05,.12,.08,.05,.08,.1,.07,.02,.01,.1,.1,
                .1,.02,.1,.01,.4,.1,.05,.03,.05,.15,.1,.15,.09,.08,.18,
@@ -277,7 +277,7 @@ Algumas opções de teste de normalidade multivariada
 
 Caso 1: Variáveis sem transformação
 
-```{r, echo=F}
+```{r, echo=F,cache=TRUE}
 kable(mardia(data.frame(Oven,Radiation))$mv.test)
 kable(mvn(data.frame(Oven,Radiation))$multivariateNormality)
 qqplot(x=Oven,y=Radiation)
@@ -285,7 +285,7 @@ qqplot(x=Oven,y=Radiation)
 
 Caso 2: Variáveis com transformação $\lambda=0$ (ln)
 
-```{r, echo=F}
+```{r, echo=F,cache=TRUE}
 kable(mardia(data.frame(Oven,log(Radiation)))$mv.test)
 kable(mvn(data.frame(Oven,log(Radiation)))$multivariateNormality)
 qqplot(x=Oven,y=log(Radiation))
@@ -293,7 +293,7 @@ qqplot(x=Oven,y=log(Radiation))
 
 Caso 3: Variáveis com transformação $\lambda=1/4$ ($\frac{x^{(\lambda)-1}}{\lambda}$)
 
-```{r, echo=F}
+```{r, echo=F,cache=TRUE}
 kable(mardia(data.frame(Oven,(Radiation-1)/1/4))$mv.test)
 kable(mvn(data.frame(Oven,(Radiation-1)/1/4))$multivariateNormality)
 qqplot(x=Oven,y=(Radiation-1)/1/4)
@@ -305,7 +305,7 @@ Portanto, apesar de ser bem difícil de inferir uma conclusão, a transformaçã
 
 ## Ex. 4.35 | Johnson & Wichern
 
-```{r, echo=F, message=FALSE}
+```{r, echo=F, message=FALSE,cache=TRUE}
 dados <- read_table("dados/PaperQuality-T1-2.DAT.txt", 
     col_names = FALSE)
 colnames(dados) <- c("Density","Strength_MachineDirection","Strength_CrossDirection")
@@ -336,7 +336,7 @@ $$\Sigma_1 = \left[ {\begin{array}{ccc}
      1  & 2 & 1 \\
   \end{array} } \right]$$
 
-```{r q63}
+```{r q63,echo=FALSE,cache=TRUE}
 S1 <- matrix(c(14,8,3,
                8,5,2,
                3,2,1),3,3)
@@ -397,7 +397,7 @@ $$\mathbf{y \sim N_3(\mu,\Sigma); \mu = \left[ {\begin{array}{ccc}
 ### a)
 Distribuição de $\mathbf{z = 2y_1-y_2+3y_3}$.
 \
-```{r q65a, include=FALSE}
+```{r q65a, include=FALSE,cache=TRUE}
 c <- t(c(2,-1,3))
 mu <- t(t(c(3,1,4)))
 c%*%mu
@@ -425,7 +425,7 @@ $\square$
 ### b)
 Distribuição conjunta de $\mathbf{z_1 = y_1+y_2+y_3}$ e $\mathbf{z_2=y_1-y_2+2y_3}$.
 \
-```{r q65b, include=FALSE}
+```{r q65b, include=FALSE,cache=TRUE}
 A <- matrix(c(1,1,
               1,-1,
               1,2),2,3)
@@ -435,13 +435,14 @@ A%*%mu # media
 
 A%*%sigma%*%t(A) # variância
 ```
+
 \
 Sol.:
 \
 $$\mathbf{A=\left[ {\begin{array}{ccc}
      1   & 1  & 1 \\
      1   & -1 & 2  \\
-  \end{array} } \right] = Conjuntos \ z_1 \ e \ z_2}$$
+  \end{array} } \right] = Conjunta \ z_1 \ e \ z_2}$$
 \
 Propriedade (Rencher & Christensen; 4.2.1 (b)):
 Seja $\mathbf{y\sim N_P(\mu,\Sigma)}$. Então $\mathbf{Ay\sim N_P(A\mu,A\Sigma A')}$
@@ -458,13 +459,79 @@ $\square$
 \
 
 ### c)
+Distribuição de $\mathbf{y_2}$
+
+```{r q65c, include=FALSE,cache=TRUE}
+c <- t(c(0,1,0))
+mu <- t(t(c(3,1,4)))
+c%*%mu
+
+sigma <- matrix(c(6,1,-2,
+                  1,13,4,
+                  -2,4,4),3,3)
+
+c %*% sigma %*% t(c)
+```
+
+\
+Sol.:
+\
+$$\mathbf{A=\left[ {\begin{array}{ccc}
+     0   & 1  & 0 \\
+  \end{array} } \right] = y_2}$$
+\
+Propriedade (Rencher & Christensen; 4.2.1 (b)):
+Seja $\mathbf{y\sim N_P(\mu,\Sigma)}$. Então $\mathbf{Ay\sim N_P(A\mu,A\Sigma A')}$
+\
+Então: $$\mathbf{Ay\sim N_2(A\mu,A\Sigma A') \rightarrow Ay\sim N(1,13)}$$
+\
+$\square$
+\
+
 
 ### d)
+Distribuição conjunta de $\mathbf{y_1,y3}$
+
+```{r q65d, include=FALSE,cache=TRUE}
+c <- matrix(c(1,0,0,
+              0,0,1),2,3)
+mu <- t(t(c(3,1,4)))
+c%*%mu
+
+sigma <- matrix(c(6,1,-2,
+                  1,13,4,
+                  -2,4,4),3,3)
+
+c %*% sigma %*% t(c)
+```
+
+\
+Sol.:
+\
+$$\mathbf{A=\left[ {\begin{array}{ccc}
+     1   & 0  & 0 \\
+     0   & 0 & 1  \\
+  \end{array} } \right] = Conjunta \ y_1 \ e \ y_3}$$
+\
+Propriedade (Rencher & Christensen; 4.2.1 (b)):
+Seja $\mathbf{y\sim N_P(\mu,\Sigma)}$. Então $\mathbf{Ay\sim N_P(A\mu,A\Sigma A')}$
+\
+Então: $$\mathbf{Ay\sim N_2(A\mu,A\Sigma A') \rightarrow Ay\sim N_2(\left[ {\begin{array}{cc}
+     3\\
+     4\\
+  \end{array} } \right],\left[ {\begin{array}{ccc}
+     6 & -2 \\
+     -2 & 4  \\
+  \end{array} } \right])}$$ Será a conjunta de $\mathbf{z_1,z_2}$
+\
+$\square$
+\
+
 
 ### e)
 Distribuição conjunta de $y_1,y_3 \ e \ \frac{1}{2}(y_1+y_2)$
 \
-```{r q65c, include=FALSE}
+```{r q65e, include=FALSE,cache=TRUE}
 c <- c(0,1,0)
 c
 c %*% mu
@@ -523,7 +590,7 @@ Como $\mathbf{\mu}$ de $$\mathbf{y=\left[ {\begin{array}{ccc}
      y-4\\
   \end{array} } \right]$$. Por outro lado, para obter $\mathbf{(T')^{-1}}$, devemos fazer a decomposição de Choleski; tal que $\mathbf{\Sigma=T'T}=$
   
-```{r q66a, echo=F}
+```{r q66a, echo=F,cache=TRUE}
 sigma <- matrix(c(6,1,-2,
                   1,13,4,
                   -2,4,4),3,3)
@@ -543,8 +610,62 @@ Logo, $$\mathbf{Z=\left[ {\begin{array}{ccc}
 $\square$
 
 ### b)
+Achar um vetor **z** tal que $\mathbf{z=(\Sigma^{1/2})^{-1}(y-\mu)\sim N_3(0,I)}$
+
+```{r q66b, include=FALSE,cache=TRUE}
+sigma <- matrix(c(6,1,-2,
+                  1,13,4,
+                  -2,4,4),3,3)
+svd <- svd(sigma)
+
+P <- svd$u
+D <- svd$d
+
+D <- sqrt(D)
+DQ <- matrix(c(rep(0,9)),3,3)
+diag(DQ) <- D
+#DQ
+```
+
+Sol.:
+\
+Como $\mathbf{\mu}$ de $$\mathbf{y=\left[ {\begin{array}{ccc}
+     3\\
+     1\\
+     4\\
+  \end{array} } \right]}$$ então o termo da direita fica $$\left[ {\begin{array}{ccc}
+     y-3\\
+     y-1\\
+     y-4\\
+  \end{array} } \right]$$ análogo ao item a).
+Já para o termo da direita, iremos aplicar a decomposição espectral SVD, tal que $\mathbf{\Sigma=PDP'}$. Após, iremos tirar a raiz quadrada dos elementos da matriz D (autovalores na diagonal principal, zero no restante); E então multiplicá-la novamente, tal que $\mathbf{PD^{1/2}P=\Sigma^{1/2}}$; e então encontrar a inversa para finalmente obter $\mathbf{(\Sigma^{1/2})^{-1}}$.
+
+```{r q66b2, echo=F,cache=TRUE}
+solve(P %*% DQ %*% t(P))
+```
+
+Logo, $$\mathbf{Z=\left[ {\begin{array}{ccc}
+     0,464  & -0,069      & 0,170    \\
+     -0,069 & 0,326  & -0,165    \\
+     0,170  & -0,165 & 0,691\\
+  \end{array} } \right]\left[ {\begin{array}{ccc}
+     y-3\\
+     y-1\\
+     y-4\\
+  \end{array} } \right]}$$
+\
+$\square$
 
 ### c)
+Qual a distribuição de $\mathbf{(y-\mu)'\Sigma^{-1}(y-\mu)}?$
+\
+Propriedade: Se $\mathbf{y\sim N_p(\mu,\Sigma)}$, então $\mathbf{(y-\mu)'\Sigma^{-1}(y-\mu)\sim \chi^2_p}$ [Rencher & Christensen; 4.6]
+\
+Como $p=3$, temos que $\mathbf{(y-\mu)'\Sigma^{-1}(y-\mu)\sim \chi^2_3}$
+\
+$\square$
+\
+
 
 # Questão 67
 
@@ -566,36 +687,457 @@ $$\mu=\left[ {\begin{array}{c}
 ### a)
 Distribuição de $\mathbf{z=4y_1-2y_2+y_3-3y_4}$.
 
+```{r q67a, include=F,cache=TRUE}
+c <- matrix(c(4,-2,1,-3),1,4)
+
+
+mu <- t(t(c(-2,3,-1,5)))
+c%*%mu
+
+sigma <- matrix(c(11,-8,3,9,
+                  -8,9,-3,-6,
+                  3,-3,2,3,
+                  9,-6,3,9),4,4)
+
+c %*% sigma %*% t(c)
+```
+
+\
+Sol.:
+\
+$\mathbf{c'=[4 \ \ \ -2 \ \ \ 1 \ \ \ -3]}$.
+\
+Usando a mesma propriedade utilizada na questão **65) a)**;
+\
+$\mathbf{c'y\sim N(c'\mu,c'\Sigma \ c) \rightarrow N(-30,153)}$
+\
+$\square$
+\
+
+
 ### b)
 Distribuição conjunta de $\mathbf{z_1=y_1+y_2+y_3+y_4}$ e $\mathbf{z_2=-2y_1+3y_2+y_3-2y_4}$.
+
+```{r q67b, include=FALSE,cache=TRUE}
+c <- t(matrix(c(1,1,1,1,
+              -2,3,1,-2),4,2))
+
+
+mu <- t(t(c(-2,3,-1,5)))
+c%*%mu
+
+sigma <- matrix(c(11,-8,3,9,
+                  -8,9,-3,-6,
+                  3,-3,2,3,
+                  9,-6,3,9),4,4)
+
+c %*% sigma %*% t(c)
+```
+
+\
+Sol.:
+\
+$$\mathbf{A=\left[ {\begin{array}{cccc}
+     1   & 1  & 1 & 1\\
+     -2   & 3 & 1 & -2 \\
+  \end{array} } \right] = Conjunta \ z_1 \ e \ z_2}$$
+\
+Usando a mesma propriedade utilizada na questão **65) b)**;
+\
+Então: $$\mathbf{Ay\sim N_2(A\mu,A\Sigma A') \rightarrow Ay\sim N_2(\left[ {\begin{array}{c}
+     5\\
+     2\\
+  \end{array} } \right],\left[ {\begin{array}{cc}
+     27 & -79 \\
+     -79 & 361  \\
+  \end{array} } \right])}$$ Será a conjunta de $\mathbf{z_1,z_2}$
+\
+$\square$
+\
 
 ### c)
 Distribuição conjunta de $\mathbf{z_1=3y_1+y_2-4y_3-y_4}$, $\mathbf{z_2=-y_1-3y_2+y_3-2y_4}$ e $\mathbf{z_3=2y_1+2y_2+4y_3-5y_4}$.
 
+```{r q67c, include=FALSE,cache=TRUE}
+c <- t(matrix(c(3,1,-4,-1,
+              -1,-3,1,-2,
+              2,2,4,-5),4,3))
+
+
+mu <- t(t(c(-2,3,-1,5)))
+c%*%mu
+
+sigma <- matrix(c(11,-8,3,9,
+                  -8,9,-3,-6,
+                  3,-3,2,3,
+                  9,-6,3,9),4,4)
+
+c %*% sigma %*% t(c)
+```
+
+\
+Sol.:
+\
+$$\mathbf{A=\left[ {\begin{array}{cccc}
+     3   & 1  & -4 & -1\\
+     -1   & -3 & 1 & -2 \\
+     2 & 2 & 4 & -5 \\
+  \end{array} } \right] = Conjunta \ z_1,z_2,z_3}$$
+\
+Usando a mesma propriedade utilizada na questão **65) b)**;
+\
+Então: $$\mathbf{Ay\sim N_3(A\mu,A\Sigma A') \rightarrow Ay\sim N_3(\left[ {\begin{array}{c}
+     -4\\
+     -18\\
+     -27\\
+  \end{array} } \right],\left[ {\begin{array}{ccc}
+     35 & -18 & -6 \\
+     -18 & 46 & 14 \\
+     -6 & 14 & 93
+  \end{array} } \right])}$$ Será a conjunta de $\mathbf{z_1,z_2,z_3}$
+\
+$\square$
+\
+
 ### d)
 Distribuição de $\mathbf{y_3}$?
 
-### d)
-Distribuição conjunta de $\mathbf{y_2}$ e $\mathbf{y_4}$?
+```{r q67d, include=FALSE,cache=TRUE}
+c <- t(matrix(c(0,0,1,0),4,1))
+
+
+mu <- t(t(c(-2,3,-1,5)))
+c%*%mu
+
+sigma <- matrix(c(11,-8,3,9,
+                  -8,9,-3,-6,
+                  3,-3,2,3,
+                  9,-6,3,9),4,4)
+
+c %*% sigma %*% t(c)
+```
+
+\
+Sol.:
+\
+$\mathbf{c'=[0 \ \ \ 0 \ \ \ 1 \ \ \ 0]}$.
+\
+Usando a mesma propriedade utilizada na questão **65) a)**;
+\
+$\mathbf{c'y\sim N(c'\mu,c'\Sigma \ c) \rightarrow N(-1,2)}$
+\
+$\square$
+\
 
 ### e)
+Distribuição conjunta de $\mathbf{y_2}$ e $\mathbf{y_4}$?
+
+```{r q67e,include=FALSE,cache=TRUE}
+c <- t(matrix(c(0,1,0,0,
+                0,0,0,1),4,2))
+
+
+mu <- t(t(c(-2,3,-1,5)))
+c%*%mu
+
+sigma <- matrix(c(11,-8,3,9,
+                  -8,9,-3,-6,
+                  3,-3,2,3,
+                  9,-6,3,9),4,4)
+
+c %*% sigma %*% t(c)
+```
+
+\
+Sol.:
+\
+$$\mathbf{A=\left[ {\begin{array}{cccc}
+     0   & 1 & 0 & 0 \\
+     0   & 0 & 0 & 1 \\
+  \end{array} } \right] = Conjunta \ y_2,y_4}$$
+\
+Usando a mesma propriedade utilizada na questão **65) b)**;
+\
+Então: $$\mathbf{Ay\sim N_2(A\mu,A\Sigma A') \rightarrow Ay\sim N_2(\left[ {\begin{array}{c}
+     3\\
+     5\\
+  \end{array} } \right],\left[ {\begin{array}{cc}
+     9 & -6 \\
+     -6 & 9 \\
+  \end{array} } \right])}$$ Será a conjunta de $\mathbf{y_2,y_4}$
+\
+$\square$
+\
+
+### f)
 Distribuição conjunta de $\mathbf{y_1}$, $\frac{1}{2}(\mathbf{y_1+y_2})$, $\frac{1}{3}(\mathbf{y_1+y_2+y_3})$ e $\frac{1}{4}(\mathbf{y_1+y_2+y_3+y_4})$.
+
+```{r q67f, include=FALSE,cache=TRUE}
+c <- t(matrix(c(1,0,0,0,
+                (1/2),(1/2),0,0,
+                (1/3),(1/3),(1/3),0,
+                (1/4),(1/4),(1/4),(1/4)),4,4))
+
+
+mu <- t(t(c(-2,3,-1,5)))
+c%*%mu
+
+sigma <- matrix(c(11,-8,3,9,
+                  -8,9,-3,-6,
+                  3,-3,2,3,
+                  9,-6,3,9),4,4)
+
+c %*% sigma %*% t(c)
+```
+
+\
+Sol.:
+\
+$$\mathbf{A=\left[ {\begin{array}{cccc}
+     1   & 0 & 0 & 0 \\
+     \frac{1}{2}   & \frac{1}{2} & 0 & 0 \\
+     \frac{1}{3} & \frac{1}{3} & \frac{1}{3} & 0\\
+     \frac{1}{4} & \frac{1}{4} & \frac{1}{4} & \frac{1}{4}\\
+  \end{array} } \right] \rightarrow Conjunta}$$
+\
+Usando a mesma propriedade utilizada na questão **65) b)**;
+\
+Então: $$\mathbf{Ay\sim N_4(A\mu,A\Sigma A') \rightarrow Ay\sim N_4(\left[ {\begin{array}{c}
+     -2\\
+     0,5\\
+     0\\
+     1,25\\
+  \end{array} } \right],\left[ {\begin{array}{cccc}
+     11 & 1,5 & 2 & 3,75 \\
+     1,5 & 1 & 0,666 & 0,875 \\
+     2 & 0,666 & 0,666 & 1 \\
+     3,75 & 0,875 & 1 & 1,687
+  \end{array} } \right])}$$ Será a conjunta de $\mathbf{y_2,y_4}$
+\
+$\square$
+\
 
 # Questão 68
 
 ## Ex. 4.13 | Rencher & Christensen
 
+$$\mathbf{y\sim N_4(\mu,\Sigma);\mu = \left[ {\begin{array}{c}
+     -2\\
+     3\\
+     -1\\
+     5\\
+  \end{array} } \right],\Sigma=\left[ {\begin{array}{cccc}
+     11  & -8  & 3 & 9\\
+     -8  & 9 & -3 & -6 \\
+     3 & -3  & 2 & 3 \\
+     9 & -6 & 3 & 9
+  \end{array} } \right]}$$
 
+### a)
+Achar um vetor $\mathbf{Z}$ tal que $\mathbf{Z=(T')^{-1}(y-\mu)\sim N_4(0,I)}$.
+\
+Sol.:
+\
+Como $\mathbf{\mu}$ de $$\mathbf{y=\left[ {\begin{array}{c}
+     -2\\
+     3\\
+     -1\\
+     5\\
+  \end{array} } \right]}$$, então o termo da direita fica $$\left[ {\begin{array}{c}
+     y + 2\\
+     y - 3\\
+     y + 1\\
+     y - 5\\
+  \end{array} } \right]$$. Por outro lado, para obter $\mathbf{(T')^{-1}}$, devemos fazer a decomposição de Choleski; tal que $\mathbf{\Sigma=T'T}=$
+  
+```{r q68a, echo=F,cache=TRUE}
+sigma <- matrix(c(11,-8,3,9,
+                  -8,9,-3,-6,
+                  3,-3,2,3,
+                  9,-6,3,9),4,4)
+round(solve(t(chol(sigma))),3)
+```
+\
+Logo, $$\mathbf{Z=\left[ {\begin{array}{cccc}
+     0,302  & 0      & 0  & 0  \\
+     0,408 & 0,561  & 0 & 0   \\
+     -0,087  & 0,261 & 1,015 & 0\\
+     -0,857 & -0,343 & -0,686 & 0,972
+  \end{array} } \right]\left[ {\begin{array}{c}
+     y + 2\\
+     y - 3\\
+     y + 1\\
+     y - 5\\
+  \end{array} } \right]}$$
+\
+$\square$
+
+### b)
+
+Achar um vetor **z** tal que $\mathbf{z=(\Sigma^{1/2})^{-1}(y-\mu)\sim N_4(0,I)}$
+
+```{r q68b, include=FALSE,cache=TRUE}
+sigma <- matrix(c(11,-8,3,9,
+                  -8,9,-3,-6,
+                  3,-3,2,3,
+                  9,-6,3,9),4,4)
+svd <- svd(sigma)
+
+P <- svd$u
+D <- svd$d
+
+D <- sqrt(D)
+DQ <- matrix(c(rep(0,16)),4,4)
+diag(DQ) <- D
+#DQ
+```
+
+Sol.:
+\
+Como $\mathbf{\mu}$ de $$\mathbf{y=\left[ {\begin{array}{c}
+     -2\\
+     3\\
+     -1\\
+     5\\
+  \end{array} } \right]}$$ então o termo da direita fica $$\left[ {\begin{array}{c}
+     y + 2\\
+     y - 3\\
+     y + 1\\
+     y - 5\\
+  \end{array} } \right]$$ análogo ao item a).
+Já para o termo da direita, iremos aplicar a decomposição espectral SVD, tal que $\mathbf{\Sigma=PDP'}$. Após, iremos tirar a raiz quadrada dos elementos da matriz D (autovalores na diagonal principal, zero no restante); E então multiplicá-la novamente, tal que $\mathbf{PD^{1/2}P=\Sigma^{1/2}}$; e então encontrar a inversa para finalmente obter $\mathbf{(\Sigma^{1/2})^{-1}}$.
+
+```{r q68b2, echo=F,cache=TRUE}
+solve(P %*% DQ %*% t(P))
+```
+
+Logo, $$\mathbf{Z=\left[ {\begin{array}{cccc}
+     0,810  & 0,305      & 0,143 & -0,479    \\
+     0,305 & 0,581  & 0,248 & -0,082    \\
+     0,143  & 0,248 & 1,152 & -0,297\\
+     -0,479 & -0,082 & -0,297 & 0,787
+  \end{array} } \right]\left[ {\begin{array}{c}
+     y + 2\\
+     y - 3\\
+     y + 1\\
+     y - 5\\
+  \end{array} } \right]}$$
+\
+$\square$
+
+### c)
+Qual a distribuição de $\mathbf{(y-\mu)'\Sigma^{-1}(y-\mu)}?$
+\
+Usando a mesma propriedade utilizada na questão **66) c)**;
+\
+Como $p=4$, temos que $\mathbf{(y-\mu)'\Sigma^{-1}(y-\mu)\sim \chi^2_4}$
+\
+$\square$
+\
 
 # Questão 69
 
 ## Ex. 4.14 | Rencher & Christensen
 
+Suponha que $$\mathbf{y \sim N_3(\mu,\Sigma);\mu=\left[ {\begin{array}{c}
+     2\\
+     -3\\
+     4\\
+  \end{array} } \right],\Sigma=\left[ {\begin{array}{ccc}
+  4 & -3 & 0\\
+  -3 & 6 & 0\\
+  0 & 0 & 5\\
+  \end{array} } \right]}$$
 
+Qual das variáveis abaixo são independentes?
+
+(a) $y_1$ e $y_2$
+(b) $y_1$ e $y_3$
+(c) $y_2$ e $y_3$
+(d) $(y_1,y_2)$ e $y_3$
+(e) $(y_1,y_3)$ e $y_2$
+
+\
+Sol.:
+\
+
+```{r q69, echo=FALSE,cache=TRUE}
+a <- t(matrix(c(1,0,0,
+                0,1,0,
+                0,0,0),3,3))
+b <- t(matrix(c(1,0,0,
+                0,0,0,
+                0,0,1),3,3))
+c <- t(matrix(c(0,0,0,
+                0,1,0,
+                0,0,1),3,3))
+d <- t(matrix(c(1,1,0,
+                0,0,3,
+                0,0,0),3,3))
+e <- t(matrix(c(1,0,1,
+                0,1,0,
+                0,0,0),3,3))
+
+mu <- t(t(c(2,-3,4)))
+sigma <- matrix(c(4,-3,0,
+                  -3,6,0,
+                  0,0,5),3,3)
+
+a %*% sigma %*% t(a) 
+b %*% sigma %*% t(b) # independente, covariâncias = 0
+c %*% sigma %*% t(c) # independente, covariâncias = 0
+d %*% sigma %*% t(d) # independente, covariâncias = 0
+e %*% sigma %*% t(e)
+
+```
+
+Analisando em qual dos itens todas as covariâncias (Valores $\Sigma_{ij},i\neq j$) são nulas, concluímos que são independentes as opções (b),(c) e (d).
+$\square$
 
 # Questão 70
 
 ## Ex. 4.17 | Rencher & Christensen
+
+Suponha que y e x são subvetores, tal que y é 2 x 1 e x é 3 x 1, com $\mu$ e $\Sigma$ particionados como:
+$$\mathbf{\mu=\left[ {\begin{array}{c}
+     3\\
+     -2\\
+     --\\
+     4\\
+     -3\\
+     5
+  \end{array} } \right],\Sigma=\left[ {\begin{array}{cccccc}
+  14 & -8 & | & 15 & 0 & 3\\
+  -8 & 18 & | & 8 & 6 & -2\\
+  -- & -- & -|- & -- & -- & -- \\
+  15 & 8 & | & 50 & 8 & 5\\
+  0 & 6 & | & 8 & 4 & 0\\
+  3 & -2 & | & 5 & 0 & 1\\
+  \end{array} } \right]}$$
+
+Assuma que $$\mathbf{\left( {\begin{array}{c}
+     y\\
+     x\\
+  \end{array} } \right) \sim N_5(\mu,\Sigma)}.$$ 
+
+### a)
+Encontrar $E(\mathbf{x|y})$
+\
+Propriedade: $E(\mathbf{x|y})=\mathbf{\mu_y+\Sigma_{yx}\Sigma^{-1}_{xx}(x-\mu_x)}$ 
+\
+Sol.:
+\
+
+
+
+### b)
+Encontrar $cov(\mathbf{x|y})$
+\
+Propriedade: $cov(\mathbf{x|y})=\mathbf{\Sigma_{yy}-\Sigma_{yx}\Sigma^{-1}_{xx}\Sigma_{xy}}$ 
+\
+Sol.:
+\
+
 
 
 \newpage
