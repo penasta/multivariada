@@ -50,7 +50,7 @@ always_allow_html: yes
 library(pacman)
 p_load(knitr,tidyverse,vcd,ca,FactoMineR,factoextra,gplots,heplots,
        ggfortify,gridExtra,MVN,mvnormalTest,QuantPsyc,mvnormtest,MASS,
-       ellipse,ggforce)
+       ellipse,ggforce,psych)
 ```
 
 \newpage
@@ -66,33 +66,128 @@ mvrnorm(20, mu, sigma)
 ```
 
 
-# Questão 56 (caderno)
+# Questão 56 
 
+$\mathbf{X \sim N_P (\mu,\Sigma)}$, Então: 
+$\mathbf{U = (X-\mu)'\Sigma^{-1}(X-\mu)}$.
+
+Sol:
+
+Seja $Z \sim N_P(0,I)$;
+\
+$\sum_{i=1}^P\mathbf{Z_i^2=Z^TZ\sim\chi^2_P}$. Mas, $\mathbf{Z^TZ=(Y-\mu)^T(\Sigma^{1/2})^{-1}(\Sigma^{1/2})^{-1}(Y-\mu)=(Y-\mu)^T\Sigma^{-1}(Y-\mu)\sim\chi^2_P}$.
+\
+Seja $\mathbf{Y=X}$. Então:
+$\mathbf{(X-\mu)^T\Sigma^{-1}(X-\mu)\sim\chi^2_P}$
+\
+$\square$
 
 
 # Questão 57
 
-```{r}
-mu <- c(1, 2)
-a <- 0
-sigma1 <- matrix(c(2, a, a, 2),2)
-a <- (-1/2)
-sigma2 <- matrix(c(2, a, a, 2),2)
-a <- (1/2)
-sigma3 <- matrix(c(2, a, a, 2),2)
-a <- 1
-sigma4 <- matrix(c(2, a, a, 2),2)
-# continuar
+Ao invés das elipses, irei representar os contornos, pois encontrei uma função que faz e traz uma representação mais interessante, na minha opinião, para a normal bivariada.
+
+## a = 0
+
+```{r q571,echo=F}
+m <- c(1, 2)
+sigma <- matrix(c(2,0,0,2), nrow=2)
+data.grid <- expand.grid(s.1 = seq(-2, 5, length.out=200), s.2 = seq(-2, 5, length.out=200))
+q.samp <- cbind(data.grid, prob = mvtnorm::dmvnorm(data.grid, mean = m, sigma = sigma))
+ggplot(q.samp, aes(x=s.1, y=s.2, z=prob)) + 
+  geom_contour() +
+  coord_fixed(xlim = c(-2, 4), ylim = c(-1, 5), ratio = 1) 
+```
+
+## a = -1/2
+
+```{r q572,echo=F}
+sigma <- matrix(c(2,(-1/2),(-1/2),2), nrow=2)
+data.grid <- expand.grid(s.1 = seq(-2, 5, length.out=200), s.2 = seq(-2, 5, length.out=200))
+q.samp <- cbind(data.grid, prob = mvtnorm::dmvnorm(data.grid, mean = m, sigma = sigma))
+ggplot(q.samp, aes(x=s.1, y=s.2, z=prob)) + 
+  geom_contour() +
+  coord_fixed(xlim = c(-2, 4), ylim = c(-1, 5), ratio = 1) 
+```
+
+## a = 1/2
+
+```{r q573,echo=F}
+sigma <- matrix(c(2,(1/2),(1/2),2), nrow=2)
+data.grid <- expand.grid(s.1 = seq(-2, 5, length.out=200), s.2 = seq(-2, 5, length.out=200))
+q.samp <- cbind(data.grid, prob = mvtnorm::dmvnorm(data.grid, mean = m, sigma = sigma))
+ggplot(q.samp, aes(x=s.1, y=s.2, z=prob)) + 
+  geom_contour() +
+  coord_fixed(xlim = c(-2, 4), ylim = c(-1, 5), ratio = 1) 
+```
+
+## a = 1
+
+```{r q574,echo=F}
+sigma <- matrix(c(2,1,1,2), nrow=2)
+data.grid <- expand.grid(s.1 = seq(-2, 5, length.out=200), s.2 = seq(-2, 5, length.out=200))
+q.samp <- cbind(data.grid, prob = mvtnorm::dmvnorm(data.grid, mean = m, sigma = sigma))
+ggplot(q.samp, aes(x=s.1, y=s.2, z=prob)) + 
+  geom_contour() +
+  coord_fixed(xlim = c(-2, 4), ylim = c(-1, 5), ratio = 1) 
 ```
 
 
-# Questão 58 (caderno)
 
+# Questão 58 
+
+$\mathbf{X\sim N(\mu,\Sigma)}$ tal que $$\mu = \left[ {\begin{array}{cc} 2\\ 2\\\end{array} } \right]; \Sigma = \left[ {\begin{array}{cc} 1 & 0\\ 0 & 1\\ \end{array} } \right]$$
+
+E $\mathbf{A} = [1 \ \ \ 1];\mathbf{B} = [1 \ \ \ -1]$. Mostre que **AX** é independente de **BX**
+\
+Solução:
+\
+Como $\mathbf{\Sigma_{12}}=0$, temos que os vetores $\mathbf{Y_1}$ e $\mathbf{Y_{2}}$ amostras de **X** sao independentes.
+
+Seja $$\mathbf{Y}_1 = \mathbf{AX} =   \left[ {\begin{array}{cc}
+     1 & 1\\
+  \end{array} } \right]
+  \left[ {\begin{array}{cc}
+     X_1\\
+     X_2\\
+  \end{array} } \right] = X \ ;$$
+  
+e $$\mathbf{Y}_2 = \mathbf{BX} =   \left[ {\begin{array}{cc}
+     1 & -1\\
+  \end{array} } \right]
+  \left[ {\begin{array}{cc}
+     X_1\\
+     X_2\\
+  \end{array} } \right] =   \left[ {\begin{array}{cc}
+     X_1\\
+     - X_2\\
+  \end{array} } \right] \neq X \ .$$
+  
+Que são independentes por $\Sigma_{12}=0$. Logo, $Cov(\mathbf{Y_1,Y_2})=0$
+\
+$\square$
 
 
 # Questão 59
 
+Seja $$\mathbf{X} = \left[ {\begin{array}{cc}
+     X_1\\ X_2 \\
+  \end{array} } \right] \sim \mathbf{N_P \ (\mu,\Sigma)}; \mathbf{\Sigma
+  \left[ {\begin{array}{cc}
+     \Sigma_{11} & \Sigma_{12}\\
+     \Sigma_{21} & \Sigma_{22}\\
+  \end{array} } \right]} \ ;$$
+  
+Provar que $\Sigma_{12}=0 \iff x_1 \ independente \ de \ x_2$
+\
+Prova:
+\
+Se as variávels aleatórias são não correlacionadas, então $\mathbf{\Sigma}$ é diagonal. Neste caso, a forma quadrática $\mathbf{(x-\mu)'\Sigma^{-1}(x-\mu)}$ é reduzida à uma soma de quadrados, assim como a densidade dos fatores no produto das densidades marginais, o que implica em independência. [4]
 
+Neste caso, $\Sigma_{12}=\Sigma_{21}$ representa a totalidade da correlação. Como ela é 0, a prova acima se aplica, definindo portanto a independência de $\mathbf{x_1,x_2}$
+\
+$\square$
+\
 
 # Questão 60
 
@@ -231,31 +326,260 @@ Diversos testes de normalidade multivariada e marginal univariada foram testados
 
 ## Ex. 4.1 | Rencher & Christensen
 
+$$\Sigma_1 = \left[ {\begin{array}{ccc}
+     14 & 8 & 3 \\
+     8  & 5 & 2 \\
+     3  & 2 & 1 \\
+  \end{array} } \right]; \Sigma_2 = \left[ {\begin{array}{ccc}
+     6  & 6 & 1 \\
+     6  & 8 & 2 \\
+     1  & 2 & 1 \\
+  \end{array} } \right]$$
 
+```{r q63}
+S1 <- matrix(c(14,8,3,
+               8,5,2,
+               3,2,1),3,3)
+det1 <- det(S1)
+tr1  <- tr(S1)
+
+S2 <- matrix(c(6,6,1,
+               6,8,2,
+               1,2,1),3,3)
+det2 <- det(S2)
+tr2  <- tr(S2)
+```
+
+Temos que $|\Sigma_1| =$ `r det1`;$|\Sigma_2| =$ `r det2`;$tr(\Sigma_1) =$ `r tr1` e $tr(\Sigma_2) =$ `r tr2`.
+Portanto; $|\Sigma_2| > |\Sigma_1|$ e $tr(\Sigma_2) < tr(\Sigma_1)$.
+\
+O aumento das correlações leva à um decréscimo do determinante. Neste caso, a diminuição das correlações superou o aumento da variância, por isso observamos estes resultados.
 
 # Questão 64
 
 ## Ex. 4.2 | Rencher & Christensen
 
+$\mathbf{Z = (T')^{-1}(y-\mu)}$. Mostrar que $E(\mathbf{Z})=0$ e $cov(\mathbf{Z})=\mathbf{I}$.
 
+Demonstração:
+\
+$\mathbf{E(Z) = E[(T')^{-1}(y-\mu)]}$. Pela lineariedade da esperança, temos
+\
+$\mathbf{(T')^{-1}[E(y)-\mu] = (T')^{-1}[\mu-\mu]}=0$.
+\
+\
+$Cov(\mathbf{Z})=Cov\mathbf{[(T')^{-1}(y-\mu)]})$
+\
+Como $Cov(\mathbf{A}y+b)=\mathbf{A\Sigma A'}$; temos:
+\
+$Cov(\mathbf{Z})=\mathbf{(T')^{-1}\Sigma[(T')^{-1}]'}$.
+\
+Como $\mathbf{(A')^{-1}=(A^{-1})'}$, e $\mathbf{A=T'T}$; temos:
+\
+$Cov\mathbf({Z})=\mathbf{(T')^{-1}\Sigma[(T')^{-1}]' = (T')^{-1}T'TT^{-1}=I}$
+\
+$\square$
 
 # Questão 65
 
 ## Ex. 4.10 | Rencher & Christensen
 
+$$\mathbf{y \sim N_3(\mu,\Sigma); \mu = \left[ {\begin{array}{ccc}
+     3\\
+     1\\
+     4\\
+  \end{array} } \right]; \Sigma = \left[ {\begin{array}{ccc}
+     6   & 1  & -2 \\
+     1   & 13 & 4  \\
+     -2  & 4  & 4 \\
+  \end{array} } \right]}$$
+  
+### a)
+Distribuição de $\mathbf{z = 2y_1-y_2+3y_3}$.
+\
+```{r q65a, include=FALSE}
+c <- t(c(2,-1,3))
+mu <- t(t(c(3,1,4)))
+c%*%mu
 
+sigma <- matrix(c(6,1,-2,
+                  1,13,4,
+                  -2,4,4),3,3)
+
+c %*% sigma %*% t(c)
+```
+
+\
+Sol.:
+\
+$\mathbf{c'=[2 \ \ \ -1 \ \ \ 3]}$.
+\
+Propriedade (Rencher & Christensen; 4.2.1 (a)):
+Se $\mathbf{y \sim N_P(\mu,\Sigma)}$, então $\mathbf{a'y\sim N(a'y,a'\Sigma \ a)}$.
+\
+Então; $\mathbf{c'y\sim N(c'\mu,c'\Sigma \ c) = N(17,21)}$
+\
+$\square$
+\
+
+### b)
+Distribuição conjunta de $\mathbf{z_1 = y_1+y_2+y_3}$ e $\mathbf{z_2=y_1-y_2+2y_3}$.
+\
+```{r q65b, include=FALSE}
+A <- matrix(c(1,1,
+              1,-1,
+              1,2),2,3)
+A
+
+A%*%mu # media
+
+A%*%sigma%*%t(A) # variância
+```
+\
+Sol.:
+\
+$$\mathbf{A=\left[ {\begin{array}{ccc}
+     1   & 1  & 1 \\
+     1   & -1 & 2  \\
+  \end{array} } \right] = Conjuntos \ z_1 \ e \ z_2}$$
+\
+Propriedade (Rencher & Christensen; 4.2.1 (b)):
+Seja $\mathbf{y\sim N_P(\mu,\Sigma)}$. Então $\mathbf{Ay\sim N_P(A\mu,A\Sigma A')}$
+\
+Então: $$\mathbf{Ay\sim N_2(A\mu,A\Sigma A') \rightarrow Ay\sim N_2(\left[ {\begin{array}{cc}
+     8\\
+     10\\
+  \end{array} } \right],\left[ {\begin{array}{ccc}
+     29 & -1 \\
+     -1 & 9  \\
+  \end{array} } \right])}$$ Será a conjunta de $\mathbf{z_1,z_2}$
+\
+$\square$
+\
+
+### c)
+
+### d)
+
+### e)
+Distribuição conjunta de $y_1,y_3 \ e \ \frac{1}{2}(y_1+y_2)$
+\
+```{r q65c, include=FALSE}
+c <- c(0,1,0)
+c
+c %*% mu
+c %*% sigma %*% c
+```
+\
+Sol.:
+\
+$$\mathbf{A=\left[ {\begin{array}{ccc}
+     1   & 0  & 0 \\
+     0   & 0  & 1  \\
+     \frac{1}{2}  & \frac{1}{2}  & 0 \\
+  \end{array} } \right]}$$Será a conjunta.
+\
+Pela mesma propriedade do item anterior (b);
+\
+$$\mathbf{Ay\sim N_3(\left[ {\begin{array}{ccc}
+     3\\
+     4\\
+     2\\
+  \end{array} } \right],\left[ {\begin{array}{ccc}
+     6   & -2  & 3,5 \\
+     -2  & 4   & 1   \\
+     3,5  & 1  & 5,25\\
+  \end{array} } \right])}$$
+\
+$\square$
+\
 
 # Questão 66
 
 ## Ex. 4.11 | Rencher & Christensen
 
+$$\mathbf{y\sim N_3(\mu,\Sigma);\mu = \left[ {\begin{array}{ccc}
+     3\\
+     1\\
+     4\\
+  \end{array} } \right],\Sigma=\left[ {\begin{array}{ccc}
+     6  & 1  & -2\\
+     1  & 13 & 4 \\
+     -2 & 4  & 4 \\
+  \end{array} } \right]}$$
 
+### a)
+Achar um vetor $\mathbf{Z}$ tal que $\mathbf{Z=(T')^{-1}(y-\mu)\sim N_3(0,I)}$.
+\
+Sol.:
+\
+Como $\mathbf{\mu}$ de $$\mathbf{y=\left[ {\begin{array}{ccc}
+     3\\
+     1\\
+     4\\
+  \end{array} } \right]}$$, então o termo da direita fica $$\left[ {\begin{array}{ccc}
+     y-3\\
+     y-1\\
+     y-4\\
+  \end{array} } \right]$$. Por outro lado, para obter $\mathbf{(T')^{-1}}$, devemos fazer a decomposição de Choleski; tal que $\mathbf{\Sigma=T'T}=$
+  
+```{r q66a, echo=F}
+sigma <- matrix(c(6,1,-2,
+                  1,13,4,
+                  -2,4,4),3,3)
+round(solve(t(chol(sigma))),3)
+```
+\
+Logo, $$\mathbf{Z=\left[ {\begin{array}{ccc}
+     0,408  & 0      & 0    \\
+     -0,047 & 0,279  & 0    \\
+     0,285  & -0,247 & 0,731\\
+  \end{array} } \right]\left[ {\begin{array}{ccc}
+     y-3\\
+     y-1\\
+     y-4\\
+  \end{array} } \right]}$$
+\
+$\square$
+
+### b)
+
+### c)
 
 # Questão 67
 
 ## Ex. 4.12 | Rencher & Christensen
 
+$\mathbf{y\sim N_4(\mu,\Sigma)}$, em que
+$$\mu=\left[ {\begin{array}{c}
+     -2\\
+     3\\
+     -1\\
+     5\\
+  \end{array} } \right],\Sigma=\left[ {\begin{array}{cccc}
+     11 & -8 & 3 & 9 \\
+     -1 & 9 & -3 & -6\\
+     3 & -3 & 2 & 3\\
+     9 & -6 & 3 & 9\\
+  \end{array} } \right].$$
+  
+### a)
+Distribuição de $\mathbf{z=4y_1-2y_2+y_3-3y_4}$.
 
+### b)
+Distribuição conjunta de $\mathbf{z_1=y_1+y_2+y_3+y_4}$ e $\mathbf{z_2=-2y_1+3y_2+y_3-2y_4}$.
+
+### c)
+Distribuição conjunta de $\mathbf{z_1=3y_1+y_2-4y_3-y_4}$, $\mathbf{z_2=-y_1-3y_2+y_3-2y_4}$ e $\mathbf{z_3=2y_1+2y_2+4y_3-5y_4}$.
+
+### d)
+Distribuição de $\mathbf{y_3}$?
+
+### d)
+Distribuição conjunta de $\mathbf{y_2}$ e $\mathbf{y_4}$?
+
+### e)
+Distribuição conjunta de $\mathbf{y_1}$, $\frac{1}{2}(\mathbf{y_1+y_2})$, $\frac{1}{3}(\mathbf{y_1+y_2+y_3})$ e $\frac{1}{4}(\mathbf{y_1+y_2+y_3+y_4})$.
 
 # Questão 68
 
@@ -274,3 +598,14 @@ Diversos testes de normalidade multivariada e marginal univariada foram testados
 ## Ex. 4.17 | Rencher & Christensen
 
 
+\newpage
+
+# Referências:
+
+## [1] JOHNSON, Richard A; WICHERN, Dean W. **APPLIED MULTIVARIATE STATISTICAL ANALYSIS**. 6ª Edição. Pearson, 2007.
+
+## [2] von Borries, George. Material de aula disponível no Aprender3; Notas de aula e códigos. Análise Multivariada 1. Universidade de Brasília, 2023.
+
+## [3] RENCHER, Alvin C; CHRISTENSEN, William F. **METHODS OF MULTIVARIATE ANALYSIS**. 3ª Edição. WILEY, 2012.
+
+## [4] https://healy.econ.ohio-state.edu/kcb/Ma103/Notes/Lecture11.pdf. Prova do Corolário 11.1.8. 

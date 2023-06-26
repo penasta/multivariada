@@ -107,10 +107,10 @@ solve(t(chol(sigma)))
 
 
 
-m <- c(.5, -.5)
-sigma <- matrix(c(1,.5,.5,1), nrow=2)
-data.grid <- expand.grid(s.1 = seq(-3, 3, length.out=200), s.2 = seq(-3, 3, length.out=200))
+m <- c(1, 2)
+sigma <- matrix(c(2,1,1,2), nrow=2)
+data.grid <- expand.grid(s.1 = seq(-2, 5, length.out=200), s.2 = seq(-2, 5, length.out=200))
 q.samp <- cbind(data.grid, prob = mvtnorm::dmvnorm(data.grid, mean = m, sigma = sigma))
 ggplot(q.samp, aes(x=s.1, y=s.2, z=prob)) + 
   geom_contour() +
-  coord_fixed(xlim = c(-3, 3), ylim = c(-3, 3), ratio = 1) 
+  coord_fixed(xlim = c(-2, 4), ylim = c(-1, 5), ratio = 1) 
