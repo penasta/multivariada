@@ -1128,7 +1128,60 @@ Propriedade: $E(\mathbf{x|y})=\mathbf{\mu_y+\Sigma_{yx}\Sigma^{-1}_{xx}(x-\mu_x)
 Sol.:
 \
 
+```{r q70a,include=FALSE}
+muy <- t(matrix(c(3,-2),1,2))
+#muy
 
+Syx <- t(matrix(c(15,0,3,
+                8,6,-2),3,2))
+#Syx
+
+Sxx <- matrix(c(50,8,5,
+                8,4,0,
+                5,0,1),3,3)
+#Sxx
+#solve(Sxx)
+
+x <- t(t(c('x1','x2','x3')))
+#x
+
+mux <- t(matrix(c(-4,3,-5),1,3))
+#mux
+
+#x + mux
+
+Syx %*% solve(Sxx)
+```
+
+Portanto, $$E(\mathbf{x|y}) = \left[ {\begin{array}{c}
+     3\\
+     -2\\
+  \end{array} } \right]+\left[ {\begin{array}{ccc}
+     15 & 0 & 3\\
+     8 & 6 & -2\\
+  \end{array} } \right]\left[ {\begin{array}{ccc}
+     50 & 8 & 5\\
+     8 & 4 & 0\\
+     5 & 0 & 1\\
+  \end{array} } \right]^{-1}\left[ {\begin{array}{c}
+     x_1-4\\
+     x_2+3\\
+     x_3-5\\
+  \end{array} } \right]=$$
+
+$$\left[ {\begin{array}{c}
+     3\\
+     -2\\
+  \end{array} } \right]+\left[ {\begin{array}{ccc}
+     0 & 0 & 3\\
+     0,666 & 1,666 & -5,333\\
+  \end{array} } \right]\left[ {\begin{array}{c}
+     x_1-4\\
+     x_2+3\\
+     x_3-5\\
+  \end{array} } \right]$$
+$\square$
+\
 
 ### b)
 Encontrar $cov(\mathbf{x|y})$
@@ -1137,7 +1190,31 @@ Propriedade: $cov(\mathbf{x|y})=\mathbf{\Sigma_{yy}-\Sigma_{yx}\Sigma^{-1}_{xx}\
 \
 Sol.:
 \
+```{r q70b,echo=FALSE}
+Syy <- matrix(c(14,-8,
+                -8,18),2,2)
 
+Syx <- t(matrix(c(15,0,3,
+                  8,6,-2),3,2))
+
+Sxx <- matrix(c(50,8,5,
+                8,4,0,
+                5,0,1),3,3)
+
+Sxy <- t(matrix(c(15,8,
+                0,6,
+                3,-2),2,3))
+
+Syy - Syx %*% solve(Sxx) %*% Sxy
+```
+
+$$cov(\mathbf{x|y})=\left[ {\begin{array}{cc}
+     5 & -2\\
+     -2 & 1\\
+  \end{array} } \right]$$
+\
+$\square$
+\
 
 
 \newpage

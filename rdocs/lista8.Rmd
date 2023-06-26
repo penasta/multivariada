@@ -57,28 +57,136 @@ p_load(knitr,tidyverse)
 
 ## Ex. 10.1 | Johnson & Wichern
 
+Considerar a matriz de covariâncias $$\mathbf{Cov=\left[{\begin{array}{c}
+     x_1^{(1)}\\
+     x_2^{(1)}\\
+     --\\
+     x_1^{(2)}\\
+     x_2^{(2)}\\
+  \end{array} } \right]=\left[ {\begin{array}{ccc}
+     \Sigma_{11} & | & \Sigma_{12}\\
+     -- & -|- & --\\
+      \Sigma_{21} & | & \Sigma_{22}\\
+  \end{array} } \right]=\left[ {\begin{array}{ccccc}
+  100 & 0 & | & 0 & 0\\
+  0 & 1 & | & 0,95 & 0\\
+  -- & -- & -|- & -- & --\\
+  0 & 0,95 & | & 1 & 0\\
+  0 & 0 & | & 0 & 100\\
+  \end{array} } \right]}$$
+
+Verificar que o primeiro par de variáveis canônicas são $U_1=X_2^{(1)},V_1=X_1^{(2)}$ com correlação canônica $\rho_1^*=0,95$.
+\
+sol.:
+\
 
 
 # Questão 72
 
 ## Ex. 10.2 | Johnson & Wichern
 
+Os vetores aleatórios $\mathbf{X^{(1)},X^{(2)} \ (2 \times 1)}$ têm vetor de médias e variâncias conjuntas $$\mathbf{\mu=\left[{\begin{array}{c}
+     \mu^{(1)}\\
+     --\\
+     \mu^{(2)}\\
+  \end{array} } \right]=\left[{\begin{array}{c}
+     -3\\
+     2\\
+     --\\
+     0\\
+     1\\
+  \end{array} } \right];\Sigma=\left[ {\begin{array}{ccc}
+     \Sigma_{11} & | & \Sigma_{12}\\
+     -- & -|- & --\\
+      \Sigma_{21} & | & \Sigma_{22}\\
+  \end{array} } \right]=\left[ {\begin{array}{ccccc}
+  8 & 2 & | & 3 & 1\\
+  2 & 5 & | & -1 & 3\\
+  -- & -- & -|- & -- & --\\
+  3 & -1 & | & 6 & -2\\
+  1 & 3 & | & -2 & 7\\
+  \end{array} } \right]}$$
+
+### a)
+Calcular as correlações canônicas $\rho_1^*,\rho_2^*$.
+
+
+
+### b)
+Determinar os pares de variáveis canônicas $(U_1,V_1)$ e $(U_2,V_2)$.
+
+
+
+### c)
+Seja $\mathbf{U} = [U_1,U_2]'$ e $\mathbf{V}=[V_1,V_2]'$. Avalie: $$\mathbf{E\left[{\begin{array}{c}
+     U\\
+     --\\
+     V\\
+  \end{array} } \right] \ e \ \ Cov\left[{\begin{array}{c}
+     U\\
+     --\\
+     V\\
+  \end{array} } \right]=\left[ {\begin{array}{ccc}
+     \Sigma_{UU} & | & \Sigma_{UV}\\
+     -- & -|- & --\\
+      \Sigma_{VU} & | & \Sigma_{VV}\\
+  \end{array} } \right]}$$.
+  
+Comparar os resultados com as propriedades do resultado 10.1.
 
 
 # Questão 73
 
 ## Ex. 10.9 | Johnson & Wichern (itens (a) e (c))
 
+Foram aplicados para $n=140$ alunos da sétima série quatro testes, tais que $\mathbf{X_1^{(1)}}$ = velocidade de leitura; $\mathbf{X_2^{(1)}}$ = habilidade de leitura; $\mathbf{X_1^{(2)}}$ = velocidade em aritmética; $\mathbf{X_2^{(2)}}$ = habilidade em aritmética. A correlação da performance medida foi: $$\mathbf{R=\left[ {\begin{array}{ccc}
+     R_{11} & | & R{12}\\
+     -- & -|- & --\\
+      R{21} & | & R{22}\\
+  \end{array} } \right]=\left[ {\begin{array}{ccccc}
+     1.0 & 0,6328 & | & 0,2412 & 0,0586\\
+     0,6328 & 1 & | & -0,0553 & 0,0655\\
+     -- & -|- & --\\
+     0,2412 & -0,0553 & | & 1 & 0,4248\\
+     0,0586 & 0,0655 & | & 0,4248 & 1\\
+  \end{array} } \right]}$$.
+  
+
 ### a)
+Encontrar todas as correlações e variáveis canônicas amostrais 
 
-
-### b)
-
+### c)
+Avaliar as matrizes de erros aproximados para $\mathbf{R_{11},R_{22}}$ e $\mathbf{R_{12}}$ determinadas pelo primeiro par de variáveis canônicas $\hat{U}_1,\hat{V}_1$.
 
 # Questão 74
 
 ## Ex. 10.10 | Johnson & Wichern
 
+Em um estudo sobre pobreza, criminalidade e detenção, reportou-se um sumário estatístico da criminalidade em vários estados para os anos de 1970 e 1973. Uma parte da matriz de correlação amostral é: $$\mathbf{R=\left[ {\begin{array}{ccc}
+     R_{11} & | & R{12}\\
+     -- & -|- & --\\
+      R{21} & | & R{22}\\
+  \end{array} } \right]=\left[ {\begin{array}{ccccc}
+     1.0 & 0,615 & | & -0,111 & -0,266\\
+     0,615 & 1 & | & -0,195 & -0,085\\
+     -- & -|- & --\\
+     -0,111 & -0,195 & | & 1 & -0,269\\
+     -0,266 & -0,085 & | & -0,269 & 1\\
+  \end{array} } \right]}$$.
+
+As variáveis são:
+$\mathbf{X_1^{(1)}}$ = Homicídios não primários em 1973;
+$\mathbf{X_2^{(1)}}$ = Homicídios primários em 1973 (homicídios envolvendo familiares ou conhecidos);
+$\mathbf{X_1^{(2)}}$ = Severidade da punição em 1970 (mediana de meses encarceirado);
+$\mathbf{X_2^{(2)}}$ = Convicção de punição em 1970 (Número de encarceiramentos dividido pelo número de homicídios).
+
+### a)
+Encontrar a correlação canônica amostral.
+
+
+
+### b)
+Determinar o primeiro par de variáveis canônicas $\hat{U}_1,\hat{V}_1$, e interpretar as quantidades.
 
 
 
