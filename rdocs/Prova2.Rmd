@@ -1,0 +1,579 @@
+---
+title: ''
+author: ''
+date: ''
+output:
+  pdf_document: null
+  fig_crop: no
+  html_document:
+    df_print: paged
+subtitle: ''
+highlight: tango
+number_sections: no
+fig_caption: yes
+keep_tex: yes
+includes:
+  in_header: Estilo.sty
+classoption: a4paper
+always_allow_html: yes
+---
+  
+  
+\begin{center}
+{\Large
+  DEPARTAMENTO DE ESTATÍSTICA} \\
+\vspace{0.5cm}
+\begin{figure}[!t]
+\centering
+\includegraphics[width=9cm, keepaspectratio]{logo-UnB.eps}
+\end{figure}
+\vskip 1em
+{\large
+  `r format(Sys.time(), '%d %B %Y')`}
+\vskip 3em
+{\LARGE
+  \textbf{Prova 2}} \\
+\vskip 1em
+{\Large
+  Prof. Dr. George von Borries} \\
+\vskip 1em
+{\Large
+  Análise Multivariada 1} \\
+\vskip 1em
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636} \\
+\vskip 1em
+{\Large
+  Página 01/11} \\
+\vskip 1em
+\end{center}
+
+```{r setup, include=F}
+
+if (!require("pacman")) install.packages("pacman")
+p_load(knitr,tidyverse,MCMCpack,data.table,psych,GPArotation,ggfortify,
+       ACSWR,vcd,ca,FactoMineR,factoextra,gplots,heplots,
+       gridExtra,MVN,mvnormalTest,QuantPsyc,mvnormtest,MASS,
+       ellipse,ggforce)
+
+```
+
+```{r aviso,include=FALSE,eval=FALSE}
+# AVISO AO PROFESSOR
+
+# CASO O SENHOR QUEIRA RODAR MEU MARKDOWN, POSSIVELMENTE IRÁ DAR ERRO PELA ESTILIZAÇÃO DO CABEÇALHO REQUERER ARQUIVOS AUXILIARES QUE NÃO INCLUI NESTA ENTREGA
+
+# PORTANTO, CASO O SENHOR DESEJE RODAR ESTE ARQUIVO, APAGUE AS LINHAS 1 A 49, E SUBSTITUA PELO CABEÇALHO GENÉRICO ABAIXO:
+---
+title: "Prova 2 - Prof. Dr. George von Borries - Análise Multivariada 1 - "
+author: "Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 01/11"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+# OBRIGADO!
+
+```
+
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 02/11} \\
+\end{center}
+
+
+# Lista 6 - Análise fatorial exploratória
+
+# Questão 44
+
+## Ex. 9.2 | Johnson & Wichern
+
+Use the information in Exercise 9.1.
+
+ (a) Calculate communalities $h_i^2, i=1,2,3$ and interpret these quantities.
+ 
+ (b) Calculate $Corr(Z_i,F_1)$ for $i=1,2,3$. Which variable might carry the greatest weight in "naming" the common factor? Why?
+ 
+### Soluções:
+#### a)
+
+As comunalidades são dadas por: $\sum_{j=1}^nl_{ij}^2=h_i^2$. Para a matriz $\mathbf{L}=[.9 \ \ .7 \ \ .5 ]$, temos que as comunalidades são:
+
+$h_1^2=.81\\h_2^2=.49\\h_3^2=.25$.
+
+Como as comunalidades são quantidades de variâncias de cada variável explicada pelos fatores, quanto maior for a comunalidade, maior será o poder de explicação daquela variável pelo fator. A comunalidade $h_i^2$ assume valores no intervalo [0,1]. Desejamos, em geral, valores acima de $0.5$. Neste caso, temos que $h_1^2 > 0.5$, enquanto $h_2^2,h_3^2 < 0.5$. Entretanto $h_2^2 \approx 0.5$, temos que $h_2^2$ também pode ser utilizada.
+
+#### b)
+
+Como $Cov(\mathbf{X,F=L})$, e $Cov(\mathbf{X_i,F_j})=\ell_{}ij$ (Resultado 2., pag. 484 J&W) [1], e $Cov(\mathbf{X_1,F_1}) = Corr(\mathbf{X_1,F_1})$ (pag. 486 J&W) [1] sabemos que $Cor(\mathbf{Z_i,F_1})$, para $i=1,2,3$ será $\ell_{i1}= [.9 \ \ .7 \ \ .5] = \mathbf{L}$. Isso indica que a variável $Z_1$ carrega a maior carga fatorial, dado seu maior valor absoluto (comparando também com o último resultado encontrado sobre comunalidade).
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 03/11} \\
+\end{center}
+
+# Questão 53
+
+## Ex. 9.22 | Johnson & Wichern
+
+```{r q53, include=FALSE}
+dados <- read_table("dados/table9_12-SalespeopleData.DAT.txt", 
+    col_names = FALSE)
+#S <- cor(dados)
+fa_reg <- factanal(dados, rotation="none",factors = 2,scores="regression")
+
+fa_mq <- factanal(dados, rotation="none",factors = 2,scores="Bartlett")
+
+fa_pca <- principal(dados, nfactors = 2, rotate = 'none', scores=TRUE)
+
+```
+
+### a) Escore dos fatores para m = 2 para:
+
+#### Método regressivo:
+
+```{r q531, echo=F}
+head(fa_reg$scores,10)
+```
+
+#### Método mínimos quadrados ponderados:
+
+```{r q532, echo=F}
+head(fa_mq$scores,10)
+```
+
+### b) Encontrar os escores dos fatores pelo método de análise de componente principal:
+
+```{r q533, echo=F}
+head(fa_pca$scores,10)
+```
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 04/11} \\
+\end{center}
+
+### c) Comparar os três métodos:
+
+Visualizando graficamente os escores:
+
+```{r q534, echo=F,message=FALSE}
+
+g1 <- autoplot(fa_reg$scores) +
+  ggtitle("Escores Regressão")
+g2 <- autoplot(fa_mq$scores) +
+  ggtitle("Escores MQP")
+g3 <- autoplot(fa_pca$scores) +
+  ggtitle("Escores PCA")
+
+grid.arrange(g1, g2, g3, nrow = 1)
+
+t1 <- ggplot(fa_pca$scores, aes(x = fa_pca$scores[,1], y = fa_pca$scores[,2])) +
+  geom_smooth() +
+  xlab("PC 1") + ylab("PC 2") +
+  ggtitle("Escores PCA")
+
+t2 <- ggplot(fa_reg$scores, aes(x = fa_reg$scores[,1], y = fa_reg$scores[,2])) +
+  geom_smooth() +
+  xlab("PC 1") + ylab("PC 2") +
+  ggtitle("Escores Regressão")
+
+t3 <- ggplot(fa_mq$scores, aes(x = fa_mq$scores[,1], y = fa_mq$scores[,2])) +
+  geom_smooth() +
+  xlab("PC 1") + ylab("PC 2") +
+  ggtitle("Escores MQP")
+
+grid.arrange(t2, t3, t1, nrow = 1)
+
+```
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 05/11} \\
+\end{center}
+
+Pela visualização dos gráficos, podemos perceber que os escores do método regressivo e de mínimos quadrados ponderados se assemelham bastante, enquanto os escores da PCA diferem um pouco desses últimos dois, mas ainda se mantendo numa escala parecida.
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 06/11} \\
+\end{center}
+# Lista 7 - Normal Multivariada
+
+# Questão 55
+
+```{r q55,echo=F,cache=TRUE}
+mu <- c(3, 2)
+sigma <- matrix(c(1, -1.5, -1.5, 4),2)
+set.seed(150167636)
+mvrnorm(10, mu, sigma)
+```
+
+Outros algorítmos...
+
+```{r q552,echo=F,cache=TRUE}
+mu <- c(3, 2)
+Sigma <- matrix(c(1, -1.5, -1.5, 4), 
+                nrow = 2, ncol = 2)
+
+#### POR DECOMPOSICAO ESPECTRAL ####
+
+rmvn.eigen <-
+  function(n, mu, Sigma) {
+    p <- length(mu)
+    ev <- eigen(Sigma, symmetric = TRUE)
+    lambda <- ev$values
+    V <- ev$vectors
+    R <- V %*% diag(sqrt(lambda)) %*% t(V)
+    Z <- matrix(rnorm(n*p), nrow = n, ncol = p)
+    X <- Z %*% R + matrix(mu, n, p, byrow = TRUE)
+    X
+  }
+
+rmvn.eigen(10, mu, Sigma)
+
+#### POR DECOMPOSICAO EM VALORES SINGULARES ####
+
+rmvn.svd <-
+  function(n, mu, Sigma) {
+    p <- length(mu)
+    S <- svd(Sigma)
+    R <- S$u %*% diag(sqrt(S$d)) %*% t(S$v)
+    Z <- matrix(rnorm(n*p), nrow=n, ncol=p)
+    X <- Z %*% R + matrix(mu, n, p, byrow=TRUE)
+    X
+  }
+
+rmvn.svd(10, mu, Sigma)
+
+
+#### POR DECOMPOSICAO DE CHOLESKY ####
+
+rmvn.cholesky <-
+  function(n, mu, Sigma) {
+    p <- length(mu)
+    Q <- chol(Sigma)
+    Z <- matrix(rnorm(n*p), nrow=n, ncol=p)
+    X <- Z %*% Q + matrix(mu, n, p, byrow=TRUE)
+    X
+  }
+
+rmvn.cholesky(10, mu, Sigma)
+
+```
+
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 07/11} \\
+\end{center}
+
+# Questão 58 
+
+$\mathbf{X\sim N(\mu,\Sigma)}$ tal que $$\mu = \left[ {\begin{array}{cc} 2\\ 2\\\end{array} } \right]; \Sigma = \left[ {\begin{array}{cc} 1 & 0\\ 0 & 1\\ \end{array} } \right]$$
+
+E $\mathbf{A} = [1 \ \ \ 1];\mathbf{B} = [1 \ \ \ -1]$. Mostre que **AX** é independente de **BX**
+\
+Solução:
+\
+Como $\mathbf{\Sigma_{12}}=0$, temos que os vetores $\mathbf{Y_1}$ e $\mathbf{Y_{2}}$ amostras de **X** sao independentes.
+
+Seja $$\mathbf{Y}_1 = \mathbf{AX} =   \left[ {\begin{array}{cc}
+     1 & 1\\
+  \end{array} } \right]
+  \left[ {\begin{array}{cc}
+     X_1\\
+     X_2\\
+  \end{array} } \right] = X \ ;$$
+  
+e $$\mathbf{Y}_2 = \mathbf{BX} =   \left[ {\begin{array}{cc}
+     1 & -1\\
+  \end{array} } \right]
+  \left[ {\begin{array}{cc}
+     X_1\\
+     X_2\\
+  \end{array} } \right] =   \left[ {\begin{array}{cc}
+     X_1\\
+     - X_2\\
+  \end{array} } \right] \neq X \ .$$
+  
+Que são independentes por $\Sigma_{12}=0$. Logo, $Cov(\mathbf{Y_1,Y_2})=0$
+\
+$\square$
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 08/11} \\
+\end{center}
+# Lista 8 - Correlação canônica
+
+# Questão 72
+
+## Ex. 10.2 | Johnson & Wichern
+
+Os vetores aleatórios $\mathbf{X^{(1)},X^{(2)} \ (2 \times 1)}$ têm vetor de médias e variâncias conjuntas $$\mathbf{\mu=\left[{\begin{array}{c}
+     \mu^{(1)}\\
+     --\\
+     \mu^{(2)}\\
+  \end{array} } \right]=\left[{\begin{array}{c}
+     -3\\
+     2\\
+     --\\
+     0\\
+     1\\
+  \end{array} } \right];\Sigma=\left[ {\begin{array}{ccc}
+     \Sigma_{11} & | & \Sigma_{12}\\
+     -- & -|- & --\\
+      \Sigma_{21} & | & \Sigma_{22}\\
+  \end{array} } \right]=\left[ {\begin{array}{ccccc}
+  8 & 2 & | & 3 & 1\\
+  2 & 5 & | & -1 & 3\\
+  -- & -- & -|- & -- & --\\
+  3 & -1 & | & 6 & -2\\
+  1 & 3 & | & -2 & 7\\
+  \end{array} } \right]}$$
+
+### a)
+Calcular as correlações canônicas $\rho_1^*,\rho_2^*$.
+
+```{r q72a,echo=FALSE}
+S11 <- matrix(c(8,2,
+                2,5),2,2)
+S12 <- t(matrix(c(3,1,
+                -1,3),2,2))
+S21 <- t(matrix(c(3,-1,
+                1,3),2,2))
+S22 <- matrix(c(6,-2,
+                -2,7),2,2)
+svd11 <- svd(S11)
+S11d <- sqrt(svd11$d)
+d11q <- matrix(rep(0,4),2,2)
+diag(d11q) <- S11d
+s11 <- svd11$u %*% d11q %*% svd11$v
+
+svd22 <- svd(S22)
+S22d <- sqrt(svd22$d)
+d22q <- matrix(rep(0,4),2,2)
+diag(d22q) <- S22d
+s22 <- svd22$u %*% d22q %*% svd22$v
+
+a1t <- solve(s11) %*% S12 %*% solve(S22) %*% S21 %*% solve(s11)
+b1t <- solve(s22) %*% S21 %*% solve(S11) %*% S12 %*% solve(s22)
+svd(a1t)$d
+```
+Logo, as correlações canônicas serão $\rho_1 = \sqrt{0,3046268}\approx 0.552$ e $\rho_2 = \sqrt{0,2399638}\approx 0.489$
+
+### b)
+Determinar os pares de variáveis canônicas $(U_1,V_1)$ e $(U_2,V_2)$.
+
+```{r q72b,echo=FALSE}
+svd(a1t)$u[1,] %*% solve(s11)
+svd(b1t)$u[1,] %*% solve(s22)
+```
+
+Portanto, $U_1=-0,316X_1^{(1)}+0,362X_2^{(1)}$,$V_1=-0,364X_1^{(2)}+0,095X_2^{(2)}$ = $(U_1,V_1)$.
+
+```{r q72b2,echo=FALSE}
+svd(a1t)$u[2,] %*% solve(s11)
+svd(b1t)$u[2,] %*% solve(s22)
+```
+
+Enquanto que $(U_2,V_2)$ será: $U_2=0,196x_1^{(1)}+0,301X_2^{(2)}$,$V_2=0,226X_1^{(2)}+0,385X_2^{(2)}$.
+\
+$\square$
+\
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 09/11} \\
+\end{center}
+
+### c)
+Seja $\mathbf{U} = [U_1,U_2]'$ e $\mathbf{V}=[V_1,V_2]'$. Avalie: $$\mathbf{E\left[{\begin{array}{c}
+     U\\
+     --\\
+     V\\
+  \end{array} } \right] \ e \ \ Cov\left[{\begin{array}{c}
+     U\\
+     --\\
+     V\\
+  \end{array} } \right]=\left[ {\begin{array}{ccc}
+     \Sigma_{UU} & | & \Sigma_{UV}\\
+     -- & -|- & --\\
+      \Sigma_{VU} & | & \Sigma_{VV}\\
+  \end{array} } \right]}$$.
+
+```{r q72c,echo=FALSE}
+# E(U)1=
+(svd(a1t)$u[1,] %*% solve(s11)) %*% t(t(c(-3,2)))
+# E(U)2=
+(svd(a1t)$u[2,] %*% solve(s11)) %*% t(t(c(-3,2)))
+# E(V)1=
+(svd(b1t)$u[1,] %*% solve(s22)) %*% t(t(c(0,1)))
+# E(V)2=
+(svd(b1t)$u[2,] %*% solve(s22)) %*% t(t(c(0,1)))
+```
+
+Portanto, $$\mathbf{E\left[{\begin{array}{c}
+     U\\
+     --\\
+     V\\
+  \end{array} } \right]}=\left[{\begin{array}{c}
+     1,674\\
+     0,014\\
+     --\\
+     0,095\\
+     0,385\\
+  \end{array} } \right]$$
+
+Enquanto que $$\mathbf{Cov\left[{\begin{array}{c}
+     U\\
+     --\\
+     V\\
+  \end{array} } \right]=\left[ {\begin{array}{ccc}
+     \Sigma_{UU} & | & \Sigma_{UV}\\
+     -- & -|- & --\\
+      \Sigma_{VU} & | & \Sigma_{VV}\\
+  \end{array} } \right]=\left[ {\begin{array}{ccccc}
+     1 & 0 & | & \rho_1^* & 0\\
+     0 & 1 & | & 0 & \rho_2^*\\
+     -- & -- & -|- & -- & --\\
+     \rho_1^* & 0 & | & 1 & 0\\
+     0 & \rho_2^* & | & 0 & 1\\
+  \end{array} } \right]}$$ será um resultado trivial.
+
+
+  
+Comparar os resultados com as propriedades do resultado 10.1.
+
+Neste caso, da definição 10.1 do livro [1], e definição 10.5; $E(X^{(1)})=\mu^{(1)}$, temos que $E(U)=E(a'X)$. Pela lineariedade da esperança, temos que $a'E(X)=E(U)=a'E(\mu)$, que foi justamente o resultado utilizado para as contas. Já para a covariância, existe a definição em 10.1, porém o resultado é trivial visto que $\Sigma_{ij}$ irá retornar sempre uma matriz diagonal; se $i=j$, o valor da diagonal será 1 (a variável por ela mesma); e para $i\neq j$, o resultado será as correlações canônicas calculadas para i e j.
+\
+$\square$
+\
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 10/11} \\
+\end{center}
+
+# Questão 73
+
+## Ex. 10.9 | Johnson & Wichern (itens (a) e (c))
+
+Foram aplicados para $n=140$ alunos da sétima série quatro testes, tais que $\mathbf{X_1^{(1)}}$ = velocidade de leitura; $\mathbf{X_2^{(1)}}$ = habilidade de leitura; $\mathbf{X_1^{(2)}}$ = velocidade em aritmética; $\mathbf{X_2^{(2)}}$ = habilidade em aritmética. A correlação da performance medida foi: $$\mathbf{R=\left[ {\begin{array}{ccc}
+     R_{11} & | & R{12}\\
+     -- & -|- & --\\
+      R{21} & | & R{22}\\
+  \end{array} } \right]=\left[ {\begin{array}{ccccc}
+     1.0 & 0,6328 & | & 0,2412 & 0,0586\\
+     0,6328 & 1 & | & -0,0553 & 0,0655\\
+     --- & --- & -|- & ---& --- \\
+     0,2412 & -0,0553 & | & 1 & 0,4248\\
+     0,0586 & 0,0655 & | & 0,4248 & 1\\
+  \end{array} } \right]}$$.
+  
+
+### a)
+Encontrar todas as correlações e variáveis canônicas amostrais 
+
+```{r q73a,echo=FALSE}
+S11 <- matrix(c(1,0.6328,
+                0.6328,1),2,2)
+S12 <- t(matrix(c(0.2412,0.0586,
+                -0.0553,0.0655),2,2))
+S21 <- t(matrix(c(0.2412,-0.0553,
+                  0.0586,0.0655),2,2))
+S22 <- matrix(c(1,0.4248,
+                0.4248,1),2,2)
+
+svd11 <- svd(S11)
+S11d <- sqrt(svd11$d)
+d11q <- matrix(rep(0,4),2,2)
+diag(d11q) <- S11d
+s11 <- svd11$u %*% d11q %*% svd11$v
+
+svd22 <- svd(S22)
+S22d <- sqrt(svd22$d)
+d22q <- matrix(rep(0,4),2,2)
+diag(d22q) <- S22d
+s22 <- svd22$u %*% d22q %*% svd22$v
+
+a1t <- solve(s11) %*% S12 %*% solve(S22) %*% S21 %*% solve(s11)
+b1t <- solve(s22) %*% S21 %*% solve(S11) %*% S12 %*% solve(s22)
+svd(a1t)$d
+```
+
+Logo, as correlações canônicas amostrais serão $\hat{\rho}_1 = \sqrt{0,155634923}\approx 0.394$ e $\hat{\rho}_2 = \sqrt{0,004740029}\approx 0.068$.
+
+```{r q73a2,echo=FALSE}
+#U1
+svd(a1t)$u[1,] %*% solve(s11)
+#U2
+svd(a1t)$u[2,] %*% solve(s11)
+#V1
+svd(b1t)$u[1,] %*% solve(s22)
+#V2
+svd(b1t)$u[2,] %*% solve(s22)
+```
+
+Enquanto que os pares canônicos amostrais serão: $\hat{U}_1=-1,256X_1^{(1)}+1,025X_2^{(1)}; \hat{V}_1=-1,104X_1^{(2)}+0,452X_2^{(2)}$ e $\hat{U}_2=0,297X_1^{(1)}+0,785X_2^{(1)}; \hat{V}_2=-0,018X_1^{(2)}+1,007X_2^{(2)}$
+
+### c)
+Avaliar as matrizes de erros aproximados para $\mathbf{R_{11},R_{22}}$ e $\mathbf{R_{12}}$ determinadas pelo primeiro par de variáveis canônicas $\hat{U}_1,\hat{V}_1$.
+
+```{r q73c,echo=F}
+# a' * U1 = 
+# (svd(a1t)$u[1,] %*% solve(s11)) %*% t((svd(a1t)$u[1,] %*% solve(s11)))
+A <- matrix(c((svd(a1t)$u[1,] %*% solve(s11)),(svd(a1t)$u[2,] %*% solve(s11))),2,)
+#A
+Ainv <- solve(A)
+
+#(svd(b1t)$u[1,] %*% solve(s22))
+B <- matrix(c((svd(b1t)$u[1,] %*% solve(s22)),(svd(b1t)$u[2,] %*% solve(s22))),2,2)
+
+Binv <- solve(B)
+
+R11 <- Ainv[,2] %*% t(Ainv[,2])
+R22 <- Binv[,2] %*% t(Binv[,2])
+R12 <- sqrt(svd(a1t)$d[2]) * Ainv[,2] %*% t(Binv[,2])
+```
+
+O cálculo das matrizes resultou em:
+
+$\mathbf{R_{11}}=$
+```{r q73c1,echo=F}
+R11
+```
+
+$\mathbf{R_{22}}=$
+```{r q73c2,echo=F}
+R22
+```
+
+$\mathbf{R_{12}}=$
+```{r q73c3,echo=F}
+R12
+```
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 11/11} \\
+\end{center}
+
+# Referências:
+
+## [1] JOHNSON, Richard A; WICHERN, Dean W. **APPLIED MULTIVARIATE STATISTICAL ANALYSIS**. 6ª Edição. Pearson, 2007.
+
+## [2] von Borries, George. Material de aula disponível no Aprender3; Notas de aula e códigos. Análise Multivariada 1. Universidade de Brasília, 2023.
+
+## [3] RENCHER, Alvin C; CHRISTENSEN, William F. **METHODS OF MULTIVARIATE ANALYSIS**. 3ª Edição. WILEY, 2012.
+
