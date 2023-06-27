@@ -80,6 +80,76 @@ Verificar que o primeiro par de variáveis canônicas são $U_1=X_2^{(1)},V_1=X_
 sol.:
 \
 
+```{r q71,include=FALSE}
+S11 <- matrix(c(100,0,
+                0,1),2,2)
+S12 <- t(matrix(c(0,0,
+                .95,0),2,2))
+S21 <- t(matrix(c(0,.95,
+                0,0),2,2))
+S22 <- matrix(c(1,0,
+                0,100),2,2)
+svd11 <- svd(S11)
+d11 <- svd11$d
+d11 <- sqrt(d11)
+d11q <- matrix(rep(0,4),2,2)
+diag(d11q) <- d11
+R <- solve(d11q) %*% S12 %*% solve(S22) %*% S21 %*% solve(d11q)
+avav <- eigen(R)
+
+svd22 <- svd(S22)
+d22 <- svd22$d
+d22 <- sqrt(d22)
+d22q <- matrix(rep(0,4),2,2)
+diag(d22q) <- d22
+```
+
+$\mathbf{\Sigma_{11}^{-1/2}\Sigma_{12}\Sigma_{22}^{-1}\Sigma_{11}^{-1/2}}=$
+
+```{r q711,echo=FALSE}
+R
+```
+
+Com autovalores:
+```{r q712,echo=FALSE}
+avav$values
+```
+
+e autovetores normalizados:
+```{r q713,echo=FALSE}
+abs(avav$vectors)
+```
+
+Ou seja, $$U_1=e'_1\Sigma_{11}^{1/2}x^{(1)}=\left[{\begin{array}{cc}
+     0 & 1\\
+  \end{array} } \right]\left[{\begin{array}{cc}
+     10 & 0\\
+     0 & 1\\
+  \end{array} } \right]\left[{\begin{array}{c}
+     x_1^{(1)}\\
+     x_2^{(1)}\\
+  \end{array} } \right]=x_2^{(1)}$$
+
+E ainda
+
+```{r q714,echo=FALSE} 
+abs(avav$vectors[1,]) %*% solve(d22q)
+```
+
+$$V_1=f'_1\Sigma_{22}^{-1/2}x^{(2)}=\left[{\begin{array}{cc}
+     0 & 1\\
+  \end{array} } \right]\left[{\begin{array}{cc}
+     0,1 & 0\\
+     0 & 1\\
+  \end{array} } \right]\left[{\begin{array}{c}
+     x_1^{(2)}\\
+     x_2^{(2)}\\
+  \end{array} } \right]=x_1^{(2)}$$
+
+Então, o par canônico $(U_1,V_1)=(X_2^{(1)},X_1^{(2)})$, e $\rho_1^*=0,95$.
+\
+$\square$
+\
 
 # Questão 72
 
@@ -194,9 +264,14 @@ Determinar o primeiro par de variáveis canônicas $\hat{U}_1,\hat{V}_1$, e inte
 
 ## Ex. 11.8 | Rencher & Christensen
 
+```{r q75,include=FALSE}
+dados <- read_table("dados/DIABETES-DATA.txt", 
+    col_names = FALSE)
+colnames(dados) <- c("paciente","y1_relative_weight","y2_fasting_plasma_glucose",
+                     "x1_glucose_intolerance","x2_insulin_response_to_oral_glucose","x3_insulin_resistance")
+```
+
+
 ### (a) Encontre as correlações canônicas entre (y1, y2) e (x1, x2, x3).
 
 ### (b) Encontre os coeficientes padronizados das variáveis canônicas.
-
-
-

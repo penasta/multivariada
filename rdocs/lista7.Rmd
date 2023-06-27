@@ -376,7 +376,7 @@ $Cov(\mathbf{Z})=\mathbf{(T')^{-1}\Sigma[(T')^{-1}]'}$.
 \
 Como $\mathbf{(A')^{-1}=(A^{-1})'}$, e $\mathbf{A=T'T}$; temos:
 \
-$Cov\mathbf({Z})=\mathbf{(T')^{-1}\Sigma[(T')^{-1}]' = (T')^{-1}T'TT^{-1}=I}$
+$Cov\mathbf({Z})=\mathbf{(T')^{-1}\Sigma[(T')^{-1}]' = (T')^{-1}T'TT^{-1}=I \ I = I}$
 \
 $\square$
 
