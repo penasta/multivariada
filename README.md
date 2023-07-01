@@ -1,6 +1,6 @@
 # Análise Multivariada 1 (MULTI1)
 ## Universidade de Brasília
-### Prof. Dr. George von Borries
+### Prof. Dr. George Freitas von Borries
 ### Aluno: Bruno Gondim toledo
 ### Matrícula: 15/0167636
 #### 1º/2023
