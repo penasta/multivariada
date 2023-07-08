@@ -1,0 +1,40 @@
+LISTA FATORIAL:
+43 - J&W - feito
+44 - J&W - feito
+45 - J&W - feito
+46 - J&W - feito a) e b); falta c) (ver gabarito)
+47 - J&W - feito
+48 - J&W - feito
+49 - J&W - (ver solução do Micael)
+50 - J&W - feito
+51 - J&W - feito
+52 - J&W - feito
+53 - J&W - feito
+54 - J&W - feito
+
+LISTA NORMAL MULTI: (finalizada)
+
+55 - feito - professor postou código com algoritmo 
+56 - feito
+57 - feito - ver codigo do professor p/ gerar elipses
+58 - feito
+59 - feito - função geradora de momentos (complementar?)
+60 - J&W - feito
+61 - J&W - feito
+62 - J&W - feito
+63 - R&C - feito
+64 - R&C - feito
+65 - R&C - feito
+66 - R&C - feito
+67 - R&C - feito - ARRUMAR: ELEMENTO S_24 TA ERRADO (O "CERTO" É 6)
+68 - R&C - feito - COMO O ITEM ACIMA ESTÁ ERRADO, ESTE SE TORNA IMPOSSÍVEL.
+69 - R&C - feito
+70 - R&C - feito
+
+LISTA CORR CANONICA:
+
+71 - J&W - feito
+72 - J&W - feito
+73 - J&W - feito a); falta c)
+74 - J&W - feito (melhorar conclusão da (b)?)
+75 - R&C - feito
