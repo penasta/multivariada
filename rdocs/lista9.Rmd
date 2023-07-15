@@ -1,0 +1,510 @@
+---
+title: ''
+author: ''
+date: ''
+output:
+  pdf_document: null
+  fig_crop: no
+  html_document:
+    df_print: paged
+subtitle: ''
+highlight: tango
+number_sections: no
+fig_caption: yes
+keep_tex: yes
+includes:
+  in_header: Estilo.sty
+classoption: a4paper
+always_allow_html: yes
+---
+  
+  
+\begin{center}
+{\Large
+  DEPARTAMENTO DE ESTATÍSTICA} \\
+\vspace{0.5cm}
+\begin{figure}[!t]
+\centering
+\includegraphics[width=9cm, keepaspectratio]{logo-UnB.eps}
+\end{figure}
+\vskip 1em
+{\large
+  `r format(Sys.time(), '%d %B %Y')`}
+\vskip 3em
+{\LARGE
+  \textbf{Lista 9 - Análise de Agrupamentos}} \\
+\vskip 1em
+{\Large
+  Prof. Dr. George von Borries} \\
+\vskip 1em
+{\Large
+  Análise Multivariada 1} \\
+\vskip 1em
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636} \\
+\vskip 1em
+\end{center}
+
+```{r setup, include=F}
+library(pacman)
+p_load(knitr,gclus,tidyverse,aplpack,gridExtra,mclust,factoextra,cluster,
+               biotools)
+M <- 150167636
+```
+
+\newpage
+
+# 76. Johnson e Wichern - Exercício 12.3.
+
+# 77. Johnson e Wichern - Exercício 12.5.
+
+## a), b) e c):
+
+```{r q77, echo=FALSE,cache=TRUE}
+# a)
+
+D <- matrix(0, nrow = 4, ncol = 4)
+D[lower.tri(D)] <- c(1,11,2,5,3,4)
+D[upper.tri(D)] <- rev(c(1,11,2,5,3,4))
+
+par(mfrow = c(1, 3))
+clust <- hclust(as.dist(D), method = "single")
+plot(clust)
+
+# b)
+
+clust2 <- hclust(as.dist(D), method = "complete")
+plot(clust2)
+
+# c)
+
+clust3 <- hclust(as.dist(D), method = "average")
+plot(clust3)
+```
+
+Analisando os dendogramas, percebemos que tanto as abordagens simples, média e completa, agregaram os valores da exata mesma maneira.
+
+# 78. Johnson e Wichern - Exercício 12.6.
+
+```{r q78, echo=FALSE,cache=TRUE}
+D <- matrix(0, nrow = 5, ncol = 5)
+D[lower.tri(D)] <- c(4,6,9,1,7,10,6,3,5,8)
+D[upper.tri(D)] <- rev(c(4,6,9,1,7,10,6,3,5,8))
+
+par(mfrow = c(1, 3))
+
+clust <- hclust(as.dist(D), method = "single")
+plot(clust)
+
+clust2 <- hclust(as.dist(D), method = "complete")
+plot(clust2)
+
+clust3 <- hclust(as.dist(D), method = "average")
+plot(clust3)
+```
+
+Analisando os dendogramas, percebemos que tanto as abordagens simples, média e completa, agregaram os valores da exata mesma maneira.
+
+# 79. Johnson e Wichern - Exercício 12.7.
+
+```{r q79,echo=FALSE,cache=TRUE}
+S <- matrix(0, nrow = 5, ncol = 5)
+S[lower.tri(S)] <- c(.63,.51,.57,.12,.32,.18,.16,.21,.15,.68)
+S[upper.tri(S)] <- rev(c(.63,.51,.57,.12,.32,.18,.16,.21,.15,.68))
+diag(S) <- 1
+
+D <- 1 - S # convertendo a matriz de correlação em uma matriz de dissimilaridades D:
+par(mfrow = c(1, 2))
+
+clust <- hclust(as.dist(D), method = "single")
+plot(clust, main = "Single Linkage")
+
+clust2 <- hclust(as.dist(D), method = "complete")
+plot(clust2, main = "Complete Linkage")
+
+#clust3 <- hclust(as.dist(D), method = "average")
+#plot(clust3, main = "Average Linkage")
+```
+
+Analisando os dendogramas, percebemos que tanto as abordagens simples e completa agregaram os valores (1,2) e (4,5) no mesmo grupo, mas diferiram quanto a agregação do valor (3); no caso da agregação simples, o valor (3) foi caracterizado como um grupo robustamente separado dos dois demais grupos, enquanto na agregação completa, o *cluster* do valor (3) foi colocado como mais próximo do *cluster* dos valores (1,2), e esses mais distantes do *cluster* dos valores (4,5).
+
+# 80. Johnson e Wichern - Exercício 12.11.
+
+# 81. Johnson e Wichern - Exercício 12.12.
+
+# 82. Johnson e Wichern - Exercício 12.13.
+
+# 83.
+
+```{r q83,echo=FALSE,cache=TRUE}
+ponto <- 1:22
+x <- c(1,2,2,2,3,7,12,13,13,14,14,15,7,6,7,8,6,7,8,6,7,8)
+y <- c(9,10,9,8,9,14,9,10,8,10,8,9,7,3,3,3,2,2,2,1,1,1)
+
+df <- data.frame(ponto,x,y)
+```
+
+## a)
+
+```{r q83a,echo=FALSE,cache=TRUE}
+plot(x=x,y=y)
+```
+
+Pela análise do gráfico, aparetam haver entre 3 a 5 grupos: sendo 3 grupos sólidos agrupados, e 2 *outliers* dispersos que provavelmente otimizariam formando um grupo para cada, ou ainda podem ser talvez agregados a algum dos 3 grupos mais robustos, porém aumentando assim sua dispersão.
+
+## b)
+```{r q83b,echo=FALSE,cache=TRUE}
+# Euclidiana
+D_euclidiana <- dist(df[,-1], method = "euclidean")
+#D_euclidiana
+
+# Manhattan
+D_manhattan <- dist(df[,-1], method = "manhattan")
+#D_manhattan
+
+# Mahalanobis.
+D_Mahalanobis <- D2.dist(df[,-1], cov(df[,-1]))
+#D_Mahalanobis
+
+```
+
+Irei apresentar os valores na forma corrida para caber melhor no documento, mas é bom observar que a forma "natural" destes valores são matrizes triangulares inferiores. Favor verificar o código para exibi-los estruturados.
+
+### Distâncias euclidianas:
+
+`r D_euclidiana`
+
+### Distâncias 'Manhattan':
+
+`r D_manhattan`
+
+### Distâncias de Mahalanobis:
+
+`r D_Mahalanobis`
+
+\vskip 2em
+
+Apesar dos valores serem bem diferentes, isso se dá mais pelo método de cálculo de distância de cada uma das técnicas.
+A distância Euclidiana trabalha basicamente com a "distância bruta" entre um ponto e outro, literalmente medindo a distância linear.
+A distância Manhattan trabalha com distância absoluta entre as coordenadas dos pontos.
+A distância de Mahalanobis busca centralizar os dados, calculando as distâncias levando em consideração a correlação entre as dimensões.
+
+Portanto, apesar de improvável, é possível que mesmo com valores observados absolutamente distoantes, agrupar as variáveis segundo as três distâncias trabalhadas e em todos os casos, retornar os exatos mesmos clusters pros dados.
+
+# c)
+
+Irei apresentar corridamente três painéis, cada um composto por dois dendogramas (agregação simples e média), referentes respectivamente aos valores de distância Euclidiana, Manhattan e de Mahalanobis.
+
+```{r q83c,echo=FALSE,cache=TRUE}
+par(mfrow = c(1, 2))
+clust4 <- hclust(D_euclidiana, method = "single")
+plot(clust4, main = "Single Linkage")
+
+clust5 <- hclust(D_euclidiana, method = "average")
+plot(clust5, main = "Average Linkage")
+
+par(mfrow = c(1, 2))
+clust6 <- hclust(D_manhattan, method = "single")
+plot(clust6, main = "Single Linkage")
+
+clust7 <- hclust(D_manhattan, method = "average")
+plot(clust7, main = "Average Linkage")
+
+par(mfrow = c(1, 2))
+clust8 <- hclust(D_Mahalanobis, method = "single")
+plot(clust8, main = "Single Linkage")
+
+clust9 <- hclust(D_Mahalanobis, method = "average")
+plot(clust9, main = "Average Linkage")
+```
+
+Em todos os dendogramas, foi confirmada a suspeita levantada no item (a); em que haviam 3 grupos aglomerativos bem definidos, e mais 2 grupos formados cada um por apenas um *outlier*. Cada dendograma teve seu formato específico, mas todos foram eficientes em agrupar os dados pelos seus similares.
+
+# d) 
+
+```{r q83d,echo=FALSE,cache=TRUE}
+df <- data.frame(ponto,x,y)
+df <- scale(df[,-1])
+```
+
+Primeiro, devemos identificar o número ideal de *clusters*, já que o *k-means* necessita que o usuário entre manualmente com o número de *clusters* que o algoritmo deve separar. Já foi visto anteriormente que o número é 3 ou 5, dependendo da abordagem que queira se fazer quanto aos *outliers*. Porém, irei também seguir a praxe deste algorítmo, que é *plotar* um gráfico que ajuda a determinar o número ideal de *clusters*.
+
+```{r q83d1,echo=FALSE,cache=TRUE}
+
+fviz_nbclust(df, kmeans, method = "wss")
+
+```
+
+Pelo método de *elbow*, o número ideal são 3 *clusters*...
+
+```{r q83d2,echo=FALSE,cache=TRUE}
+
+fviz_nbclust(df, kmeans, method = "wss")+
+  geom_vline(xintercept = 3, linetype = 2)
+
+```
+
+Portanto, executando o *k-means* para 3 *clusters*, iremos obter o seguinte resultado:
+
+```{r q83d3,echo=FALSE,cache=TRUE}
+
+set.seed(M)
+km <- kmeans(df, 3, iter.max = M)
+aggregate(df, by=list(cluster=km$cluster), mean)
+
+df <- data.frame(ponto,x,y)
+df <- cbind(df, cluster=km$cluster)
+#km$centers
+
+fviz_cluster(km, data=df,
+             palette = c("#00AFBB", "#E7B800", "#FC4E07"),
+             ellipse.type="euclid",
+             star.plot=TRUE,
+             repel=TRUE,
+             ggtheme=theme_minimal())
+
+```
+
+Aqui, notamos que o *k-means* foi relativamente eficiente em classificar os dois *outliers* em um dos *clusters*, sem muita perda de generalização.
+
+\vskip 3em
+
+Porém, se quisermos forçar a mão e testar a aglomeração *k-means* com 5 grupos, este será o resultado:
+
+```{r q83d4,echo=FALSE,cache=TRUE,message=FALSE,warning=FALSE}
+
+set.seed(M)
+km2 <- kmeans(df, 5, iter.max = M)
+aggregate(df, by=list(cluster=km2$cluster), mean)
+
+df <- data.frame(ponto,x,y)
+df <- cbind(df, cluster=km2$cluster)
+#km$centers
+
+fviz_cluster(km2, data=df,
+             palette = c("#2E9FDF","#00AFBB", "#E7B800", "#FC4E07","#a11d21"),
+             ellipse.type="euclid",
+             star.plot=TRUE,
+             repel=TRUE,
+             ggtheme=theme_minimal())
+
+```
+
+Em que notamos que o *k-means* não foi nada eficiente em identificar os *outliers* cada um como sendo um grupo robustamente separado dos outros três.
+
+# 84.
+
+```{r q84,echo=FALSE,cache=TRUE}
+data(bank)
+bank$Status <- factor(bank$Status)
+
+mu <- bank %>%
+  group_by(Status) %>%
+  summarise_all(list(mean)) %>%
+  dplyr::select(!Status)
+
+S0 <- bank %>%
+  filter(Status == 0) %>%
+  dplyr::select(!Status) %>%
+  cov(.)
+
+S1 <- bank %>%
+  filter(Status == 1) %>%
+  dplyr::select(!Status) %>%
+  cov(.)
+```
+
+## a)
+
+```{r q84a,echo=FALSE,message=FALSE,warning=FALSE,comment=FALSE,results='hide',cache=TRUE}
+
+faces(mu)
+
+```
+
+Apesar d'eu particularmente não gostar desse tipo de gráfico, por talvez trazer um ar de ridículo a um trabalho potencialmente sério, é inegável seu valor num exemplo como esse, em que conseguimos identificar de forma simples e didática a diferença entre os dois grupos de notas disponíveis, de forma muito mais visual que vetores numéricos ou gráficos potencialmente de interpretação complexa para o público leigo.
+
+## b)
+
+Aqui, irei testar diferentes formas de agrupamento, para avaliar quais métodos performam melhor para este conjunto de dados.
+
+### *k-means*:
+
+```{r q84b1,echo=FALSE,cache=TRUE}
+X <- bank[,-1]
+X <- scale(X)
+set.seed(M)
+km.res=kmeans(X, 2, iter.max = M)
+#print(km.res)
+
+#aggregate(X, by=list(cluster=km.res$cluster), mean)
+X<-cbind(X, cluster=km.res$cluster)
+
+fviz_cluster(km.res, data=X,
+             palette = c("#00AFBB","#FC4E07"),
+             ellipse.type="euclid",
+             star.plot=TRUE,
+             repel=TRUE,
+             ggtheme=theme_minimal())
+
+#km.res$withinss / km.res$totss 
+#km.res$betweenss / km.res$totss  
+
+#km.res$totss - km.res$tot.withinss
+#km.res$betweenss
+
+n <- nrow(X)
+r2g2 <- km.res$betweenss / km.res$totss
+g <- 2
+
+# medidas de avaliação do modelo:
+pseudoF2 <- (n-g)/(g-1) * r2g2/(1-r2g2) # maior Pseudo-F => melhor agrupamento
+rand_kmeans <- adjustedRandIndex(km.res$cluster,bank$Status)
+
+```
+
+### Aglomerativo:
+
+```{r q84b2,echo=FALSE,warning=FALSE,cache=TRUE}
+X <- bank[,-1]
+X <- scale(X)
+
+dista <- dist(X, method="euclidean")
+#as.matrix(dista)[1:3,1:3]
+dista.hc <- hclust(d=dista, method="ward.D")
+fviz_dend(dista.hc, cex=0.5)
+```
+
+Para um conjunto relativamente grande como esse, é praticamente impossível pela figura verificar onde está cada valor. Entretanto, ao verificar os dois grupos principais formados pelo dendograma e verificando os valores que foram agregados à eles, notamos que este foi extremamente eficiente em dividir as notas genuínas das falsificadas, com pouquíssimas observações sendo classificadas incorretamente.
+
+### Algorítmos não hierárquicos:
+### CLARA:
+
+
+```{r q84b3,echo=FALSE,cache=TRUE}
+
+clarax.2 <- clara(X, 2, samples = 20, metric = "euclidean")
+
+#clarax.2$clusinfo
+
+# Cluster de cada valor:
+#clarax.2$clustering
+
+par(mfrow=c(1, 1))
+plot(X, col = clarax.2$clustering)
+points(clarax.2$medoids, col = 1:2, pch = 19, cex=2)
+
+kable(table(clarax.2$clustering))
+
+
+rand_clara <- adjustedRandIndex(clarax.2$clustering,bank$Status)
+
+```
+
+Notamos que CLARA agrupou apenas 3 valores errados, apontando 3 notas genuínas como falsificadas. Além disso, não apontou nenhuma falsificada como genuína.
+
+### PAM:
+
+```{r q84b4,echo=FALSE,cache=TRUE}
+
+pamx.2 <- pam(X, 2)
+
+# Informações:
+#summary(pamx.2)
+#pamx.2$clusinfo
+
+# Agrupamento:
+#pamx.2$clustering
+
+par(mfrow=c(1, 1))
+plot(X, col = pamx.2$clustering)
+points(pamx.2$medoids, col = 1:2, pch = 19, cex=2)
+
+# Validação:
+rand_pam <- adjustedRandIndex(pamx.2$clustering,bank$Status)
+
+```
+
+Notamos que PAM também agrupou apenas 3 valores errados, também apontando 3 notas genuínas como falsificadas. Também não apontou nenhuma falsificada como genuína. O resultado foi idêntico ao retornado por PAM neste caso.
+
+### AGNES:
+
+```{r q84b5,echo=FALSE,cache=TRUE}
+
+agn1 <- agnes(X, metric = "manhattan", stand = TRUE)
+
+#agn1
+par(mfrow=c(1, 2))
+plot(agn1)
+# pares de dissimilaridades (distancias)
+agn2 <- agnes(daisy(X), diss = TRUE, 
+              method = "complete")
+
+par(mfrow=c(1, 2))
+plot(agn2)
+# A AGNES não performou tão bem para este conjunto de dados.
+
+```
+
+Aqui, testamos tanto AGNES utilizando as distâncias de Manhattan com aglomeração simples no primeiro caso, e usando distâncias euclidianas com aglomeração completa no segundo caso. Em nenhum dos dois AGNES performou tão bem quanto CLARA e PAM para este conjunto de dados.
+
+# c)
+
+```{r q84c1,echo=FALSE,cache=TRUE}
+X <- bank[,-1]
+BIC <- mclustBIC(X)
+plot(BIC)
+summary(BIC)
+```
+
+Para o método *mclust*, está indicando que o ideal seriam 3 agrupamentos, com o modelo *VVE*. Como sabemos que são apenas 2 grupos, temos que este método provavelmente não irá funcionar bem.
+
+Seguindo a sugestão da BIC, iremos ajustar com o modelo *VVE* de 3 grupos
+
+```{r q84c2,echo=FALSE,cache=TRUE}
+n <- length(bank[,1])
+bank.mclust <- densityMclust(bank[,-1], model="VVE", G = 3)
+
+# simulando amostra da densidade
+sim.results <- simVVE(bank.mclust$parameters, n, seed = M)
+ysim <- sim.results[,c(2:4)]
+gsim <- sim.results[,"group"]
+ysim1 <- ysim[gsim==1, ]
+ysim2 <- ysim[gsim==2, ]
+ysim3 <- ysim[gsim==3, ]
+kable(table(gsim))
+
+rand_mclustVVE3 <- adjustedRandIndex(sim.results[,1],bank$Status)
+
+```
+
+Percebemos que este foi o modelo que mais errou dos testados até agora. Apenas por fins didáticos, testarei o modelo mais 'complexo' *VVV*, forçando o número de *clusters* como igual à dois.
+
+```{r q84c3,echo=FALSE,cache=TRUE}
+n <- length(bank[,1])
+bank.mclust <- densityMclust(bank[,-1], model="VVV", G = 2)
+
+# simulando amostra da densidade
+sim.results <- simVVV(bank.mclust$parameters, n, seed = M)
+ysim <- sim.results[,c(2,3)]
+gsim <- sim.results[,"group"]
+ysim1 <- ysim[gsim==1, ]
+ysim2 <- ysim[gsim==2, ]
+kable(table(gsim))
+
+rand_mclustVVV2 <- adjustedRandIndex(data.frame(sim.results)$group,bank$Status)
+
+```
+
+Percebemos que aqui, foi dissolvido o grupo 3 que possivelmente continham informações mais de "fronteira" entre os dois grupos mais sólidos, e estas foram diluídas entre os 2 grupos robustos existentes, com um dos grupos "ganhando" 3 itens, enquanto o outro ficando com o restante das 13 observações. Apesar do erro bruto não parecer tão grande, é um pouco decepcionante para um algoritmo tão robusto e pesado um resultado como este. Isso nos leva a suspeitar que as distribuições diferem bastante de uma normal multivariada, apesar deste não ser exatamente um pressuposto rígido deste modelo.
+
+# d)
+
+```{r q84d,echo=FALSE,cache=TRUE}
+APER_mclustVVE3 <- 1-(21/200)
+APER_mclustVVV2 <- 1-(16/200)
+kable(data.frame(rand_kmeans,rand_clara,rand_pam,APER_mclustVVE3,APER_mclustVVV2,rand_mclustVVE3,rand_mclustVVV2))
+```
+
+Aqui notamos que, de todos os algorítmos aqui testados, os que perfomaram melhor foram os (esquecidos e discriminados) CLARA e PAM.
+

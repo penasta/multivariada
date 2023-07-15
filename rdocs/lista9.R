@@ -323,14 +323,15 @@ summary(BIC)
 # como sabemos que são apenas 2 grupos, temos que este método provavelmente não irá funcionar bem.
 
 n <- length(bank[,1])
-bank.mclust <- densityMclust(bank[,-1], model="VEE", G = 2)
+bank.mclust <- densityMclust(bank[,-1], model="VVE", G = 3)
 
 # simulando amostra da densidade
-sim.results <- simVVV(bank.mclust$parameters, n, seed = M)
-ysim <- sim.results[,c(2,3)]
+sim.results <- simVVE(bank.mclust$parameters, n, seed = M)
+ysim <- sim.results[,c(2:4)]
 gsim <- sim.results[,"group"]
 ysim1 <- ysim[gsim==1, ]
 ysim2 <- ysim[gsim==2, ]
+ysim3 <- ysim[gsim==3, ]
 
 # De fato, este foi o modelo que mais errou.
 
