@@ -10,7 +10,7 @@ D <- matrix(0, nrow = 4, ncol = 4)
 D[lower.tri(D)] <- c(1,11,2,5,3,4)
 D[upper.tri(D)] <- rev(c(1,11,2,5,3,4))
 
-#par(mfrow = c(1, 3))
+par(mfrow = c(1, 3))
 clust <- hclust(as.dist(D), method = "single")
 plot(clust)
 
@@ -307,7 +307,7 @@ plot(agn1)
 # pares de dissimilaridades (distancias)
 agn2 <- agnes(daisy(X), diss = TRUE, 
               method = "complete")
-plot(agn2)
+plot(agn1)
 # A AGNES não performou tão bem para este conjunto de dados.
 
 # c) ----
