@@ -1,3 +1,4 @@
+# OBSERVAÇÃO: Algumas coisas foram modificidadas/ajustadas no .rmd referente a esta lista. Para obter as soluções mais precisas, consulte aquele arquivo ao invés d'este.
 pacman::p_load(effectsize,DescTools,tidyverse,MASS,klaR,knitr,cowplot,nlme,
                Rchoice,AICcmodavg,mdscore,questionr,mda,mvnTest,gclus,mclust)
 
@@ -116,10 +117,10 @@ al <- t(xb1-xb2) %*% solve(Sp) # Logo, \hat{y}_0 = -0.4906887x_1 - 0.5291162x_2
 m <- .5*(al%*%xb1+al%*%xb2)
 x0l <- c(0,1)
 
-al %*%x0l - m # > m . Logo, devemos alocar x_0 na população \pi_2
+al %*%x0l # > m . Logo, devemos alocar x_0 na população \pi_2
 
 # J&W 11.24 ----
-rm(list = ls())
+#rm(list = ls())
 dados <- read_table("rdocs/dados/T11-4-BankruptcyData.DAT.txt", 
                     col_names = FALSE, col_types = cols(X6 = col_skip()))
 dados$X5 <- factor(dados$X5)
@@ -201,10 +202,18 @@ gqda <- qda(X5~X1+X2, data = dados,prior =c(.5,.5))
 partimat(X5~X1+X2, data=dados, method="qda", 
          plot.matrix = F, imageplot = T,prec=100)
 
+# Com validação cruzada
+gqdaVC <- qda(X5~X1+X2, data = dados,prior =c(.5,.5),CV=T)
 
 # d) ----
 
-9/sum(gqctable1) # APER x1,x2
+# Matrizes de confusão:
+M <- table(dados$X5, gqdap1$class) 
+MCV <- table(dados$X5, gqdaVC$class) 
+
+# APER e \hat{E}APR:
+APER <- (sum(M)-sum(diag(M)))/sum(M) # APER x_1,x_2
+E_APR <- (sum(MCV)-sum(diag(MCV)))/sum(MCV) # \hat{E} APR x_1,x_2
 
 # e) ----
 
