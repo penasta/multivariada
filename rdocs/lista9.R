@@ -73,18 +73,96 @@ x2 <- c(4,-2,1,1)
 item <- c("A","B","C","D")
 df <- data.frame(item,x1,x2)
 
-linhas_iniciais <- c(1, 4)
-kc <- df[linhas_iniciais, 2:3]
+centro1 <- df |>
+  filter(item == c("A","B")) |>
+  dplyr::select(!item) |>
+  summarise_all(list(mean))
 
-kmeans_result <- kmeans(df[,2:3], centers = kc, iter.max = M)
+centro2 <- df |>
+  filter(item == c("C","D")) |>
+  dplyr::select(!item) |>
+  summarise_all(list(mean))
 
-df$cluster <- kmeans_result$cluster
+centro <- as.matrix(rbind(centro1,centro2))
 
-# Parece estar errado isso...
+
+kmeans_result <- kmeans(df[,2:3], centers = centro, iter.max = M)
+
+#df$cluster <- kmeans_result$cluster
+
+fviz_cluster(kmeans_result, data=df[,2:3],
+             palette = c("#00AFBB","#FC4E07"),
+             ellipse.type="euclid",
+             star.plot=TRUE,
+             repel=TRUE,
+             ggtheme=theme_minimal())
 
 # ex. 12.12 J&W ---- 
 
+x1 <- c(5,-1,1,-3)
+x2 <- c(3,1,-2,-2)
+item <- c("A","B","C","D")
+df <- data.frame(item,x1,x2)
+
+centro1 <- df |>
+  filter(item == c("A","C")) |>
+  dplyr::select(!item) |>
+  summarise_all(list(mean))
+
+centro2 <- df |>
+  filter(item == c("B","D")) |>
+  dplyr::select(!item) |>
+  summarise_all(list(mean))
+
+centro <- as.matrix(rbind(centro1,centro2))
+
+
+kmeans_result <- kmeans(df[,2:3], centers = centro, iter.max = M)
+
+#df$cluster <- kmeans_result$cluster
+
+fviz_cluster(kmeans_result, data=df[,2:3],
+             palette = c("#00AFBB","#FC4E07"),
+             ellipse.type="euclid",
+             star.plot=TRUE,
+             repel=TRUE,
+             ggtheme=theme_minimal())
+
+# Conforme elucidado pelo prof. George, o algoritmo k-means, após decidir os centros dos grupos (neste caso, ele partiu do que eu defini manualmente inicialmente), itera os pontos afim de encontrar os centros e agrupar de tal modo que minimize a variabilidade dentro; e maximize a variabilidade entre os clusters. No caso, este ponto "ótimo" é o mesmo que o calculado no Exercício 12.11 do livro; portanto independente deu alterar os centros iniciais, o processo iterativo sempre vai retornar para este valor. Isto é verdade pelo número baixo de pontos e número alto de iterações permitidas. Conjuntos com muitos pontos e número de iterações reduzido por vezes irão produzir resultados aglomerativos diferentes.
+
 # ex. 12.13 J&W ----
+
+x1 <- rev(C(5,-1,1,-3))
+x2 <- rev(c(3,1,-2,-2))
+item <- rev(c("A","B","C","D"))
+df <- data.frame(item,x1,x2)
+
+centro1 <- df[3:4,] |>
+#  filter(item == c("A","C","B","D")) |>
+  dplyr::select(!item) |>
+  summarise_all(list(mean))
+
+centro2 <- df[1:2,] |>
+#  filter(item == c("B","D")) |>
+  dplyr::select(!item) |>
+  summarise_all(list(mean))
+
+centro <- as.matrix(rbind(centro1,centro2))
+
+
+kmeans_result <- kmeans(df[,2:3], centers = centro, iter.max = M)
+
+#df$cluster <- kmeans_result$cluster
+
+fviz_cluster(kmeans_result, data=df[,2:3],
+             palette = c("#00AFBB","#FC4E07"),
+             ellipse.type="euclid",
+             star.plot=TRUE,
+             repel=TRUE,
+             ggtheme=theme_minimal())
+
+# Os agrupamentos foram idênticos, mas inverteu os clusters: Antes o cluster 1 continha os pontos "ACD" e o cluster 2; o ponto "B". Agora, o cluster 1 contém o ponto "B" e o cluster 2 contém os pontos "ACD". O motivo é análogo ao descrito no item anterior.
+
 
 # ---------------------------------------------------------------------------- #
 
