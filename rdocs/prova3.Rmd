@@ -1,0 +1,1514 @@
+---
+title: ''
+author: ''
+date: ''
+output:
+  pdf_document: null
+  fig_crop: no
+  html_document:
+    df_print: paged
+subtitle: ''
+highlight: tango
+number_sections: no
+fig_caption: yes
+keep_tex: yes
+includes:
+  in_header: Estilo.sty
+classoption: a4paper
+always_allow_html: yes
+---
+  
+  
+\begin{center}
+{\Large
+  DEPARTAMENTO DE ESTATÍSTICA} \\
+\vspace{0.5cm}
+\begin{figure}[!t]
+\centering
+\includegraphics[width=9cm, keepaspectratio]{logo-UnB.eps}
+\end{figure}
+\vskip 1em
+{\large
+  `r format(Sys.time(), '%d %B %Y')`}
+\vskip 3em
+{\LARGE
+  \textbf{Prova 3}} \\
+\vskip 1em
+{\Large
+  Prof. Dr. George von Borries} \\
+\vskip 1em
+{\Large
+  Análise Multivariada 1} \\
+\vskip 1em
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636} \\
+\vskip 1em
+{\Large
+  Página 01/39} \\
+\vskip 1em
+\end{center}
+
+```{r setup, include=F}
+if (!require("pacman")) install.packages("pacman")
+p_load(knitr,effectsize,DescTools,tidyverse,MASS,klaR,knitr,cowplot,nlme,
+       Rchoice,AICcmodavg,mdscore,questionr,mda,mvnTest,gclus,mclust,caTools,
+       aplpack,gridExtra,factoextra,cluster,biotools)
+M <- 150167636
+```
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 02/39} \\
+\end{center}
+
+# 79. Johnson e Wichern - Exercício 12.7.
+
+```{r q79,echo=FALSE,cache=TRUE}
+S <- matrix(0, nrow = 5, ncol = 5)
+S[lower.tri(S)] <- c(.63,.51,.57,.12,.32,.18,.16,.21,.15,.68)
+S[upper.tri(S)] <- rev(c(.63,.51,.57,.12,.32,.18,.16,.21,.15,.68))
+diag(S) <- 1
+
+D <- 1 - S # convertendo a matriz de correlação em uma matriz de dissimilaridades D:
+par(mfrow = c(1, 2))
+
+clust <- hclust(as.dist(D), method = "single")
+plot(clust, main = "Single Linkage")
+
+clust2 <- hclust(as.dist(D), method = "complete")
+plot(clust2, main = "Complete Linkage")
+
+#clust3 <- hclust(as.dist(D), method = "average")
+#plot(clust3, main = "Average Linkage")
+```
+
+Analisando os dendogramas, percebemos que tanto as abordagens simples e completa agregaram os valores (1,2) e (4,5) no mesmo grupo, mas diferiram quanto a agregação do valor (3); no caso da agregação simples, o valor (3) foi caracterizado como um grupo robustamente separado dos dois demais grupos, enquanto na agregação completa, o *cluster* do valor (3) foi colocado como mais próximo do *cluster* dos valores (1,2), e esses mais distantes do *cluster* dos valores (4,5).
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 03/39} \\
+\end{center}
+
+# 81. Johnson e Wichern - Exercício 12.12.
+
+```{r q81,echo=FALSE,cache=TRUE}
+x1 <- c(5,-1,1,-3)
+x2 <- c(3,1,-2,-2)
+item <- c("A","B","C","D")
+df <- data.frame(item,x1,x2)
+
+centro1 <- df |>
+  filter(item == c("A","C")) |>
+  dplyr::select(!item) |>
+  summarise_all(list(mean))
+
+centro2 <- df |>
+  filter(item == c("B","D")) |>
+  dplyr::select(!item) |>
+  summarise_all(list(mean))
+
+centro <- as.matrix(rbind(centro1,centro2))
+kmeans_result <- kmeans(df[,2:3], centers = centro, iter.max = M)
+
+
+fviz_cluster(kmeans_result, data=df[,2:3],
+             palette = c("#00AFBB","#FC4E07"),
+             ellipse.type="euclid",
+             star.plot=TRUE,
+             repel=TRUE,
+             ggtheme=theme_minimal())
+```
+
+Conforme elucidado pelo prof. George, o algoritmo *k-means*, após decidir os centros dos grupos (neste caso, ele partiu do que eu defini manualmente inicialmente), itera os pontos afim de encontrar os centros e agrupar de tal modo que minimize a variabilidade dentro; e maximize a variabilidade entre os clusters. No caso, este ponto "ótimo" é o mesmo que o calculado no Exercício 12.11 do livro; portanto independente deu alterar os centros iniciais, o processo iterativo sempre vai retornar para este valor. Isto é verdade pelo número baixo de pontos e número alto de iterações permitidas. Conjuntos com muitos pontos e número de iterações reduzido por vezes irão produzir resultados aglomerativos diferentes.
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 04/39} \\
+\end{center}
+
+# 83.
+
+```{r q83,echo=FALSE,cache=TRUE}
+ponto <- 1:22
+x <- c(1,2,2,2,3,7,12,13,13,14,14,15,7,6,7,8,6,7,8,6,7,8)
+y <- c(9,10,9,8,9,14,9,10,8,10,8,9,7,3,3,3,2,2,2,1,1,1)
+
+df <- data.frame(ponto,x,y)
+```
+
+## a)
+
+```{r q83a,echo=FALSE,cache=TRUE}
+plot(x=x,y=y)
+```
+
+Pela análise do gráfico, aparetam haver entre 3 a 5 grupos: sendo 3 grupos sólidos agrupados, e 2 *outliers* dispersos que provavelmente otimizariam formando um grupo para cada, ou ainda podem ser talvez agregados a algum dos 3 grupos mais robustos, porém aumentando assim sua dispersão.
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 05/39} \\
+\end{center}
+
+## b)
+```{r q83b,echo=FALSE,cache=TRUE}
+# Euclidiana
+D_euclidiana <- dist(df[,-1], method = "euclidean")
+#D_euclidiana
+
+# Manhattan
+D_manhattan <- dist(df[,-1], method = "manhattan")
+#D_manhattan
+
+# Mahalanobis.
+D_Mahalanobis <- D2.dist(df[,-1], cov(df[,-1]))
+#D_Mahalanobis
+
+```
+
+Irei apresentar os valores na forma corrida para caber melhor no documento, mas é bom observar que a forma "natural" destes valores são matrizes triangulares inferiores. Favor verificar o código para exibi-los estruturados.
+
+### Distâncias euclidianas:
+
+`r D_euclidiana`
+
+### Distâncias 'Manhattan':
+
+`r D_manhattan`
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 06/39} \\
+\end{center}
+
+### Distâncias de Mahalanobis:
+
+`r D_Mahalanobis`
+
+\vskip 2em
+
+Apesar dos valores serem bem diferentes, isso se dá mais pelo método de cálculo de distância de cada uma das técnicas.
+A distância Euclidiana trabalha basicamente com a "distância bruta" entre um ponto e outro, literalmente medindo a distância linear.
+A distância Manhattan trabalha com distância absoluta entre as coordenadas dos pontos.
+A distância de Mahalanobis busca centralizar os dados, calculando as distâncias levando em consideração a correlação entre as dimensões.
+
+Portanto, apesar de improvável, é possível que mesmo com valores observados absolutamente distoantes, agrupar as variáveis segundo as três distâncias trabalhadas e em todos os casos, retornar os exatos mesmos clusters pros dados.
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 07/39} \\
+\end{center}
+
+# c)
+
+Irei apresentar corridamente três painéis, cada um composto por dois dendogramas (agregação simples e média), referentes respectivamente aos valores de distância Euclidiana, Manhattan e de Mahalanobis.
+
+```{r q83c,echo=FALSE,cache=TRUE}
+par(mfrow = c(1, 2))
+clust4 <- hclust(D_euclidiana, method = "single")
+plot(clust4, main = "Single Linkage")
+
+clust5 <- hclust(D_euclidiana, method = "average")
+plot(clust5, main = "Average Linkage")
+
+
+```
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 08/39} \\
+\end{center}
+
+```{r q83c2,echo=FALSE,cache=TRUE}
+par(mfrow = c(1, 2))
+clust6 <- hclust(D_manhattan, method = "single")
+plot(clust6, main = "Single Linkage")
+
+clust7 <- hclust(D_manhattan, method = "average")
+plot(clust7, main = "Average Linkage")
+
+par(mfrow = c(1, 2))
+clust8 <- hclust(D_Mahalanobis, method = "single")
+plot(clust8, main = "Single Linkage")
+
+clust9 <- hclust(D_Mahalanobis, method = "average")
+plot(clust9, main = "Average Linkage")
+```
+
+
+Em todos os dendogramas, foi confirmada a suspeita levantada no item (a); em que haviam 3 grupos aglomerativos bem definidos, e mais 2 grupos formados cada um por apenas um *outlier*. Cada dendograma teve seu formato específico, mas todos foram eficientes em agrupar os dados pelos seus similares.
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 09/39} \\
+\end{center}
+
+# d) 
+
+```{r q83d,echo=FALSE,cache=TRUE}
+df <- data.frame(ponto,x,y)
+df <- scale(df[,-1])
+```
+
+Primeiro, devemos identificar o número ideal de *clusters*, já que o *k-means* necessita que o usuário entre manualmente com o número de *clusters* que o algoritmo deve separar. Já foi visto anteriormente que o número é 3 ou 5, dependendo da abordagem que queira se fazer quanto aos *outliers*. Porém, irei também seguir a praxe deste algorítmo, que é *plotar* um gráfico que ajuda a determinar o número ideal de *clusters*.
+
+```{r q83d1,echo=FALSE,cache=TRUE}
+
+fviz_nbclust(df, kmeans, method = "wss")
+
+```
+
+Pelo método de *elbow*, o número ideal são 3 *clusters*...
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 10/39} \\
+\end{center}
+
+```{r q83d2,echo=FALSE,cache=TRUE}
+
+fviz_nbclust(df, kmeans, method = "wss")+
+  geom_vline(xintercept = 3, linetype = 2)
+
+```
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 11/39} \\
+\end{center}
+
+Portanto, executando o *k-means* para 3 *clusters*, iremos obter o seguinte resultado:
+
+```{r q83d3,echo=FALSE,cache=TRUE}
+
+set.seed(M)
+km <- kmeans(df, 3, iter.max = M)
+aggregate(df, by=list(cluster=km$cluster), mean)
+
+df <- data.frame(ponto,x,y)
+df <- cbind(df, cluster=km$cluster)
+#km$centers
+
+fviz_cluster(km, data=df,
+             palette = c("#00AFBB", "#E7B800", "#FC4E07"),
+             ellipse.type="euclid",
+             star.plot=TRUE,
+             repel=TRUE,
+             ggtheme=theme_minimal())
+
+```
+
+Aqui, notamos que o *k-means* foi relativamente eficiente em classificar os dois *outliers* em um dos *clusters*, sem muita perda de generalização.
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 12/39} \\
+\end{center}
+
+Porém, se quisermos forçar a mão e testar a aglomeração *k-means* com 5 grupos, este será o resultado:
+
+```{r q83d4,echo=FALSE,cache=TRUE,message=FALSE,warning=FALSE}
+
+set.seed(M)
+km2 <- kmeans(df, 5, iter.max = M)
+aggregate(df, by=list(cluster=km2$cluster), mean)
+
+df <- data.frame(ponto,x,y)
+df <- cbind(df, cluster=km2$cluster)
+#km$centers
+
+fviz_cluster(km2, data=df,
+             palette = c("#2E9FDF","#00AFBB", "#E7B800", "#FC4E07","#a11d21"),
+             ellipse.type="euclid",
+             star.plot=TRUE,
+             repel=TRUE,
+             ggtheme=theme_minimal())
+
+```
+
+Em que notamos que o *k-means* não foi nada eficiente em identificar os *outliers* cada um como sendo um grupo robustamente separado dos outros três.
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 13/39} \\
+\end{center}
+
+# 84.
+
+```{r q84,echo=FALSE,cache=TRUE}
+data(bank)
+bank$Status <- factor(bank$Status)
+
+mu <- bank %>%
+  group_by(Status) %>%
+  summarise_all(list(mean)) %>%
+  dplyr::select(!Status)
+
+S0 <- bank %>%
+  filter(Status == 0) %>%
+  dplyr::select(!Status) %>%
+  cov(.)
+
+S1 <- bank %>%
+  filter(Status == 1) %>%
+  dplyr::select(!Status) %>%
+  cov(.)
+```
+
+## a)
+
+```{r q84a,echo=FALSE,message=FALSE,warning=FALSE,comment=FALSE,results='hide',cache=TRUE}
+
+faces(mu)
+
+```
+
+Apesar d'eu particularmente não gostar desse tipo de gráfico, por talvez trazer um ar de ridículo a um trabalho potencialmente sério, é inegável seu valor num exemplo como esse, em que conseguimos identificar de forma simples e didática a diferença entre os dois grupos de notas disponíveis, de forma muito mais visual que vetores numéricos ou gráficos potencialmente de interpretação complexa para o público leigo.
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 14/39} \\
+\end{center}
+
+## b)
+
+Aqui, irei testar diferentes formas de agrupamento, para avaliar quais métodos performam melhor para este conjunto de dados.
+
+### *k-means*:
+
+```{r q84b1,echo=FALSE,cache=TRUE}
+X <- bank[,-1]
+X <- scale(X)
+set.seed(M)
+km.res=kmeans(X, 2, iter.max = M)
+#print(km.res)
+
+#aggregate(X, by=list(cluster=km.res$cluster), mean)
+X<-cbind(X, cluster=km.res$cluster)
+
+fviz_cluster(km.res, data=X,
+             palette = c("#00AFBB","#FC4E07"),
+             ellipse.type="euclid",
+             star.plot=TRUE,
+             repel=TRUE,
+             ggtheme=theme_minimal())
+
+#km.res$withinss / km.res$totss 
+#km.res$betweenss / km.res$totss  
+
+#km.res$totss - km.res$tot.withinss
+#km.res$betweenss
+
+n <- nrow(X)
+r2g2 <- km.res$betweenss / km.res$totss
+g <- 2
+
+# medidas de avaliação do modelo:
+pseudoF2 <- (n-g)/(g-1) * r2g2/(1-r2g2) # maior Pseudo-F => melhor agrupamento
+rand_kmeans <- adjustedRandIndex(km.res$cluster,bank$Status)
+
+```
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 15/39} \\
+\end{center}
+
+### Aglomerativo:
+
+```{r q84b2,echo=FALSE,warning=FALSE,cache=TRUE}
+X <- bank[,-1]
+X <- scale(X)
+
+dista <- dist(X, method="euclidean")
+#as.matrix(dista)[1:3,1:3]
+dista.hc <- hclust(d=dista, method="ward.D")
+fviz_dend(dista.hc, cex=0.5)
+```
+
+Para um conjunto relativamente grande como esse, é praticamente impossível pela figura verificar onde está cada valor. Entretanto, ao verificar os dois grupos principais formados pelo dendograma e verificando os valores que foram agregados à eles, notamos que este foi extremamente eficiente em dividir as notas genuínas das falsificadas, com pouquíssimas observações sendo classificadas incorretamente.
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 16/39} \\
+\end{center}
+
+### Algorítmos não hierárquicos:
+### CLARA:
+
+
+```{r q84b3,echo=FALSE,cache=TRUE}
+
+clarax.2 <- clara(X, 2, samples = 20, metric = "euclidean")
+
+#clarax.2$clusinfo
+
+# Cluster de cada valor:
+#clarax.2$clustering
+
+par(mfrow=c(1, 1))
+plot(X, col = clarax.2$clustering)
+points(clarax.2$medoids, col = 1:2, pch = 19, cex=2)
+
+kable(table(clarax.2$clustering))
+
+
+rand_clara <- adjustedRandIndex(clarax.2$clustering,bank$Status)
+
+```
+
+Notamos que CLARA agrupou apenas 3 valores errados, apontando 3 notas genuínas como falsificadas. Além disso, não apontou nenhuma falsificada como genuína.
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 17/39} \\
+\end{center}
+
+### PAM:
+
+```{r q84b4,echo=FALSE,cache=TRUE}
+
+pamx.2 <- pam(X, 2)
+
+# Informações:
+#summary(pamx.2)
+#pamx.2$clusinfo
+
+# Agrupamento:
+#pamx.2$clustering
+
+par(mfrow=c(1, 1))
+plot(X, col = pamx.2$clustering)
+points(pamx.2$medoids, col = 1:2, pch = 19, cex=2)
+
+# Validação:
+rand_pam <- adjustedRandIndex(pamx.2$clustering,bank$Status)
+
+```
+
+Notamos que PAM também agrupou apenas 3 valores errados, também apontando 3 notas genuínas como falsificadas. Também não apontou nenhuma falsificada como genuína. O resultado foi idêntico ao retornado por PAM neste caso.
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 18/39} \\
+\end{center}
+
+### AGNES:
+
+```{r q84b5,echo=FALSE,cache=TRUE}
+
+agn1 <- agnes(X, metric = "manhattan", stand = TRUE)
+
+#agn1
+par(mfrow=c(1, 2))
+plot(agn1)
+# pares de dissimilaridades (distancias)
+agn2 <- agnes(daisy(X), diss = TRUE, 
+              method = "complete")
+
+par(mfrow=c(1, 2))
+plot(agn2)
+# A AGNES não performou tão bem para este conjunto de dados.
+
+```
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 19/39} \\
+\end{center}
+
+Aqui, testamos tanto AGNES utilizando as distâncias de Manhattan com aglomeração simples no primeiro caso, e usando distâncias euclidianas com aglomeração completa no segundo caso. Em nenhum dos dois AGNES performou tão bem quanto CLARA e PAM para este conjunto de dados.
+
+# c)
+
+```{r q84c1,echo=FALSE,cache=TRUE}
+X <- bank[,-1]
+BIC <- mclustBIC(X)
+plot(BIC)
+summary(BIC)
+```
+
+Para o método *mclust*, está indicando que o ideal seriam 3 agrupamentos, com o modelo *VVE*. Como sabemos que são apenas 2 grupos, temos que este método provavelmente não irá funcionar bem.
+
+Seguindo a sugestão da BIC, iremos ajustar com o modelo *VVE* de 3 grupos
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 20/39} \\
+\end{center}
+
+```{r q84c2,echo=FALSE,cache=TRUE}
+n <- length(bank[,1])
+bank.mclust <- densityMclust(bank[,-1], model="VVE", G = 3)
+
+# simulando amostra da densidade
+sim.results <- simVVE(bank.mclust$parameters, n, seed = M)
+ysim <- sim.results[,c(2:4)]
+gsim <- sim.results[,"group"]
+ysim1 <- ysim[gsim==1, ]
+ysim2 <- ysim[gsim==2, ]
+ysim3 <- ysim[gsim==3, ]
+kable(table(gsim))
+
+rand_mclustVVE3 <- adjustedRandIndex(sim.results[,1],bank$Status)
+
+```
+
+Percebemos que este foi o modelo que mais errou dos testados até agora. Apenas por fins didáticos, testarei o modelo mais 'complexo' *VVV*, forçando o número de *clusters* como igual à dois.
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 21/39} \\
+\end{center}
+
+```{r q84c3,echo=FALSE,cache=TRUE}
+n <- length(bank[,1])
+bank.mclust <- densityMclust(bank[,-1], model="VVV", G = 2)
+
+# simulando amostra da densidade
+sim.results <- simVVV(bank.mclust$parameters, n, seed = M)
+ysim <- sim.results[,c(2,3)]
+gsim <- sim.results[,"group"]
+ysim1 <- ysim[gsim==1, ]
+ysim2 <- ysim[gsim==2, ]
+kable(table(gsim))
+
+rand_mclustVVV2 <- adjustedRandIndex(data.frame(sim.results)$group,bank$Status)
+
+```
+
+Percebemos que aqui, foi dissolvido o grupo 3 que possivelmente continham informações mais de "fronteira" entre os dois grupos mais sólidos, e estas foram diluídas entre os 2 grupos robustos existentes, com um dos grupos "ganhando" 3 itens, enquanto o outro ficando com o restante das 13 observações. Apesar do erro bruto não parecer tão grande, é um pouco decepcionante para um algoritmo tão robusto e pesado um resultado como este. Isso nos leva a suspeitar que as distribuições diferem bastante de uma normal multivariada, apesar deste não ser exatamente um pressuposto rígido deste modelo.
+
+# d)
+
+```{r q84d,echo=FALSE,cache=TRUE}
+APER_mclustVVE3 <- 1-(21/200)
+APER_mclustVVV2 <- 1-(16/200)
+kable(data.frame(rand_kmeans,rand_clara,rand_pam,APER_mclustVVE3,APER_mclustVVV2,rand_mclustVVE3,rand_mclustVVV2))
+```
+
+Aqui notamos que, de todos os algorítmos aqui testados, os que perfomaram melhor foram os (esquecidos e discriminados) CLARA e PAM.
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 22/39} \\
+\end{center}
+
+# 89. Johnson e Wichern - Exercício 11.24.
+
+```{r q89,echo=FALSE,cache=TRUE,warning=FALSE}
+dados <- read_table("dados/T11-4-BankruptcyData.DAT.txt", 
+                    col_names = FALSE, col_types = cols(X6 = col_skip()))
+dados$X5 <- factor(dados$X5)
+```
+
+## a)
+
+```{r q89a,echo=FALSE,cache=TRUE}
+dados <- dados |>
+  mutate(grupo = ifelse(X5 == 0,"Faliu","Não faliu"))
+
+ggplot(dados, aes(x = X1, y = X2, color = grupo)) +
+  geom_point(size = 3) +
+  labs(
+    x = "(fluxo de caixa)/(dívida total)",
+    y = "(lucro líquido)/(ativos totais)"
+  ) +
+  scale_color_manual(values = c("#A11D21", "#1D21A1")) +
+  theme_minimal()
+
+```
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 23/39} \\
+\end{center}
+
+```{r q89a2,echo=FALSE,cache=TRUE}
+
+ggplot(dados, aes(x = X1, y = X3, color = grupo)) +
+  geom_point(size = 3) +
+  labs(
+    x = "(fluxo de caixa)/(dívida total)",
+    y = "(ativo circulante)/(passivo circulante)") +
+  scale_color_manual(values = c("#A11D21", "#1D21A1")) +
+  theme_minimal()
+
+```
+
+```{r q89a3,echo=FALSE,cache=TRUE}
+
+ggplot(dados, aes(x = X1, y = X4, color = grupo)) +
+  geom_point(size = 3) +
+  labs(
+    x = "(fluxo de caixa)/(dívida total)",
+    y = "(ativos atuais)/(vendas líquidas)") +
+  scale_color_manual(values = c("#A11D21", "#1D21A1")) +
+  theme_minimal()
+
+```
+
+Em todos os gráficos, os pontos lembram a forma de elipsoides. Portanto, graficamente, não é possível rejeitar a normalidade bivariada dos dados.
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 24/39} \\
+\end{center}
+
+## b)
+
+```{r q89b,echo=FALSE,cache=TRUE}
+falidos <- dados |>
+  filter(X5 == 0) |>
+  dplyr::select(X1,X2) |>
+  summarise_all(mean)
+falidos <- as.matrix(falidos)
+colnames(falidos) <- NULL
+
+ativos <- dados |>
+  filter(X5==1) |>
+  dplyr::select(X1,X2) |>
+  summarise_all(mean)
+ativos <- as.matrix(ativos)
+colnames(ativos) <- NULL
+
+xb1 <- falidos
+xb2 <- ativos
+
+falidos <- dados |>
+  filter(X5 == 0) |>
+  dplyr::select(X1,X2)
+
+ativos <- dados |>
+  filter(X5==1) |>
+  dplyr::select(X1,X2)
+
+S1 <- cov(falidos)
+S2 <- cov(ativos)
+```
+
+Considerando 1 como o grupo de empresas que faliram (falidos) e 2 como o grupo de empresas que não faliram ainda (ativos), temos os vetores de média $\mu_1',\mu_2'$ dados respectivamente por: [`r xb1`],[`r xb2`], e matrizes de covariância $S_1$ = `r kable(S1)` e $S_2$ = `r kable(S2)`
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 25/39} \\
+\end{center}
+
+## c)
+
+Como para este conjunto não rejeitamos a hipótese de normalidade multivariada (apesar de termos feito apenas análise gráfica), e, apesar de não termos testado a igualdade das variâncias, elas aparentam ser diferentes; portanto a abordagem mais adequada para este caso é a análise discriminante quadrática abaixo. No caso, foram definido custos e prioris iguais para ambos os grupos.
+
+```{r q89c,echo=FALSE,cache=TRUE}
+dados <- dados[,-6]
+gqda <- qda(X5~X1+X2, data = dados,prior =c(.5,.5))
+
+gqdap1 <- predict(gqda)
+gqctable1 <- table(dados$X5, gqdap1$class)
+
+partimat(X5~X1+X2, data=dados, method="qda", 
+         plot.matrix = F, imageplot = T,prec=100)
+
+# Com validação cruzada
+gqdaVC <- qda(X5~X1+X2, data = dados,prior =c(.5,.5),CV=T)
+```
+
+Matriz de confusão: `r kable(gqctable1)`
+
+Proporção de classificações corretas em cada grupo: `r kable((diag(prop.table(gqctable1,1))))`
+
+Proporção total de classificação correta: `r (sum(diag(prop.table(gqctable1))))`
+
+
+## d)
+
+```{r q89d,echo=FALSE,cache=TRUE}
+# Matrizes de confusão:
+M <- table(dados$X5, gqdap1$class) 
+MCV <- table(dados$X5, gqdaVC$class) 
+
+# APER e \hat{E}APR:
+APER <- (sum(M)-sum(diag(M)))/sum(M) # APER x_1,x_2
+E_APR <- (sum(MCV)-sum(diag(MCV)))/sum(MCV) # \hat{E} APR x_1,x_2
+```
+
+O erro aparente (APER) deste conjunto foi calculado como sendo `r APER`; enquanto que a estimação da taxa de erro aparente ($\hat{E}(AER)$) foi calculada como `r E_APR`. Notamos que apesar de o erro estimado via validação cruzada Jackknife ter sido maior que o erro aparente, esta é uma estimativa mais robusta em comparação com o resultado sem validação cruzada.
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 26/39} \\
+\end{center}
+
+## e)
+
+```{r q89e,echo=FALSE,cache=TRUE}
+#dados <- dados[,-6]
+gqda <- qda(X5~X1+X2, data = dados,prior =c(.05,.95))
+
+gqdap1 <- predict(gqda)
+gqctable1 <- table(dados$X5, gqdap1$class)
+
+partimat(X5~X1+X2, data=dados, method="qda", 
+         plot.matrix = F, imageplot = T,prec=100)
+
+# Com validação cruzada
+gqdaVC <- qda(X5~X1+X2, data = dados,prior =c(.05,.95),CV=T)
+
+# Matrizes de confusão:
+M <- table(dados$X5, gqdap1$class) 
+MCV <- table(dados$X5, gqdaVC$class) 
+
+# APER e \hat{E}APR:
+APER <- (sum(M)-sum(diag(M)))/sum(M) # APER x_1,x_2
+E_APR <- (sum(MCV)-sum(diag(MCV)))/sum(MCV) # \hat{E} APR x_1,x_2
+```
+
+Matriz de confusão: `r kable(gqctable1)`
+
+Proporção de classificações corretas em cada grupo: `r kable((diag(prop.table(gqctable1,1))))`
+
+Proporção total de classificação correta: `r (sum(diag(prop.table(gqctable1))))`
+
+O erro aparente (APER):`r APER`
+
+Estimativa da taxa de erro aparente ($\hat{E}(AER)$): `r E_APR`
+
+Analisando os APER e $\hat{E}(AER)$, concluímos que as prioris iguais $(p_1=0,5;p_2=0,5)$ tem um erro de classificação inferior se comparado as prioris desiguais $(p_1=0,05;p_2=0,95)$. Neste caso, notamos que tanto o APER quanto o $\hat{E}(AER)$ deram resultados idênticos.
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 27/39} \\
+\end{center}
+
+## f)
+
+```{r q89f,echo=FALSE,cache=TRUE}
+#xb1
+#xb2
+al <- t(t(xb1-xb2)) %*% solve(cov_pooled(ativos,falidos))
+m <- t(t(xb1-xb2)) %*% solve(cov_pooled(ativos,falidos)) %*% t(xb1+xb2)
+
+pop1 <- falidos |>
+  rowwise() |>
+  mutate(M = al %*% c(X1, X2)) |>
+  mutate(pop = ifelse(M > m,"p1","p2")) |>
+  pull()
+pop1 <- factor(pop1)
+
+pop2 <- ativos |>
+  rowwise() |>
+  mutate(M = al %*% c(X1, X2)) |>
+  mutate(pop = ifelse(M > m,"p1","p2")) |>
+  pull()
+pop2 <- factor(pop2)
+#summary(pop1)
+#summary(pop2)
+
+# APER:
+APER <- 8/46
+
+# AVALIAÇÃO: Como as matrizes S_1 e S_2 aparentam ser diferentes, esta técnica não é a mais adequada. Entretanto, tomando como base apenas a performance do APER, até que a classificação por discriminantes lineares não ficou ruim, com resultados próximos ao obtido pelos discriminantes quadráticos.
+
+```
+
+Como as matrizes $S_1$ e $S_2$ aparentam ser diferentes, esta técnica não aparenta ser a mais adequada. Entretanto, tomando como base apenas a performance do APER = `r APER`, até que a classificação por discriminantes lineares não ficou ruim, com resultados até melhores do que os obtido pelos discriminantes quadráticos.
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 28/39} \\
+\end{center}
+
+## g)
+
+```{r q89g,echo=FALSE,cache=TRUE}
+#b)
+# x1,x3
+falidos2 <- dados |>
+  filter(X5 == 0) |>
+  dplyr::select(X1,X3) |>
+  summarise_all(mean)
+falidos2 <- as.matrix(falidos2)
+colnames(falidos2) <- NULL
+
+ativos2 <- dados |>
+  filter(X5==1) |>
+  dplyr::select(X1,X3) |>
+  summarise_all(mean)
+ativos2 <- as.matrix(ativos2)
+colnames(ativos2) <- NULL
+
+xb12 <- falidos2
+xb22 <- ativos2
+
+falidos2 <- dados |>
+  filter(X5 == 0) |>
+  dplyr::select(X1,X3)
+
+ativos2 <- dados |>
+  filter(X5==1) |>
+  dplyr::select(X1,X3)
+
+S12 <- cov(falidos2)
+S22 <- cov(ativos2)
+
+#x1,x4
+
+falidos3 <- dados |>
+  filter(X5 == 0) |>
+  dplyr::select(X1,X4) |>
+  summarise_all(mean)
+falidos3 <- as.matrix(falidos3)
+colnames(falidos3) <- NULL
+
+ativos3 <- dados |>
+  filter(X5==1) |>
+  dplyr::select(X1,X4) |>
+  summarise_all(mean)
+ativos3 <- as.matrix(ativos3)
+colnames(ativos3) <- NULL
+
+xb13 <- falidos3
+xb23 <- ativos3
+
+falidos3 <- dados |>
+  filter(X5 == 0) |>
+  dplyr::select(X1,X4)
+
+ativos3 <- dados |>
+  filter(X5==1) |>
+  dplyr::select(X1,X4)
+
+S13 <- cov(falidos3)
+S23 <- cov(ativos3)
+
+#c)
+# x_1,x_3 ----
+
+gqda <- qda(X5~X1+X3, data = dados,prior =c(.5,.5))
+
+gqdap2 <- predict(gqda)
+gqctable2 <- table(dados$X5, gqdap2$class)
+prop2 <- diag(prop.table(gqctable2,1)) # prop de classif. correta no grupo
+propt2 <- sum(diag(prop.table(gqctable2))) # prop total de classf. correta 
+
+partimat(X5~X1+X3, data=dados, method="qda", 
+         plot.matrix = F, imageplot = T,prec=100)
+
+# Com validação cruzada
+gqdaVC2 <- qda(X5~X1+X3, data = dados,prior =c(.5,.5),CV=T)
+
+# Matrizes de confusão:
+M2 <- table(dados$X5, gqdap2$class) 
+MCV2 <- table(dados$X5, gqdaVC2$class) 
+
+# APER e \hat{E}APR:
+APER2 <- (sum(M2)-sum(diag(M2)))/sum(M2) # APER x_1,x_2
+E_APR2 <- (sum(MCV2)-sum(diag(MCV2)))/sum(MCV2) # \hat{E} APR x_1,x_2
+
+# x_1,x_4 ----
+
+gqda <- qda(X5~X1+X4, data = dados,prior =c(.5,.5))
+
+gqdap3 <- predict(gqda)
+gqctable3 <- table(dados$X5, gqdap3$class)
+prop3 <- (diag(prop.table(gqctable3,1))) # prop de classif. correta no grupo
+propt3 <- (sum(diag(prop.table(gqctable3)))) # prop total de classf. correta 
+
+partimat(X5~X1+X4, data=dados, method="qda", 
+         plot.matrix = F, imageplot = T,prec=100)
+
+# Com validação cruzada
+gqdaVC3 <- qda(X5~X1+X4, data = dados,prior =c(.5,.5),CV=T)
+
+# Matrizes de confusão:
+M3 <- table(dados$X5, gqdap3$class) 
+MCV3 <- table(dados$X5, gqdaVC3$class) 
+
+# APER e \hat{E}APR:
+APER3 <- (sum(M3)-sum(diag(M3)))/sum(M3) # APER x_1,x_2
+E_APR3 <- (sum(MCV3)-sum(diag(MCV3)))/sum(MCV3) # \hat{E} APR x_1,x_2
+
+#e)
+# x_1,x_3 ----
+
+gqda <- qda(X5~X1+X3, data = dados,prior =c(.05,.95))
+
+gqdap4 <- predict(gqda)
+gqctable4 <- table(dados$X5, gqdap4$class)
+prop4 <- (diag(prop.table(gqctable4,1))) # prop de classif. correta no grupo
+propt4 <- (sum(diag(prop.table(gqctable4)))) # prop total de classf. correta 
+
+# Com validação cruzada
+gqdaVC4 <- qda(X5~X1+X3, data = dados,prior =c(.05,.95),CV=T)
+
+# Matrizes de confusão:
+M4 <- table(dados$X5, gqdap4$class) 
+MCV4 <- table(dados$X5, gqdaVC4$class) 
+
+# APER e \hat{E}APR:
+APER4 <- (sum(M4)-sum(diag(M4)))/sum(M4) # APER x_1,x_2
+E_APR4 <- (sum(MCV4)-sum(diag(MCV4)))/sum(MCV4) # \hat{E} APR x_1,x_2
+
+# x_1,x_4 ----
+
+gqda <- qda(X5~X1+X4, data = dados,prior =c(.05,.95))
+
+gqdap5 <- predict(gqda)
+gqctable5 <- table(dados$X5, gqdap5$class)
+prop5 <- (diag(prop.table(gqctable5,1))) # prop de classif. correta no grupo
+propt5 <- (sum(diag(prop.table(gqctable5)))) # prop total de classf. correta 
+
+# Com validação cruzada
+gqdaVC5 <- qda(X5~X1+X4, data = dados,prior =c(.05,.95),CV=T)
+
+# Matrizes de confusão:
+M5 <- table(dados$X5, gqdap5$class) 
+MCV5 <- table(dados$X5, gqdaVC5$class) 
+
+# APER e \hat{E}APR:
+APER5 <- (sum(M5)-sum(diag(M5)))/sum(M5) # APER x_1,x_2
+E_APR5 <- (sum(MCV5)-sum(diag(MCV5)))/sum(MCV5) # \hat{E} APR x_1,x_2
+
+```
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 29/39} \\
+\end{center}
+
+### Vetores de média e matrizes de covariância para as variáveis (x1,x3):
+
+Vetor média $\mu_1'=$ `r xb12`
+
+Vetor Média $\mu_3'=$ `r xb22`
+
+Matriz de covariância $S_1=$ `r kable(S12)`
+
+Matriz de covariância $S_3=$ `r kable(S22)`
+
+
+
+
+### Análise discriminante quadrática, com prioris = (0,5;0,5), utilizando as variáveis (x1,x3):
+
+Matriz de confusão: `r kable(gqctable2)`
+
+Proporção de classificações corretas em cada grupo: `r kable((diag(prop.table(gqctable2,1))))`
+
+Proporção total de classificação correta: `r (sum(diag(prop.table(gqctable2))))`
+
+Erro aparente (APER):`r APER2`
+
+Estimativa da taxa de erro aparente ($\hat{E}(AER)$): `r E_APR2`
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 30/39} \\
+\end{center}
+
+### Análise discriminante quadrática, com prioris = (0,05;0,95), utilizando as variáveis (x1,x3):
+
+Matriz de confusão: `r kable(gqctable4)`
+
+Proporção de classificações corretas em cada grupo: `r kable((diag(prop.table(gqctable4,1))))`
+
+Proporção total de classificação correta: `r (sum(diag(prop.table(gqctable4))))`
+
+Erro aparente (APER):`r APER4`
+
+Estimativa da taxa de erro aparente ($\hat{E}(AER)$): `r E_APR4`
+
+
+
+
+
+### Vetores de média e matrizes de covariância para as variáveis (x1,x4):
+
+Vetor média $\mu_1'=$ `r xb13`
+
+Vetor Média $\mu_3'=$ `r xb23`
+
+Matriz de covariância $S_1=$ `r kable(S13)`
+
+Matriz de covariância $S_3=$ `r kable(S23)`
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 31/39} \\
+\end{center}
+
+### Análise discriminante quadrática, com prioris = (0,5;0,5), utilizando as variáveis (x1,x4):
+
+Matriz de confusão: `r kable(gqctable3)`
+
+Proporção de classificações corretas em cada grupo: `r kable((diag(prop.table(gqctable3,1))))`
+
+Proporção total de classificação correta: `r (sum(diag(prop.table(gqctable3))))`
+
+Erro aparente (APER):`r APER3`
+
+Estimativa da taxa de erro aparente ($\hat{E}(AER)$): `r E_APR3`
+
+
+
+### Análise discriminante quadrática, com prioris = (0,05;0,95), utilizando as variáveis (x1,x4):
+
+Matriz de confusão: `r kable(gqctable5)`
+
+Proporção de classificações corretas em cada grupo: `r kable((diag(prop.table(gqctable5,1))))`
+
+Proporção total de classificação correta: `r (sum(diag(prop.table(gqctable5))))`
+
+Erro aparente (APER):`r APER5`
+
+Estimativa da taxa de erro aparente ($\hat{E}(AER)$): `r E_APR5`
+
+
+
+### Conclusões:
+
+De fato, os resultados encontrados foram bastante distintos para cada caso. Analisando somente os APER e $\hat{E}(AER)$, notamos que a análise em que foi observado o menor valor de ambos foi a análise executada utilizando as variáveis $(x_1,x_3)$, com prioris iguais $(0,5;0,5)$, enquanto que os maiores valores foram observados para o modelo em que utilizei as variáveis $(x_1,x_4)$ com prioris desiguais $(0,05;0,95)$. O modelo que menos variou estas duas estatísticas para ambas as prioris testadas $(0,5;0,5)$ e $(0,05;0,95)$ foi o modelo inicialmente testado com as variáveis $(x_1,x_2)$. Com base nisso, podemos concluir que tanto a escolha das variáveis quanto a escolha das prioris, influenciam bastante na qualidade do modelo final.
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 32/39} \\
+\end{center}
+
+## h)
+
+```{r q89h,echo=FALSE,cache=TRUE}
+# x1,x2,x3,x4
+
+falidos4 <- dados |>
+  filter(X5 == 0) |>
+  dplyr::select(X1,X2,X3,X4) |>
+  summarise_all(mean)
+falidos4 <- as.matrix(falidos4)
+colnames(falidos4) <- NULL
+
+ativos4 <- dados |>
+  filter(X5==1) |>
+  dplyr::select(X1,X2,X3,X4) |>
+  summarise_all(mean)
+ativos4 <- as.matrix(ativos4)
+colnames(ativos4) <- NULL
+
+xb14 <- falidos4
+xb24 <- ativos4
+
+falidos4 <- dados |>
+  filter(X5 == 0) |>
+  dplyr::select(X1,X2,X3,X4)
+
+ativos4 <- dados |>
+  filter(X5==1) |>
+  dplyr::select(X1,X2,X3,X4)
+
+S14 <- cov(falidos4)
+S24 <- cov(ativos4)
+
+# Modelo c priori igual
+
+gqda6 <- qda(X5~X1+X2+X3+X4, data = dados,prior =c(.5,.5))
+
+gqdap6 <- predict(gqda6)
+gqctable6 <- table(dados$X5, gqdap6$class)
+prop6 <- diag(prop.table(gqctable6,1)) # prop de classif. correta no grupo
+propt6 <- (sum(diag(prop.table(gqctable6)))) # prop total de classf. correta 
+
+partimat(X5~X1+X2+X3+X4, data=dados, method="qda", 
+         plot.matrix = F, imageplot = T,prec=100)
+
+# Com validação cruzada
+gqdaVC6 <- qda(X5~X1+X2+X3+X4, data = dados,prior =c(.5,.5),CV=T)
+
+# Matrizes de confusão:
+M6 <- table(dados$X5, gqdap6$class) 
+MCV6 <- table(dados$X5, gqdaVC6$class) 
+
+# APER e \hat{E}APR:
+APER6 <- (sum(M6)-sum(diag(M6)))/sum(M6) # APER x_1,x_2
+E_APR6 <- (sum(MCV6)-sum(diag(MCV6)))/sum(MCV6) # \hat{E} APR x_1,x_2
+
+
+# Alterando a priori
+gqda7 <- qda(X5~X1+X2+X3+X4, data = dados,prior =c(.05,.95))
+
+gqdap7 <- predict(gqda7)
+gqctable7 <- table(dados$X5, gqdap7$class)
+prop7 <- (diag(prop.table(gqctable7,1))) # prop de classif. correta no grupo
+propt7 <- (sum(diag(prop.table(gqctable7)))) # prop total de classf. correta 
+
+# Com validação cruzada
+gqdaVC7 <- qda(X5~X1+X2+X3+X4, data = dados,prior =c(.05,.95),CV=T)
+
+# Matrizes de confusão:
+M7 <- table(dados$X5, gqdap7$class) 
+MCV7 <- table(dados$X5, gqdaVC7$class) 
+
+# APER e \hat{E}APR:
+APER7 <- (sum(M7)-sum(diag(M7)))/sum(M7) # APER x_1,x_2
+E_APR7 <- (sum(MCV7)-sum(diag(MCV7)))/sum(MCV7) # \hat{E} APR x_1,x_2
+
+```
+
+### Vetores de média e matrizes de covariância para as variáveis (x1,x2,x3,x4):
+
+Vetor média $\mu_1'=$ `r xb14`
+
+Vetor Média $\mu_3'=$ `r xb24`
+
+Matriz de covariância $S_1=$ `r kable(S14)`
+
+Matriz de covariância $S_3=$ `r kable(S24)`
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 33/39} \\
+\end{center}
+
+### Análise discriminante quadrática, com prioris = (0,5;0,5), utilizando as variáveis (x1,x2,x3,x4):
+
+Matriz de confusão: `r kable(gqctable6)`
+
+Proporção de classificações corretas em cada grupo: `r kable((diag(prop.table(gqctable6,1))))`
+
+Proporção total de classificação correta: `r (sum(diag(prop.table(gqctable6))))`
+
+Erro aparente (APER):`r APER6`
+
+Estimativa da taxa de erro aparente ($\hat{E}(AER)$): `r E_APR6`
+
+
+
+### Análise discriminante quadrática, com prioris = (0,05;0,95), utilizando as variáveis (x1,x2,x3,x4):
+
+Matriz de confusão: `r kable(gqctable7)`
+
+Proporção de classificações corretas em cada grupo: `r kable((diag(prop.table(gqctable7,1))))`
+
+Proporção total de classificação correta: `r (sum(diag(prop.table(gqctable7))))`
+
+Erro aparente (APER):`r APER7`
+
+Estimativa da taxa de erro aparente ($\hat{E}(AER)$): `r E_APR7`
+
+
+No caso da inclusão de todas as 4 variáveis, o classificador com prioris iguais produziu as melhores classificações (menores APER e $\hat{E}(AER)$). Também neste caso, o classificador com prioris $(0,05;0,95)$ produziu um APER significativamente maior que o mesmo modelo com prioris iguais, porém foram os menores valores se comparados com os valores observados nos demais modelos com prioris $(0,05;0,95)$.
+
+### Conclusões:
+
+Isto nos leva a acreditar que a inclusão de mais variáveis foi bom para o modelo, produzindo os menores erros aparentes. Entretando, a diferença não foi tão substantiva assim, então, deve-se considerar questões como verba para coleta de tantas variáveis, complexidade da análise e viabilidade de novas coletas caso deseje-se seguir com o modelo mais preciso.
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 34/39} \\
+\end{center}
+
+# 90. Johnson e Wichern - Exercício 11.32.
+```{r q90,cache=TRUE,include=FALSE}
+dados <- read_table("dados/T11-8-Hemofilia.DAT.txt",col_names = FALSE)
+dados$X1 <- factor(dados$X1)
+#n_1 = 30; n_2 = 45
+df <- read_table("dados/tabela12.32c.txt", 
+                    col_names = FALSE)
+colnames(df) <- c("X2","X3")
+df$X1 <- NA
+```
+
+## a)
+```{r q90a,echo=FALSE,cache=TRUE}
+ggplot(dados, aes(x = X2, y = X3, color = X1)) +
+  geom_point(size = 3) +
+  labs(
+    x = "",
+    y = ""
+  ) +
+  scale_color_manual(values = c("#A11D21", "#1D21A1")) +
+  theme_minimal()
+shapiro.test(dados$X2)
+shapiro.test(dados$X3)
+
+```
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 35/39} \\
+\end{center}
+
+```{r q90a2,echo=FALSE,cache=TRUE}
+AD.test(dados[,2:3], qqplot = TRUE)
+```
+
+
+Através da análise visual, não é possível rejeitar a normalidade bivariada, visto que os pontos aparentam formar uma elipsoide. Foi realizado ainda testes de Shapiro-Wilk nas duas marginais, que também não rejeitaram a normalidade; univariada, neste caso. Foi ainda utilizado o teste de Anderson-Darling para normalidade multivariada do pacote `mvnTest`, que também não rejeitou a normalidade multivariada. Portanto, não temos evidências para rejeitar a hipótese de normalidade multivariada dos dados.
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 36/39} \\
+\end{center}
+
+## b)
+```{r q90b,echo=FALSE,cache=TRUE}
+
+medias1 <- dados |>
+  filter(X1 == 1) |>
+  dplyr::select(X2,X3) |>
+  summarise_all(mean)
+medias1 <- as.matrix(medias1)
+colnames(medias1) <- NULL
+
+medias2 <- dados |>
+  filter(X1==2) |>
+  dplyr::select(X2,X3) |>
+  summarise_all(mean)
+medias2 <- as.matrix(medias2)
+colnames(medias2) <- NULL
+
+xb1 <- medias1
+xb2 <- medias2
+
+grupo1 <- dados |>
+  filter(X1 == 1) |>
+  dplyr::select(X2,X3)
+
+grupo2 <- dados |>
+  filter(X1==2) |>
+  dplyr::select(X2,X3)
+
+al <- t(t(medias1-medias2)) %*% solve(cov_pooled(grupo1,grupo2))
+
+m <- .5*(al%*%t(medias1)+al%*%t(medias2))
+
+pop1 <- grupo1 |>
+  rowwise() |>
+  mutate(M = al %*% c(X2, X3)) |>
+  mutate(pop = ifelse(M > m,"p1","p2")) |>
+  pull()
+pop1 <- factor(pop1)
+
+pop2 <- grupo2 |>
+  rowwise() |>
+  mutate(M = al %*% c(X2, X3)) |>
+  mutate(pop = ifelse(M > m,"p1","p2")) |>
+  pull()
+pop2 <- factor(pop2)
+
+#table(pop1)
+#table(pop2)
+
+# Então, a matriz de confusão será:
+mc <- t(matrix(c(27,3,
+                 8,37),2,2, dimnames = list(c("pop1", "pop2"), c("pop1", "pop2"))))
+
+#11/sum(mc) # APER
+
+# Fazendo por funções prontas:
+
+lda <- lda(X1~X2+X3, data = dados,prior =c(.5,.5))
+
+gldap <- predict(lda)
+glctable <- table(dados$X1, gldap$class)
+prop <- (diag(prop.table(glctable,1))) # prop de classif. correta no grupo
+propt <- (sum(diag(prop.table(glctable)))) # prop total de classf. correta 
+
+# Validação hold-out
+#table(dados$X1)
+set.seed(M)
+split <- sample.split(dados$X1, SplitRatio = 0.3) 
+train <- subset(dados, split==T)
+test <- subset(dados, split==F)
+
+lda1 <- lda(X1~X2+X3, data = train,prior =c(.5,.5))
+
+PT <- predict(lda1, newdata = test, type = "response")
+glctable <- table(test$X1, PT$x >= 0.5)
+
+```
+
+
+Matriz de confusão: `r kable(glctable)`
+
+Proporção de classificações corretas em cada grupo: `r kable((diag(prop.table(glctable,1))))`
+
+Proporção total de classificação correta: `r (sum(diag(prop.table(glctable))))`
+
+Com isso, temos que a taxa de erro do modelo pontual é de `r (1-(sum(diag(prop.table(glctable)))))*100`%. Esta é relativamente maior do que a encontrada pelos outros métodos de validação utilizados até agora.
+
+## c)
+
+```{r q90c,echo=FALSE,cache=TRUE}
+pop3 <- df |>
+  rowwise() |>
+  mutate(M = al %*% c(X2, X3)) |>
+  mutate(pop = ifelse(M > m,"p1","p2")) |>
+  pull()
+pop3 <- factor(pop3)
+kable(table(pop3))
+```
+
+Todas as 10 novas observações foram classificadas como percentence à população $\pi_1$
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 37/39} \\
+\end{center}
+
+## d)
+
+```{r q90d,echo=FALSE,cache=TRUE}
+LDA <- lda(X1~., data = dados,prior=c(.75,.25))
+
+LDAp1 <- predict(LDA)
+LDAtable1 <- table(dados$X1, LDAp1$class)
+prop <- (diag(prop.table(LDAtable1,1))) # prop de classif. correta no grupo
+propt <- (sum(diag(prop.table(LDAtable1)))) # prop total de classf. correta 
+
+partimat(X1~X2+X3, data=dados, method="lda", 
+         plot.matrix = F, imageplot = T,prec=100)
+
+# Validação hold-out
+#table(dados$X1)
+set.seed(M)
+split <- sample.split(dados$X1, SplitRatio = 0.3) 
+train <- subset(dados, split==T)
+test <- subset(dados, split==F)
+
+lda1 <- lda(X1~X2+X3, data = train,prior =c(.75,.25))
+
+PT <- predict(lda1, newdata = test, type = "response")
+glctable <- table(test$X1, PT$x >= 0.5)
+
+
+pred <- LDA |>
+  predict(df)
+```
+
+
+Matriz de confusão: `r kable(glctable)`
+
+Proporção de classificações corretas em cada grupo: `r kable((diag(prop.table(glctable,1))))`
+
+Proporção total de classificação correta: `r (sum(diag(prop.table(glctable))))`
+
+Com isso, temos que a taxa de erro do modelo pontual é de `r (1-(sum(diag(prop.table(glctable)))))*100`%. Percebemos que a taxa de erro caiu consideravelmente ao escolher esta outra priori. 
+
+Além disso, todas as 10 novas observações foram novamente classificadas como pertencente à população $\pi_1$. Este é um resultado que não impressiona, visto que já haviam sido classificados assim com a priori igual, então era de se esperar que confirmasse este resultado com uma priori maior para a população 1.
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 38/39} \\
+\end{center}
+
+# 91.
+
+```{r q91,echo=FALSE,cache=TRUE}
+# Discriminante linear
+data(bank)
+bank$Status <- factor(bank$Status)
+
+LDA <- lda(Status~., data = bank,prior=c(.5,.5))
+LDAp1 <- predict(LDA)
+LDAtable1 <- table(bank$Status, LDAp1$class)
+prop1 <- (diag(prop.table(LDAtable1,1))) # prop de classif. correta no grupo
+propt1 <- (sum(diag(prop.table(LDAtable1)))) # prop total de classf. correta 
+
+# Matrizes de confusão:
+M <- table(bank$Status, LDAp1$class) 
+
+# APER:
+APER <- (sum(M)-sum(diag(M)))/sum(M)
+
+#partimat(Status ~ ., data = bank, method = "lda")
+
+# Discriminante quadrático
+QDA <- qda(Status~., data = bank,prior=c(.5,.5))
+QDAp1 <- predict(QDA)
+QDAtable1 <- table(bank$Status, QDAp1$class)
+prop2 <- (diag(prop.table(QDAtable1,1))) # prop de classif. correta no grupo
+propt2 <- (sum(diag(prop.table(QDAtable1)))) # prop total de classf. correta 
+
+# Matrizes de confusão:
+M1 <- table(bank$Status, QDAp1$class) 
+
+# APER:
+APER1 <- (sum(M1)-sum(diag(M1)))/sum(M1)
+
+#partimat(Status ~ ., data = bank, method = "qda")
+
+# Análise de discriminantes por mistura de normais (mclust)
+
+Class <- factor(bank$Status, levels = 0:1,
+                labels = c("Genuína", "Falsificada"))
+
+X <- data.matrix(bank[,-1])
+
+mod <- Mclust(X)
+summary(mod$BIC)
+
+plot(mclustBIC(X))
+
+summary(mod)
+table(Class, mod$classification)    # por algum motivo este não renderiza
+RAND <- adjustedRandIndex(Class, mod$classification)
+
+# Matrizes de confusão:
+M2 <- table(bank$Status, mod$class) 
+
+# APER:
+APER2 <- (2+16)/(2+98+16+84)
+
+```
+
+\newpage
+\begin{center}
+{\Large
+  Aluno: Bruno Gondim Toledo | Matrícula: 15/0167636 - Página 39/39} \\
+\end{center}
+
+A mistura de normais não operou tão bem quanto os discriminantes lineares e quadráticos. Enquanto nesses dois, 199 das 200 notas foram classificadas corretamente, o algorítmo de mistura de normais encontrou m=3 como o número ideal de clusters (sendo que neste caso sabemos que há apenas dois: genuínas e falsificadas). Com isso, classificou corretamente 182 das 200 notas. Interessante notar que não houve classificação de notas falsas como notas genuínas ou vice-versa; e sim algumas notas desses dois grupos foram classificadas em outro cluster, que seria talvez um cluster de "confusão", ou seja, notas em que não estava claro o suficiente se eram genuínas ou classificadas.
+
+Erro aparente (APER) do modelo de discriminante linear: `r APER`
+
+Erro aparente (APER) do modelo de discriminante quadrático: `r APER1`
+
+Erro aparente (APER) do modelo de mistura de normais: `r APER2`
+
+Índice de Rand ajustado do modelo de mistura de normais: `r RAND`
+
+
